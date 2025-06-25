@@ -7,7 +7,7 @@ from KermLib.KermLib import *
 import numpy as np
 
 
-
+list_of_functions_index = []
 
 
 
@@ -57,13 +57,23 @@ while True:
     print('Select desired function:')
     for function in list_of_tools:
         print(function_index, '--', function)
+        list_of_functions_index.append(function_index)
         function_index += 1
+
     user_input = int(input())
-    print(list_of_tools[user_input-1], 'selected')
-    
+
+    while True: # PREVENTS CRASHES FROM UNRECOGNIZED INPUTS
+        if user_input not in list_of_functions_index:
+            print('Input not recognized. Please try again.')
+            user_input = int(input())
+        else:
+            break
+        
+
 
     print('Enter parameters:')
     target_star = str(input('Target star: '))
+    target_star = target_star.upper()
     match user_input:
         case 1:
             pixelfile = star_image_retrieval(target_star)
@@ -79,7 +89,7 @@ while True:
 
 
             print('Generating periodogram...')
-            period = np.linspace(1, 20, 10000) #Period
+            period = np.linspace(1, 20, 100000) #Period
             bls = lightcurve_stitched.to_periodogram(method='bls', period=period, frequency_factor=500)
             plot_title = 'Periodogram of light curve of ' + target_star
             bls.plot(title=plot_title)
