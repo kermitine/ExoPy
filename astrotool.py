@@ -34,7 +34,7 @@ def star_lightcurve_retrieval(target_star):
     start_time = time.time()
     plot_title = 'Light curve of ' + target_star
     lightcurve = search_lightcurve(target_star, author='Kepler', cadence='long').download()
-    lightcurve_corrected = lightcurve.remove_outliers().normalize()
+    lightcurve_corrected = lightcurve.remove_outliers().normalize().flatten()
     lightcurve_corrected.plot(title=plot_title)
     # SAVEIMAGE
     directory_name = 'saved_data/' + target_star
@@ -103,6 +103,7 @@ while True:
             print('Stitching light curve collection...')
             lightcurve_stitched = lightcurve_collection.stitch()
             plot_title = 'Stitched lightcurve of ' + target_star
+            lightcurve_stitched = lightcurve_stitched.remove_outliers().normalize().flatten()
             lightcurve_stitched.plot(title=plot_title)
             # SAVEIMAGE
             directory_name = 'saved_data/' + target_star
