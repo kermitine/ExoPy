@@ -47,7 +47,7 @@ def star_lightcurve_bulk_retrieval(target_star):
     return lightcurve_collection
 
 KermLib.ascii_run()
-print('Astrotool', version, 'initialized')
+print('Astrotool V' + str(version), 'initialized')
 
 print('\n')
 print('--Loop Start--')
@@ -73,14 +73,16 @@ while True:
             lightcurve_collection = star_lightcurve_bulk_retrieval(target_star)
             print('Stitching light curve collection...')
             lightcurve_stitched = lightcurve_collection.stitch()
-            lightcurve_stitched.plot(title=target_star)
+            plot_title = 'Stitched lightcurve of ' + target_star
+            lightcurve_stitched.plot(title=plot_title)
             plt.show()
 
 
             print('Generating periodogram...')
             period = np.linspace(1, 20, 10000) #Period
             bls = lightcurve_stitched.to_periodogram(method='bls', period=period, frequency_factor=500)
-            bls.plot()
+            plot_title = 'Periodogram of light curve of ' + target_star
+            bls.plot(title=plot_title)
             plt.show()
     
     print('\n')
