@@ -5,6 +5,7 @@ import time
 from vars import *
 from KermLib.KermLib import *
 import numpy as np
+import os
 
 
 list_of_functions_index = []
@@ -13,11 +14,17 @@ list_of_functions_index = []
 
 def star_image_retrieval(target_star):
     print('Retrieving pixelfile of', target_star + '...')
-    start_time = time.time()
+    start_time = time.time() # measure load time
     plot_title = 'Pixelfile of ' + target_star
     pixelfile = search_targetpixelfile(target_star).download()
     pixelfile.plot(title=plot_title)
-    end_time = time.time()
+    # SAVEIMAGE
+    directory_name = 'saved_data/' + target_star
+    file_name = directory_name + '/' + target_star + '_PIXELFILE.svg'
+    os.makedirs(directory_name)
+    plt.savefig(file_name)
+    # SAVEIMAGE
+    end_time = time.time() # measure load time
     print('took', round((end_time - start_time), 1), 'seconds to retrieve')
     plt.show()
     return pixelfile
@@ -29,6 +36,12 @@ def star_lightcurve_retrieval(target_star):
     lightcurve = search_lightcurve(target_star, author='Kepler', cadence='long').download()
     lightcurve_corrected = lightcurve.remove_outliers().normalize()
     lightcurve_corrected.plot(title=plot_title)
+    # SAVEIMAGE
+    directory_name = 'saved_data/' + target_star
+    file_name = directory_name + '/' + target_star + '_LIGHTCURVE.svg'
+    os.makedirs(directory_name, exist_ok=True)
+    plt.savefig(file_name)
+    # SAVEIMAGE
     end_time = time.time()
     print('took', round((end_time - start_time), 1), 'seconds to retrieve')
     plt.show()
@@ -41,6 +54,12 @@ def star_lightcurve_bulk_retrieval(target_star):
     search_result = search_lightcurve(target_star, author='Kepler', cadence='long')
     lightcurve_collection = search_result.download_all()
     lightcurve_collection.plot(title=plot_title)
+    # SAVEIMAGE
+    directory_name = 'saved_data/' + target_star
+    file_name = directory_name + '/' + target_star + '_LIGHTCURVECOLLECTION.svg'
+    os.makedirs(directory_name, exist_ok=True)
+    plt.savefig(file_name)
+    # SAVEIMAGE
     end_time = time.time()
     print('took', round((end_time - start_time), 1), 'seconds to retrieve')
     plt.show()
@@ -85,6 +104,12 @@ while True:
             lightcurve_stitched = lightcurve_collection.stitch()
             plot_title = 'Stitched lightcurve of ' + target_star
             lightcurve_stitched.plot(title=plot_title)
+            # SAVEIMAGE
+            directory_name = 'saved_data/' + target_star
+            file_name = directory_name + '/' + target_star + '_STITCHEDLIGHTCURVECOLLECTION.svg'
+            os.makedirs(directory_name, exist_ok=True)
+            plt.savefig(file_name)
+            # SAVEIMAGE
             plt.show()
 
 
@@ -93,6 +118,12 @@ while True:
             bls = lightcurve_stitched.to_periodogram(method='bls', period=period, frequency_factor=500)
             plot_title = 'Periodogram of light curve of ' + target_star
             bls.plot(title=plot_title)
+            # SAVEIMAGE
+            directory_name = 'saved_data/' + target_star
+            file_name = directory_name + '/' + target_star + '_LIGHTCURVEPERIODOGRAM.svg'
+            os.makedirs(directory_name, exist_ok=True)
+            plt.savefig(file_name)
+            # SAVEIMAGE
             plt.show()
     
     print('\n')
