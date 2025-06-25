@@ -4,6 +4,12 @@ import matplotlib.pyplot as plt
 import time
 from vars import *
 from KermLib.KermLib import *
+import numpy as np
+
+
+
+
+
 
 def star_image_retrieval(target_star):
     print('Retrieving pixelfile of', target_star + '...')
@@ -68,6 +74,13 @@ while True:
             print('Stitching light curve collection...')
             lightcurve_stitched = lightcurve_collection.stitch()
             lightcurve_stitched.plot(title=target_star)
+            plt.show()
+
+
+            print('Generating periodogram...')
+            period = np.linspace(1, 20, 10000) #Period
+            bls = lightcurve_stitched.to_periodogram(method='bls', period=period, frequency_factor=500)
+            bls.plot()
             plt.show()
     
     print('\n')
