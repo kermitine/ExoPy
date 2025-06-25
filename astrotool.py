@@ -113,9 +113,29 @@ while True:
             # SAVEIMAGE
             plt.show()
 
+            print('Please input periodogram lower bound (if blank, default 1):')
+            lower_bound_input = input()
+            if lower_bound_input.strip() == "":
+                lower_bound = 1
+            else:
+                try:
+                    lower_bound = int(lower_bound_input)
+                except ValueError:
+                    lower_bound = 1
+            print('Please input periodogram upper bound (if blank, default 20):')
+            upper_bound_input = input()
+            if upper_bound_input.strip() == "":
+                upper_bound = 20
+            else:
+                try:
+                    upper_bound = int(upper_bound_input)
+                except ValueError:
+                    upper_bound = 20
+
+            
 
             print('Generating periodogram...')
-            period = np.linspace(1, 20, 100000) #Period
+            period = np.linspace(lower_bound, upper_bound, 100000) # Period
             bls = lightcurve_stitched.to_periodogram(method='bls', period=period, frequency_factor=500)
             plot_title = 'Periodogram of light curve of ' + target_star
             bls.plot(title=plot_title)
