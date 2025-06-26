@@ -86,29 +86,34 @@ KermLib.ascii_run()
 print('Astrotool V' + str(version), 'initialized')
 
 print('\n')
-print('--Loop Start--')
 
 while True:
     function_index = 1
     print('Select desired function:')
     for function in list_of_tools:
         print(function_index, '--', function)
-        list_of_functions_index.append(function_index)
+        list_of_functions_index.append(str(function_index))
         function_index += 1
 
-    user_input = int(input())
+    user_input = input()
 
     while True: # PREVENTS CRASHES FROM UNRECOGNIZED INPUTS
         if user_input not in list_of_functions_index:
             print('Input not recognized. Please try again.')
-            user_input = int(input())
+            user_input = input()
         else:
+            user_input = int(user_input)
             break
-        
-
 
     print('Enter parameters:')
-    target_star = str(input('Target star: '))
+    while True:
+        target_star = input('Target star: ')
+        if target_star is None or target_star.strip() == '':
+            print('Input not recognized. Please try again.')
+        else:
+            target_star = target_star.strip()
+            break
+
     target_star = target_star.upper()
     match user_input:
         case 1:
