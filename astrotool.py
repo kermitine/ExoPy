@@ -125,7 +125,7 @@ while True:
             lightcurve_stitched = lightcurve_stitched.remove_outliers().normalize().flatten()
             lightcurve_stitched.plot(title=plot_title)
             
-            save_plot(target_star, '_STITCHEDLIGHTCURVECOLLECTION.svg')
+            save_plot(target_star, '_LIGHTCURVECOLLECTIONSTITCHED.svg')
 
             plt.show()
 
@@ -176,7 +176,7 @@ while True:
                 ax.set_xlim(-5, 5)
                 ax.plot(title='Phasefold of Planet ' + alphabet_list[alphabet_index])
 
-                save_plot(target_star, target_star + '_PHASEFOLD_' + alphabet_list[alphabet_index] + '.svg')
+                save_plot(target_star, '_PHASEFOLD_' + alphabet_list[alphabet_index] + '.svg')
                 
                 plt.show()
                 
@@ -185,7 +185,7 @@ while True:
                 if use_masking is True: # mask signals if true
                     planet_mask = periodogram_bls.get_transit_mask(period=planet_period, transit_time=planet_t0, duration=planet_dur)
                     lightcurve_stitched = lightcurve_stitched[~planet_mask]
-                    print('Masking periodogram ' + '(' + alphabet_list[alphabet_index] + ')...')
+                    print('Masking enabled ' + '(' + alphabet_list[alphabet_index] + ')...')
 
                 print('Please input periodogram lower bound (if blank, default 1):')
                 lower_bound_input = input()
@@ -217,6 +217,6 @@ while True:
                 winsound.PlaySound("sfx/ovending.wav", winsound.SND_ASYNC | winsound.SND_FILENAME)
                 time.sleep(2)
 
-                save_plot(target_star, target_star + '_LIGHTCURVEPERIODOGRAM_' + alphabet_list[alphabet_index] + '.svg')
+                save_plot(target_star, '_LIGHTCURVEPERIODOGRAM_' + alphabet_list[alphabet_index] + '.svg')
 
                 plt.show()
