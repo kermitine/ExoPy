@@ -26,7 +26,7 @@ def star_image_retrieval(target_star):
     # SAVEIMAGE
     directory_name = 'saved_data/' + target_star
     file_name = directory_name + '/' + target_star + '_PIXELFILE.svg'
-    os.makedirs(directory_name)
+    os.makedirs(directory_name, exist_ok=True)
     plt.savefig(file_name)
     # SAVEIMAGE
     end_time = time.time() # measure load time
