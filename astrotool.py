@@ -137,6 +137,8 @@ while True:
             # SAVEIMAGE
             plt.show()
 
+            alphabet_index = 0
+            
             print('Please input periodogram lower bound (if blank, default 1):')
             lower_bound_input = input()
             if lower_bound_input.strip() == "":
@@ -161,17 +163,79 @@ while True:
             print('Generating periodogram...')
             
             period = np.linspace(lower_bound, upper_bound, 100000) # Period
-            bls = lightcurve_stitched.to_periodogram(method='bls', period=period, frequency_factor=500)
+            periodogram_bls = lightcurve_stitched.to_periodogram(method='bls', period=period, frequency_factor=500)
             plot_title = 'Periodogram of light curve of ' + target_star
-            bls.plot(title=plot_title)
+            periodogram_bls.plot(title=plot_title)
             # SAVEIMAGE
             directory_name = 'saved_data/' + target_star
-            file_name = directory_name + '/' + target_star + '_LIGHTCURVEPERIODOGRAM.svg'
+            file_name = directory_name + '/' + target_star + '_LIGHTCURVEPERIODOGRAM_' + alphabet_list[alphabet_index] + '.svg'
             os.makedirs(directory_name, exist_ok=True)
             plt.savefig(file_name)
             # SAVEIMAGE
             winsound.PlaySound("sfx/ovending.wav", winsound.SND_ASYNC | winsound.SND_FILENAME)
             time.sleep(2)
             plt.show()
+            # FIRST ONE ABOVE. REST IN LOOP
 
-    print('\n')
+            while True:
+
+                planet_period = periodogram_bls.period_at_max_power
+                planet_t0 = periodogram_bls.transit_time_at_max_power
+                planet_dur = periodogram_bls.duration_at_max_power
+
+                ax = lightcurve_stitched.fold(period=planet_period, epoch_time=planet_period).scatter()
+                ax.set_xlim(-5, 5)
+                ax.plot(title='Phasefold of Planet ' + alphabet_list[alphabet_index])
+
+                # SAVEIMAGE
+                directory_name = 'saved_data/' + target_star
+                file_name = directory_name + '/' + target_star + '_PHASEFOLD_' + alphabet_list[alphabet_index] + '.svg'
+                os.makedirs(directory_name, exist_ok=True)
+                plt.savefig(file_name)
+                # SAVEIMAGE
+                plt.show()
+                
+                alphabet_index += 1
+                #planet_mask = periodogram_bls.get_transit_mask(period=planet_period, transit_time=planet_t0, duration=planet_dur)
+                #lightcurve_stitched = lightcurve_stitched[~planet_mask]
+                #print('Masking periodogram ' + '(' + alphabet_list[alphabet_index] + ')...')
+
+                print('Please input periodogram lower bound (if blank, default 1):')
+                lower_bound_input = input()
+                if lower_bound_input.strip() == "":
+                    lower_bound = 1
+                else:
+                    try:
+                        lower_bound = int(lower_bound_input)
+                    except ValueError:
+                        lower_bound = 1
+                print('Please input periodogram upper bound (if blank, default 20):')
+                upper_bound_input = input()
+                if upper_bound_input.strip() == "":
+                    upper_bound = 20
+                else:
+                    try:
+                        upper_bound = int(upper_bound_input)
+                    except ValueError:
+                        upper_bound = 20
+
+                winsound.PlaySound("sfx/microwave_sound_effect.wav", winsound.SND_ASYNC | winsound.SND_FILENAME)
+                time.sleep(3)
+                print('Generating periodogram...')
+                
+                period = np.linspace(lower_bound, upper_bound, 100000) # Period
+                periodogram_bls = lightcurve_stitched.to_periodogram(method='bls', period=period, frequency_factor=500)
+                plot_title = 'Periodogram of light curve of ' + target_star
+                periodogram_bls.plot(title=plot_title)
+                winsound.PlaySound("sfx/ovending.wav", winsound.SND_ASYNC | winsound.SND_FILENAME)
+                time.sleep(2)
+                # SAVEIMAGE
+                directory_name = 'saved_data/' + target_star
+                file_name = directory_name + '/' + target_star + '_LIGHTCURVEPERIODOGRAM_' + alphabet_list[alphabet_index] + '.svg'
+                os.makedirs(directory_name, exist_ok=True)
+                plt.savefig(file_name)
+                # SAVEIMAGE
+                plt.show()
+
+
+            
