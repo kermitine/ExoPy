@@ -143,17 +143,17 @@ while True:
                     lower_bound = int(lower_bound_input)
                 except ValueError:
                     lower_bound = 1
-            print('Please input periodogram upper bound (if blank, default 20):')
+            print('Please input periodogram upper bound (if blank, default 30):')
             upper_bound_input = input()
             if upper_bound_input.strip() == "":
-                upper_bound = 20
+                upper_bound = 30
             else:
                 try:
                     upper_bound = int(upper_bound_input)
                 except ValueError:
-                    upper_bound = 20
+                    upper_bound = 30
 
-            winsound.PlaySound("sfx/microwave_sound_effect.wav", winsound.SND_ASYNC | winsound.SND_FILENAME)
+            winsound.PlaySound("sfx/microwave_sound_effect.wav", winsound.SND_ASYNC | winsound.SND_LOOP | winsound.SND_FILENAME)
             time.sleep(3)
             print('Generating periodogram...')
             
@@ -175,7 +175,7 @@ while True:
                 planet_t0 = periodogram_bls.transit_time_at_max_power
                 planet_dur = periodogram_bls.duration_at_max_power
 
-                ax = lightcurve_stitched.fold(period=planet_period, epoch_time=planet_period).scatter()
+                ax = lightcurve_stitched.fold(period=planet_period, epoch_time=planet_t0).scatter()
                 ax.set_xlim(-5, 5)
                 ax.plot(title='Phasefold of Planet ' + alphabet_list[alphabet_index])
 
@@ -199,17 +199,17 @@ while True:
                         lower_bound = int(lower_bound_input)
                     except ValueError:
                         lower_bound = 1
-                print('Please input periodogram upper bound (if blank, default 20):')
+                print('Please input periodogram upper bound (if blank, default 30):')
                 upper_bound_input = input()
                 if upper_bound_input.strip() == "":
-                    upper_bound = 20
+                    upper_bound = 30
                 else:
                     try:
                         upper_bound = int(upper_bound_input)
                     except ValueError:
-                        upper_bound = 20
+                        upper_bound = 30
 
-                winsound.PlaySound("sfx/microwave_sound_effect.wav", winsound.SND_ASYNC | winsound.SND_FILENAME)
+                winsound.PlaySound("sfx/microwave_sound_effect.wav", winsound.SND_ASYNC | winsound.SND_LOOP | winsound.SND_FILENAME)
                 time.sleep(3)
                 print('Generating periodogram...')
                 
