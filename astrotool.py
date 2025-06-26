@@ -80,9 +80,13 @@ def star_lightcurve_bulk_retrieval(target_star):
 KermLib.ascii_run()
 print('Astrotool V' + str(version), 'initialized')
 print('\n')
+
 print('Flags:')
-for user_flag_index in range(0, len(user_flags)-1):
-    print(user_flags[user_flag_index] + ' = ' + str(user_flags[user_flag_index+1]))
+flag_index = 0
+for x in range(len(user_flags)//2):
+    print(user_flags[flag_index] + ' = ' + str(user_flags[flag_index+1]))
+    flag_index += 2
+
 print('\n')
 
 while True:
