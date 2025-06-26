@@ -1,2 +1,2 @@
-version = '0.2.7'
+version = '0.2.8'
 list_of_tools = ['Star Image Retrieval', 'Star Light Curve Retrieval', 'Star Light Curve Bulk Retrieval']

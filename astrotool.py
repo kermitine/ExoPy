@@ -17,7 +17,12 @@ def star_image_retrieval(target_star):
     start_time = time.time() # measure load time
     plot_title = 'Pixelfile of ' + target_star
     pixelfile = search_targetpixelfile(target_star).download()
-    pixelfile.plot(title=plot_title)
+    try:
+        pixelfile.plot(title=plot_title)
+    except:
+        print('ERROR: Either no data available of', target_star + ", or system doesn't exist.")
+        print('\n')
+        return 'fail'
     # SAVEIMAGE
     directory_name = 'saved_data/' + target_star
     file_name = directory_name + '/' + target_star + '_PIXELFILE.svg'
@@ -35,7 +40,13 @@ def star_lightcurve_retrieval(target_star):
     plot_title = 'Light curve of ' + target_star
     lightcurve = search_lightcurve(target_star, author='Kepler', cadence='long').download()
     lightcurve_corrected = lightcurve.remove_outliers().normalize().flatten()
-    lightcurve_corrected.plot(title=plot_title)
+    try:
+        lightcurve_corrected.plot(title=plot_title)
+    except:
+        print('ERROR: Either no data available of', target_star + ", or system doesn't exist.")
+        print('\n')
+        return 'fail'
+
     # SAVEIMAGE
     directory_name = 'saved_data/' + target_star
     file_name = directory_name + '/' + target_star + '_LIGHTCURVE.svg'
@@ -53,7 +64,13 @@ def star_lightcurve_bulk_retrieval(target_star):
     plot_title = 'All light curves of ' + target_star
     search_result = search_lightcurve(target_star, author='Kepler', cadence='long')
     lightcurve_collection = search_result.download_all()
-    lightcurve_collection.plot(title=plot_title)
+    try:
+        lightcurve_collection.plot(title=plot_title)
+    except:
+        print('ERROR: Either no data available of', target_star + ", or system doesn't exist.")
+        print('\n')
+        return 'fail'
+
     # SAVEIMAGE
     directory_name = 'saved_data/' + target_star
     file_name = directory_name + '/' + target_star + '_LIGHTCURVECOLLECTION.svg'
@@ -100,6 +117,8 @@ while True:
             lightcurve = star_lightcurve_retrieval(target_star)
         case 3:
             lightcurve_collection = star_lightcurve_bulk_retrieval(target_star)
+            if lightcurve_collection == 'fail':
+                continue
             print('Stitching light curve collection...')
             lightcurve_stitched = lightcurve_collection.stitch()
             plot_title = 'Stitched lightcurve of ' + target_star
