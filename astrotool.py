@@ -8,8 +8,13 @@ import numpy as np
 import os
 import winsound
 
-list_of_functions_index = []
-
+def save_plot(target_star, file_suffix):
+    directory_name = 'saved_data/' + target_star
+    file_name = directory_name + '/' + target_star + file_suffix
+    os.makedirs(directory_name, exist_ok=True)
+    plt.savefig(file_name)
+    return None
+    
 
 
 def star_image_retrieval(target_star):
@@ -17,18 +22,16 @@ def star_image_retrieval(target_star):
     start_time = time.time() # measure load time
     plot_title = 'Pixelfile of ' + target_star
     pixelfile = search_targetpixelfile(target_star).download()
+
     try:
         pixelfile.plot(title=plot_title)
     except:
         print('ERROR: Either no data available of', target_star + ", or system doesn't exist.")
         print('\n')
         return 'fail'
-    # SAVEIMAGE
-    directory_name = 'saved_data/' + target_star
-    file_name = directory_name + '/' + target_star + '_PIXELFILE.svg'
-    os.makedirs(directory_name, exist_ok=True)
-    plt.savefig(file_name)
-    # SAVEIMAGE
+    
+    save_plot(target_star, '_PIXELFILE.svg')
+    
     end_time = time.time() # measure load time
     print('took', round((end_time - start_time), 1), 'seconds to retrieve')
     plt.show()
@@ -47,12 +50,8 @@ def star_lightcurve_retrieval(target_star):
         print('\n')
         return 'fail'
 
-    # SAVEIMAGE
-    directory_name = 'saved_data/' + target_star
-    file_name = directory_name + '/' + target_star + '_LIGHTCURVE.svg'
-    os.makedirs(directory_name, exist_ok=True)
-    plt.savefig(file_name)
-    # SAVEIMAGE
+    save_plot(target_star, '_LIGHTCURVE.svg')
+
     end_time = time.time()
     print('took', round((end_time - start_time), 1), 'seconds to retrieve')
     plt.show()
@@ -71,12 +70,8 @@ def star_lightcurve_bulk_retrieval(target_star):
         print('\n')
         return 'fail'
 
-    # SAVEIMAGE
-    directory_name = 'saved_data/' + target_star
-    file_name = directory_name + '/' + target_star + '_LIGHTCURVECOLLECTION.svg'
-    os.makedirs(directory_name, exist_ok=True)
-    plt.savefig(file_name)
-    # SAVEIMAGE
+    save_plot(target_star, '_LIGHTCURVECOLLECTION.svg')
+
     end_time = time.time()
     print('took', round((end_time - start_time), 1), 'seconds to retrieve')
     plt.show()
@@ -129,12 +124,9 @@ while True:
             plot_title = 'Stitched lightcurve of ' + target_star
             lightcurve_stitched = lightcurve_stitched.remove_outliers().normalize().flatten()
             lightcurve_stitched.plot(title=plot_title)
-            # SAVEIMAGE
-            directory_name = 'saved_data/' + target_star
-            file_name = directory_name + '/' + target_star + '_STITCHEDLIGHTCURVECOLLECTION.svg'
-            os.makedirs(directory_name, exist_ok=True)
-            plt.savefig(file_name)
-            # SAVEIMAGE
+            
+            save_plot(target_star, '_STITCHEDLIGHTCURVECOLLECTION.svg')
+
             plt.show()
 
             alphabet_index = 0
@@ -166,12 +158,9 @@ while True:
             periodogram_bls = lightcurve_stitched.to_periodogram(method='bls', period=period, frequency_factor=500)
             plot_title = 'Periodogram of light curve of ' + target_star
             periodogram_bls.plot(title=plot_title)
-            # SAVEIMAGE
-            directory_name = 'saved_data/' + target_star
-            file_name = directory_name + '/' + target_star + '_LIGHTCURVEPERIODOGRAM_' + alphabet_list[alphabet_index] + '.svg'
-            os.makedirs(directory_name, exist_ok=True)
-            plt.savefig(file_name)
-            # SAVEIMAGE
+            
+            save_plot(target_star, '_LIGHTCURVEPERIODOGRAM_' + alphabet_list[alphabet_index] + '.svg')
+
             winsound.PlaySound("sfx/ovending.wav", winsound.SND_ASYNC | winsound.SND_FILENAME)
             time.sleep(2)
             plt.show()
@@ -187,18 +176,16 @@ while True:
                 ax.set_xlim(-5, 5)
                 ax.plot(title='Phasefold of Planet ' + alphabet_list[alphabet_index])
 
-                # SAVEIMAGE
-                directory_name = 'saved_data/' + target_star
-                file_name = directory_name + '/' + target_star + '_PHASEFOLD_' + alphabet_list[alphabet_index] + '.svg'
-                os.makedirs(directory_name, exist_ok=True)
-                plt.savefig(file_name)
-                # SAVEIMAGE
+                save_plot(target_star, target_star + '_PHASEFOLD_' + alphabet_list[alphabet_index] + '.svg')
+                
                 plt.show()
                 
                 alphabet_index += 1
-                #planet_mask = periodogram_bls.get_transit_mask(period=planet_period, transit_time=planet_t0, duration=planet_dur)
-                #lightcurve_stitched = lightcurve_stitched[~planet_mask]
-                #print('Masking periodogram ' + '(' + alphabet_list[alphabet_index] + ')...')
+
+                if use_masking is True: # mask signals if true
+                    planet_mask = periodogram_bls.get_transit_mask(period=planet_period, transit_time=planet_t0, duration=planet_dur)
+                    lightcurve_stitched = lightcurve_stitched[~planet_mask]
+                    print('Masking periodogram ' + '(' + alphabet_list[alphabet_index] + ')...')
 
                 print('Please input periodogram lower bound (if blank, default 1):')
                 lower_bound_input = input()
@@ -229,13 +216,7 @@ while True:
                 periodogram_bls.plot(title=plot_title)
                 winsound.PlaySound("sfx/ovending.wav", winsound.SND_ASYNC | winsound.SND_FILENAME)
                 time.sleep(2)
-                # SAVEIMAGE
-                directory_name = 'saved_data/' + target_star
-                file_name = directory_name + '/' + target_star + '_LIGHTCURVEPERIODOGRAM_' + alphabet_list[alphabet_index] + '.svg'
-                os.makedirs(directory_name, exist_ok=True)
-                plt.savefig(file_name)
-                # SAVEIMAGE
+
+                save_plot(target_star, target_star + '_LIGHTCURVEPERIODOGRAM_' + alphabet_list[alphabet_index] + '.svg')
+
                 plt.show()
-
-
-            
