@@ -6,7 +6,7 @@ from vars import *
 from KermLib.KermLib import *
 import numpy as np
 import os
-
+import winsound
 
 list_of_functions_index = []
 
@@ -132,9 +132,10 @@ while True:
                 except ValueError:
                     upper_bound = 20
 
-            
-
+            winsound.PlaySound("sfx/microwave_sound_effect.wav", winsound.SND_ASYNC | winsound.SND_FILENAME)
+            time.sleep(3)
             print('Generating periodogram...')
+            
             period = np.linspace(lower_bound, upper_bound, 100000) # Period
             bls = lightcurve_stitched.to_periodogram(method='bls', period=period, frequency_factor=500)
             plot_title = 'Periodogram of light curve of ' + target_star
@@ -145,6 +146,8 @@ while True:
             os.makedirs(directory_name, exist_ok=True)
             plt.savefig(file_name)
             # SAVEIMAGE
+            winsound.PlaySound("sfx/ovending.wav", winsound.SND_ASYNC | winsound.SND_FILENAME)
+            time.sleep(2)
             plt.show()
-    
+
     print('\n')
