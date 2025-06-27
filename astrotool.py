@@ -156,8 +156,8 @@ while True:
                     upper_bound = int(upper_bound_input)
                 except ValueError:
                     upper_bound = 30
-
-            winsound.PlaySound("sfx/microwave_sound_effect.wav", winsound.SND_ASYNC | winsound.SND_LOOP | winsound.SND_FILENAME)
+            if sound_enabled is True:
+                winsound.PlaySound("sfx/microwave_sound_effect.wav", winsound.SND_ASYNC | winsound.SND_LOOP | winsound.SND_FILENAME)
             time.sleep(3)
             print('Generating periodogram...')
             
@@ -168,7 +168,8 @@ while True:
             
             save_plot(target_star, '_LIGHTCURVEPERIODOGRAM_' + alphabet_list[alphabet_index] + '.svg')
 
-            winsound.PlaySound("sfx/ovending.wav", winsound.SND_ASYNC | winsound.SND_FILENAME)
+            if sound_enabled is True:
+                winsound.PlaySound("sfx/ovending.wav", winsound.SND_ASYNC | winsound.SND_FILENAME)
             time.sleep(2)
             plt.show()
             # FIRST ONE ABOVE. REST IN LOOP
@@ -189,7 +190,7 @@ while True:
                 
                 alphabet_index += 1
 
-                if use_masking is True: # mask signals if true
+                if masking_enabled is True: # mask signals if true
                     planet_mask = periodogram_bls.get_transit_mask(period=planet_period, transit_time=planet_t0, duration=planet_dur)
                     lightcurve_stitched = lightcurve_stitched[~planet_mask]
                     print('Masking enabled ' + '(' + alphabet_list[alphabet_index] + ')...')
@@ -213,7 +214,8 @@ while True:
                     except ValueError:
                         upper_bound = 30
 
-                winsound.PlaySound("sfx/microwave_sound_effect.wav", winsound.SND_ASYNC | winsound.SND_LOOP | winsound.SND_FILENAME)
+                if sound_enabled is True:
+                    winsound.PlaySound("sfx/microwave_sound_effect.wav", winsound.SND_ASYNC | winsound.SND_LOOP | winsound.SND_FILENAME)
                 time.sleep(3)
                 print('Generating periodogram...')
                 
@@ -221,7 +223,8 @@ while True:
                 periodogram_bls = lightcurve_stitched.to_periodogram(method='bls', period=period, frequency_factor=500)
                 plot_title = 'Periodogram of light curve of ' + target_star
                 periodogram_bls.plot(title=plot_title)
-                winsound.PlaySound("sfx/ovending.wav", winsound.SND_ASYNC | winsound.SND_FILENAME)
+                if sound_enabled is True:
+                    winsound.PlaySound("sfx/ovending.wav", winsound.SND_ASYNC | winsound.SND_FILENAME)
                 time.sleep(2)
 
                 save_plot(target_star, '_LIGHTCURVEPERIODOGRAM_' + alphabet_list[alphabet_index] + '.svg')
