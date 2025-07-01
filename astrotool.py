@@ -6,79 +6,113 @@ from vars import *
 from KermLib.KermLib import *
 import numpy as np
 import os
-import winsound
+
+
+if sound_enabled is True:
+    import winsound
+
+if brain_rot_enabled is True:
+    import webbrowser
+    import random
 
 def save_plot(target_star, file_suffix):
-    directory_name = 'saved_data/' + target_star
-    file_name = directory_name + '/' + target_star + file_suffix
-    os.makedirs(directory_name, exist_ok=True)
-    plt.savefig(file_name)
-    return None
+    if file_saving_enabled is True:
+        directory_name = 'saved_data/' + target_star
+        file_name = directory_name + '/' + target_star + file_suffix
+        os.makedirs(directory_name, exist_ok=True)
+        plt.savefig(file_name)
+        print(f'Saving {target_star}{file_suffix}...')
+        time.sleep(0.8)
+        return 'saved'
+    else:
+        return 'saving is disabled'
     
+def play_sound(file_path, loop_enabled):
+    if sound_enabled is True:
+        if loop_enabled:
+            winsound.PlaySound(file_path, winsound.SND_ASYNC | winsound.SND_LOOP | winsound.SND_FILENAME)
+        else:
+            winsound.PlaySound(file_path, winsound.SND_ASYNC | winsound.SND_FILENAME)
+        return 'sound_played'
+    else:
+        return 'sound effects are disabled'
 
 
 def star_image_retrieval(target_star):
-    print('Retrieving pixelfile of', target_star + '...')
+    print(f'Retrieving pixelfile of {target_star}...')
     start_time = time.time() # measure load time
-    plot_title = 'Pixelfile of ' + target_star
+    plot_title = f'Pixelfile of {target_star}'
     pixelfile = search_targetpixelfile(target_star).download()
 
     try:
         pixelfile.plot(title=plot_title)
     except:
-        print('ERROR: Either no data available of', target_star + ", or system doesn't exist.")
+        print(f"ERROR: Either no data available for {target_star} system doesn't exist.")
         print('\n')
         return 'fail'
     
-    save_plot(target_star, '_PIXELFILE.svg')
-    
     end_time = time.time() # measure load time
     print('took', round((end_time - start_time), 1), 'seconds to retrieve')
+    save_plot(target_star, f'_PIXELFILE.{file_saving_format}')
     plt.show()
     return pixelfile
 
 def star_lightcurve_retrieval(target_star):
-    print('Retrieving light curve of', target_star + '...')
+    print(f'Retrieving light curve of {target_star}...')
     start_time = time.time()
-    plot_title = 'Light curve of ' + target_star
-    lightcurve = search_lightcurve(target_star, author='Kepler', cadence='long').download()
+    plot_title = f'Light curve of {target_star}'
+    lightcurve = search_lightcurve(target_star, author=telescope, cadence='long').download()
     lightcurve_corrected = lightcurve.remove_outliers().normalize().flatten()
     try:
         lightcurve_corrected.plot(title=plot_title)
     except:
-        print('ERROR: Either no data available of', target_star + ", or system doesn't exist.")
+        print(f"ERROR: Either no data available for {target_star} system doesn't exist.")
         print('\n')
         return 'fail'
 
-    save_plot(target_star, '_LIGHTCURVE.svg')
-
     end_time = time.time()
     print('took', round((end_time - start_time), 1), 'seconds to retrieve')
+    save_plot(target_star, f'_LIGHTCURVE.{file_saving_format}')
     plt.show()
     return lightcurve_corrected
 
 def star_lightcurve_bulk_retrieval(target_star):
-    print('Retrieving ALL light curves of', target_star + '...')
+    print(f'Retrieving ALL light curves of {target_star}...')
     start_time = time.time()
-    plot_title = 'All light curves of ' + target_star
-    search_result = search_lightcurve(target_star, author='Kepler', cadence='long')
+    plot_title = f'All light curves of {target_star}'
+    search_result = search_lightcurve(target_star, author=telescope, cadence='long')
     lightcurve_collection = search_result.download_all()
     try:
         lightcurve_collection.plot(title=plot_title)
     except:
-        print('ERROR: Either no data available of', target_star + ", or system doesn't exist.")
+        print(f"ERROR: Either no data available for {target_star} system doesn't exist.")
         print('\n')
         return 'fail'
 
-    save_plot(target_star, '_LIGHTCURVECOLLECTION.svg')
-
     end_time = time.time()
     print('took', round((end_time - start_time), 1), 'seconds to retrieve')
+
+    if brain_rot_enabled is True:
+        brain_rot_urls_selected = random.sample(brain_rot_urls, 5)
+        webbrowser.open_new(brain_rot_urls_selected[0])
+        time.sleep(0.2)
+        webbrowser.open_new(brain_rot_urls_selected[1])
+        time.sleep(0.3)
+        webbrowser.open_new(brain_rot_urls_selected[2])
+        time.sleep(0.1)
+        webbrowser.open_new(brain_rot_urls_selected[3])
+        time.sleep(0.2)
+        webbrowser.open_new(brain_rot_urls_selected[4])
+
+    save_plot(target_star, f'_LIGHTCURVECOLLECTION.{file_saving_format}')
     plt.show()
     return lightcurve_collection
 
+play_sound('sfx/subwaysurfers.wav', False)
+
 KermLib.ascii_run()
-print('Astrotool V' + str(version), 'initialized')
+print(f'Astrotool V{version} initialized')
+print('Created by Ayrik Nabirahni')
 print('\n')
 
 print('Flags:')
@@ -101,7 +135,7 @@ while True:
 
     while True: # PREVENTS CRASHES FROM UNRECOGNIZED INPUTS
         if user_input not in list_of_functions_index:
-            print('Input not recognized. Please try again.')
+            print(prompt_input_not_recognized)
             user_input = input()
         else:
             user_input = int(user_input)
@@ -111,10 +145,12 @@ while True:
     while True:
         target_star = input('Target star: ')
         if target_star is None or target_star.strip() == '':
-            print('Input not recognized. Please try again.')
+            print(prompt_input_not_recognized)
         else:
             target_star = target_star.strip()
             break
+    
+    play_sound('sfx/nflsong.wav', True)
 
     target_star = target_star.upper()
     match user_input:
@@ -128,54 +164,54 @@ while True:
                 continue
             print('Stitching light curve collection...')
             lightcurve_stitched = lightcurve_collection.stitch()
-            plot_title = 'Stitched lightcurve of ' + target_star
+            plot_title = f'Stitched lightcurve of {target_star}'
             lightcurve_stitched = lightcurve_stitched.remove_outliers().normalize().flatten()
             lightcurve_stitched.plot(title=plot_title)
             
-            save_plot(target_star, '_LIGHTCURVECOLLECTIONSTITCHED.svg')
-
+            
+            save_plot(target_star, f'_LIGHTCURVECOLLECTIONSTITCHED.{file_saving_format}')
             plt.show()
-
             alphabet_index = 0
             
-            print('Please input periodogram lower bound (if blank, default 1):')
-            lower_bound_input = input()
-            if lower_bound_input.strip() == "":
-                lower_bound = 1
+            print(prompt_periodogram_lower_bound)
+            periodogram_lower_bound_input = input()
+            if periodogram_lower_bound_input.strip() == "":
+                lower_bound = periodogram_lower_bound_default
             else:
                 try:
-                    lower_bound = int(lower_bound_input)
+                    lower_bound = int(periodogram_lower_bound_input)
                 except ValueError:
-                    lower_bound = 1
-            print('Please input periodogram upper bound (if blank, default 30):')
-            upper_bound_input = input()
-            if upper_bound_input.strip() == "":
-                upper_bound = 30
+                    lower_bound = periodogram_lower_bound_default
+            print(prompt_periodogram_upper_bound)
+            periodogram_upper_bound_input = input()
+            if periodogram_upper_bound_input.strip() == "":
+                upper_bound = periodogram_upper_bound_default
             else:
                 try:
-                    upper_bound = int(upper_bound_input)
+                    upper_bound = int(periodogram_upper_bound_input)
                 except ValueError:
-                    upper_bound = 30
-            if sound_enabled is True:
-                winsound.PlaySound("sfx/microwave_sound_effect.wav", winsound.SND_ASYNC | winsound.SND_LOOP | winsound.SND_FILENAME)
+                    upper_bound = periodogram_upper_bound_default
+
+            play_sound("sfx/microwave_sound_effect.wav", True)
             time.sleep(3)
             print('Generating periodogram...')
             
             period = np.linspace(lower_bound, upper_bound, 100000) # Period
             periodogram_bls = lightcurve_stitched.to_periodogram(method='bls', period=period, frequency_factor=500)
-            plot_title = 'Periodogram of light curve of ' + target_star
+            plot_title = f'Periodogram of light curve of {target_star}'
             periodogram_bls.plot(title=plot_title)
-            
-            save_plot(target_star, '_LIGHTCURVEPERIODOGRAM_' + alphabet_list[alphabet_index] + '.svg')
 
-            if sound_enabled is True:
-                winsound.PlaySound("sfx/ovending.wav", winsound.SND_ASYNC | winsound.SND_FILENAME)
+            play_sound("sfx/ovending.wav", False)
+
             time.sleep(2)
+            save_plot(target_star, f'_LIGHTCURVEPERIODOGRAM_{alphabet_list[alphabet_index]}.{file_saving_format}')
             plt.show()
             # FIRST ONE ABOVE. REST IN LOOP
+            time.sleep(1)
 
             while True:
-
+                play_sound('sfx/subwaysurfers.wav', True)
+                
                 planet_period = periodogram_bls.period_at_max_power
                 planet_t0 = periodogram_bls.transit_time_at_max_power
                 planet_dur = periodogram_bls.duration_at_max_power
@@ -184,10 +220,24 @@ while True:
                 ax.set_xlim(-5, 5)
                 ax.plot(title='Phasefold of Planet ' + alphabet_list[alphabet_index])
 
-                save_plot(target_star, '_PHASEFOLD_' + alphabet_list[alphabet_index] + '.svg')
-                
+                save_plot(target_star, f'_PHASEFOLD_{alphabet_list[alphabet_index]}.{file_saving_format}')
                 plt.show()
                 
+                
+                print('\n')
+                print('Would you like to create another periodogram? (y/n)')
+                while True:
+                    exit_function = input()
+                    if exit_function is None or exit_function.strip() == '' or exit_function.lower().strip() not in ['y', 'n']:
+                        print(prompt_input_not_recognized)
+                    else:
+                        exit_function = exit_function.lower().strip()
+                        break
+                print('\n')
+                if exit_function == 'n':
+                    break
+
+
                 alphabet_index += 1
 
                 if masking_enabled is True: # mask signals if true
@@ -195,27 +245,27 @@ while True:
                     lightcurve_stitched = lightcurve_stitched[~planet_mask]
                     print('Masking enabled ' + '(' + alphabet_list[alphabet_index] + ')...')
 
-                print('Please input periodogram lower bound (if blank, default 1):')
-                lower_bound_input = input()
-                if lower_bound_input.strip() == "":
-                    lower_bound = 1
+                print(prompt_periodogram_lower_bound) # input lower bound
+                periodogram_lower_bound_input = input()
+                if periodogram_lower_bound_input.strip() == "":
+                    lower_bound = periodogram_lower_bound_default
                 else:
                     try:
-                        lower_bound = int(lower_bound_input)
+                        lower_bound = int(periodogram_lower_bound_input)
                     except ValueError:
-                        lower_bound = 1
-                print('Please input periodogram upper bound (if blank, default 30):')
-                upper_bound_input = input()
-                if upper_bound_input.strip() == "":
-                    upper_bound = 30
-                else:
-                    try:
-                        upper_bound = int(upper_bound_input)
-                    except ValueError:
-                        upper_bound = 30
+                        lower_bound = periodogram_lower_bound_default
 
-                if sound_enabled is True:
-                    winsound.PlaySound("sfx/microwave_sound_effect.wav", winsound.SND_ASYNC | winsound.SND_LOOP | winsound.SND_FILENAME)
+                print(prompt_periodogram_upper_bound) # input upper bound
+                periodogram_upper_bound_input = input()
+                if periodogram_upper_bound_input.strip() == "":
+                    upper_bound = periodogram_upper_bound_default
+                else:
+                    try:
+                        upper_bound = int(periodogram_upper_bound_input)
+                    except ValueError:
+                        upper_bound = periodogram_upper_bound_default
+
+                play_sound("sfx/microwave_sound_effect.wav", True)
                 time.sleep(3)
                 print('Generating periodogram...')
                 
@@ -223,10 +273,8 @@ while True:
                 periodogram_bls = lightcurve_stitched.to_periodogram(method='bls', period=period, frequency_factor=500)
                 plot_title = 'Periodogram of light curve of ' + target_star
                 periodogram_bls.plot(title=plot_title)
-                if sound_enabled is True:
-                    winsound.PlaySound("sfx/ovending.wav", winsound.SND_ASYNC | winsound.SND_FILENAME)
+                play_sound("sfx/ovending.wav", False)
                 time.sleep(2)
-
-                save_plot(target_star, '_LIGHTCURVEPERIODOGRAM_' + alphabet_list[alphabet_index] + '.svg')
-
+                save_plot(target_star, f'_LIGHTCURVEPERIODOGRAM_{alphabet_list[alphabet_index]}.{file_saving_format}')
                 plt.show()
+                
