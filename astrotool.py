@@ -6,6 +6,7 @@ from vars import *
 from KermLib.KermLib import *
 import numpy as np
 import os
+import math
 
 
 if sound_enabled is True:
@@ -38,9 +39,15 @@ def play_sound(file_path, loop_enabled):
         return 'sound effects are disabled'
 
 
+def find_planet_radius(star_radius, depth_of_phase_fold):
+    planet_radius = star_radius * math.sqrt(1-depth_of_phase_fold)
+    print(f'Calculated planet radius: {planet_radius}')
+    print('\n' * 3)
+    return planet_radius
+
 def star_image_retrieval(target_star):
     print(f'Retrieving pixelfile of {target_star}...')
-    start_time = time.time() # measure load time
+    start_time = time.time() # measure time
     plot_title = f'Pixelfile of {target_star}'
     pixelfile = search_targetpixelfile(target_star).download()
 
@@ -61,7 +68,7 @@ def star_lightcurve_retrieval(target_star):
     print(f'Retrieving light curve of {target_star}...')
     start_time = time.time()
     plot_title = f'Light curve of {target_star}'
-    lightcurve = search_lightcurve(target_star, author=telescope, cadence='long').download()
+    lightcurve = search_lightcurve(target_star, author=selected_telescope, cadence=selected_cadence).download()
     lightcurve_corrected = lightcurve.remove_outliers().normalize().flatten()
     try:
         lightcurve_corrected.plot(title=plot_title)
@@ -80,7 +87,7 @@ def star_lightcurve_bulk_retrieval(target_star):
     print(f'Retrieving ALL light curves of {target_star}...')
     start_time = time.time()
     plot_title = f'All light curves of {target_star}'
-    search_result = search_lightcurve(target_star, author=telescope, cadence='long')
+    search_result = search_lightcurve(target_star, author=selected_telescope, cadence=selected_cadence)
     lightcurve_collection = search_result.download_all()
     try:
         lightcurve_collection.plot(title=plot_title)
@@ -120,6 +127,10 @@ flag_index = 0
 for x in range(len(user_flags)//2):
     print(user_flags[flag_index] + ' = ' + str(user_flags[flag_index+1]))
     flag_index += 2
+print(f'Telescope selected: {selected_telescope}')
+print(f'Cadence selected: {selected_cadence}')
+if file_saving_enabled is True:
+    print(f'File saving format: {file_saving_format}')
 
 print('\n')
 
@@ -140,25 +151,61 @@ while True:
         else:
             user_input = int(user_input)
             break
+    print('\n')
+    print('Parameters')
+    target_star = None
+    star_radius = None
+    depth_of_phase_fold = None
+    if user_input in [2, 3, 4]:
+        while True:
+            target_star = input('Target star: ')
+            if target_star is None or target_star.strip() == '':
+                print(prompt_input_not_recognized)
+            else:
+                target_star = target_star.strip()
+                break
 
-    print('Enter parameters:')
-    while True:
-        target_star = input('Target star: ')
-        if target_star is None or target_star.strip() == '':
-            print(prompt_input_not_recognized)
-        else:
-            target_star = target_star.strip()
-            break
+    if user_input == 1:
+        while True:
+            star_radius = input("Transited star's radius (in solar radii): ")
+            if star_radius is None or star_radius.strip() == '':
+                print(prompt_input_not_recognized)
+            else:
+                star_radius = float(star_radius.strip())
+                break
+        while True:
+            if lowest_flux is None:
+                depth_of_phase_fold = input('Depth of Phase Fold: ')
+                if depth_of_phase_fold is None or depth_of_phase_fold.strip() == '':
+                        print(prompt_input_not_recognized)
+                else:
+                    depth_of_phase_fold = float(depth_of_phase_fold.strip())
+                    break
+            else:
+                use_last_value = input(f'Would you like to use last stored value ({lowest_flux})? (y/n): ')
+                if use_last_value.lower().strip() == 'y':
+                    depth_of_phase_fold = lowest_flux
+                    break
+                else:
+                    depth_of_phase_fold = input('Depth of Phase Fold: ')
+                    if depth_of_phase_fold is None or depth_of_phase_fold.strip() == '':
+                        print(prompt_input_not_recognized)
+                    else:
+                        depth_of_phase_fold = float(depth_of_phase_fold.strip())
+                        break
     
     play_sound('sfx/nflsong.wav', True)
-
-    target_star = target_star.upper()
+    if target_star:
+        target_star = target_star.upper()
+    print('\n')
     match user_input:
         case 1:
-            pixelfile = star_image_retrieval(target_star)
+            calculated_planet_radius = find_planet_radius(star_radius, depth_of_phase_fold)
         case 2:
-            lightcurve = star_lightcurve_retrieval(target_star)
+            pixelfile = star_image_retrieval(target_star)
         case 3:
+            lightcurve = star_lightcurve_retrieval(target_star)
+        case 4:
             lightcurve_collection = star_lightcurve_bulk_retrieval(target_star)
             if lightcurve_collection == 'fail':
                 continue
@@ -218,11 +265,41 @@ while True:
 
                 ax = lightcurve_stitched.fold(period=planet_period, epoch_time=planet_t0).scatter()
                 ax.set_xlim(-5, 5)
-                ax.plot(title='Phasefold of Planet ' + alphabet_list[alphabet_index])
+                ax.plot(title=f'Phasefold of Planet {alphabet_list[alphabet_index]}')
 
                 save_plot(target_star, f'_PHASEFOLD_{alphabet_list[alphabet_index]}.{file_saving_format}')
+
+
+                # TEST EXPERIMENTAL FOR FINDING LOWEST POINT-------------------------
+                folded_lc = lightcurve_stitched.fold(period=planet_period, epoch_time=planet_t0)
+                flux = folded_lc.flux
+
+                # find the index of the minimum flux
+                min_idx = np.nanargmin(flux)
+
+                min_flux = flux[min_idx]
+                min_phase = folded_lc.time[min_idx].value  
+
+                print(f'Lowest point has flux of {min_flux:.6f} at {min_phase:.6f}.')
+                # TEST END----------------------------------------------
+
                 plt.show()
                 
+
+                binned_phase_fold = folded_lc.bin(bins=100)
+                binned_phase_fold.plot()
+                save_plot(target_star, f'_PHASEFOLDBINNED_{alphabet_list[alphabet_index]}.{file_saving_format}')
+
+                min_idx = np.nanargmin(binned_phase_fold.flux)
+                min_flux  = binned_phase_fold.flux[min_idx]
+                print(f"Lowest flux = {min_flux:.6f}. Saving")
+
+                lowest_flux = f"{min_flux:.6f}"
+                lowest_flux = float(lowest_flux)
+                plt.show()
+
+
+
                 
                 print('\n')
                 print('Would you like to create another periodogram? (y/n)')
