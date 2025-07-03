@@ -40,10 +40,11 @@ def play_sound(file_path, loop_enabled):
 
 
 def find_planet_radius(star_radius, depth_of_phase_fold):
-    planet_radius = star_radius * math.sqrt(1-depth_of_phase_fold)
-    print(f'Calculated planet radius: {planet_radius}')
+    planet_radius_solar = star_radius * math.sqrt(1-depth_of_phase_fold)
+    planet_radius_earth = planet_radius_solar * 109.1223801222
+    print(f'Calculated planet radius: {planet_radius_earth} earth radii')
     print('\n' * 3)
-    return planet_radius
+    return planet_radius_earth
 
 def star_image_retrieval(target_star):
     print(f'Retrieving pixelfile of {target_star}...')
@@ -269,22 +270,10 @@ while True:
 
                 save_plot(target_star, f'_PHASEFOLD_{alphabet_list[alphabet_index]}.{file_saving_format}')
 
-
-                # TEST EXPERIMENTAL FOR FINDING LOWEST POINT-------------------------
-                folded_lc = lightcurve_stitched.fold(period=planet_period, epoch_time=planet_t0)
-                flux = folded_lc.flux
-
-                # find the index of the minimum flux
-                min_idx = np.nanargmin(flux)
-
-                min_flux = flux[min_idx]
-                min_phase = folded_lc.time[min_idx].value  
-
-                print(f'Lowest point has flux of {min_flux:.6f} at {min_phase:.6f}.')
-                # TEST END----------------------------------------------
-
                 plt.show()
                 
+                folded_lc = lightcurve_stitched.fold(period=planet_period, epoch_time=planet_t0)
+                flux = folded_lc.flux
 
                 binned_phase_fold = folded_lc.bin(bins=100)
                 binned_phase_fold.plot()
@@ -292,7 +281,7 @@ while True:
 
                 min_idx = np.nanargmin(binned_phase_fold.flux)
                 min_flux  = binned_phase_fold.flux[min_idx]
-                print(f"Lowest flux = {min_flux:.6f}. Saving")
+                print(f"Lowest flux = {min_flux:.6f}. Saved to memory.")
 
                 lowest_flux = f"{min_flux:.6f}"
                 lowest_flux = float(lowest_flux)
