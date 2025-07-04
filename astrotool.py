@@ -8,13 +8,9 @@ import numpy as np
 import os
 import math
 
-
 if sound_enabled is True:
     import winsound
 
-if brain_rot_enabled is True:
-    import webbrowser
-    import random
 
 def save_plot(target_star, file_suffix):
     if file_saving_enabled is True:
@@ -34,89 +30,80 @@ def play_sound(file_path, loop_enabled):
             winsound.PlaySound(file_path, winsound.SND_ASYNC | winsound.SND_LOOP | winsound.SND_FILENAME)
         else:
             winsound.PlaySound(file_path, winsound.SND_ASYNC | winsound.SND_FILENAME)
-        return 'sound_played'
+        return 'sound played'
     else:
         return 'sound effects are disabled'
 
 
-def find_planet_radius(star_radius, depth_of_phase_fold):
+def find_planet_radius(star_radius, depth_of_phase_fold, star_radius_uncertainty_positive, star_radius_uncertainty_negative):
+    """
+    Estimates the radius of a transiting exoplanet using the radius of the transited star (given, solar radii)
+    and the dip in the light emitted off the star (measured in flux.) The flux is found and automatically saved
+    after retrieving light curve and creating phase fold.
+    
+    """
+    planet_radius_solar_upperlimit_uncertainty = (star_radius + star_radius_uncertainty_positive) * math.sqrt(1-depth_of_phase_fold) # calculates highest possible value
+    planet_radius_solar_lowerlimit_uncertainty = (star_radius + star_radius_uncertainty_negative) * math.sqrt(1-depth_of_phase_fold) # calculates lowest possible value
     planet_radius_solar = star_radius * math.sqrt(1-depth_of_phase_fold)
-    planet_radius_earth = planet_radius_solar * 109.1223801222
-    print(f'Calculated planet radius: {planet_radius_earth} earth radii')
+    planet_radius_solar_positive_uncertainty = planet_radius_solar_upperlimit_uncertainty - planet_radius_solar
+    planet_radius_solar_negative_uncertainty = planet_radius_solar - planet_radius_solar_lowerlimit_uncertainty
+
+
+    planet_radius_earth = planet_radius_solar * 109.1223801222 # converts solar radii to earth radii
+    planet_radius_earth_positive_uncertainty = planet_radius_solar_positive_uncertainty * 109.1223801222
+    planet_radius_earth_negative_uncertainty = planet_radius_solar_negative_uncertainty * 109.1223801222
+
+    print(f'Calculated planet radius: {planet_radius_earth} (+{planet_radius_earth_positive_uncertainty} -{planet_radius_earth_negative_uncertainty})')
+    print(f'Upper limit: {planet_radius_earth + planet_radius_earth_positive_uncertainty}')
+    print(f'Lower limit: {planet_radius_earth - planet_radius_earth_negative_uncertainty}')
     print('\n' * 3)
     return planet_radius_earth
 
-def star_image_retrieval(target_star):
+def star_pixelfile_retrieval(target_star):
+    """
+    Retrieves and displays pixelfile of star.
+    """
     print(f'Retrieving pixelfile of {target_star}...')
-    start_time = time.time() # measure time
+    start_time = time.time() # measure time 
     plot_title = f'Pixelfile of {target_star}'
     pixelfile = search_targetpixelfile(target_star).download()
 
     try:
         pixelfile.plot(title=plot_title)
     except:
-        print(f"ERROR: Either no data available for {target_star} system doesn't exist.")
+        print(f"ERROR: Either no data available for {target_star}, or system doesn't exist.")
         print('\n')
         return 'fail'
     
-    end_time = time.time() # measure load time
-    print('took', round((end_time - start_time), 1), 'seconds to retrieve')
+    end_time = time.time() # measure time
+    print(f'took {round((end_time - start_time), 1)} seconds to retrieve')
     save_plot(target_star, f'_PIXELFILE.{file_saving_format}')
     plt.show()
     return pixelfile
 
 def star_lightcurve_retrieval(target_star):
-    print(f'Retrieving light curve of {target_star}...')
-    start_time = time.time()
-    plot_title = f'Light curve of {target_star}'
-    lightcurve = search_lightcurve(target_star, author=selected_telescope, cadence=selected_cadence).download()
-    lightcurve_corrected = lightcurve.remove_outliers().normalize().flatten()
-    try:
-        lightcurve_corrected.plot(title=plot_title)
-    except:
-        print(f"ERROR: Either no data available for {target_star} system doesn't exist.")
-        print('\n')
-        return 'fail'
-
-    end_time = time.time()
-    print('took', round((end_time - start_time), 1), 'seconds to retrieve')
-    save_plot(target_star, f'_LIGHTCURVE.{file_saving_format}')
-    plt.show()
-    return lightcurve_corrected
-
-def star_lightcurve_bulk_retrieval(target_star):
+    """
+    Retrieves multiple light curves of star. Automatically graphs and saves light curve, periodogram,
+    binned lightcurve and saves values for radius calculations.
+    """
     print(f'Retrieving ALL light curves of {target_star}...')
-    start_time = time.time()
+    start_time = time.time() # measure time
     plot_title = f'All light curves of {target_star}'
     search_result = search_lightcurve(target_star, author=selected_telescope, cadence=selected_cadence)
     lightcurve_collection = search_result.download_all()
     try:
         lightcurve_collection.plot(title=plot_title)
     except:
-        print(f"ERROR: Either no data available for {target_star} system doesn't exist.")
+        print(f"ERROR: Either no data available for {target_star}, or system doesn't exist.")
         print('\n')
         return 'fail'
 
-    end_time = time.time()
-    print('took', round((end_time - start_time), 1), 'seconds to retrieve')
-
-    if brain_rot_enabled is True:
-        brain_rot_urls_selected = random.sample(brain_rot_urls, 5)
-        webbrowser.open_new(brain_rot_urls_selected[0])
-        time.sleep(0.2)
-        webbrowser.open_new(brain_rot_urls_selected[1])
-        time.sleep(0.3)
-        webbrowser.open_new(brain_rot_urls_selected[2])
-        time.sleep(0.1)
-        webbrowser.open_new(brain_rot_urls_selected[3])
-        time.sleep(0.2)
-        webbrowser.open_new(brain_rot_urls_selected[4])
-
+    end_time = time.time() # measure time
+    print(f'took {round((end_time - start_time), 1)} seconds to retrieve')
     save_plot(target_star, f'_LIGHTCURVECOLLECTION.{file_saving_format}')
     plt.show()
     return lightcurve_collection
 
-play_sound('sfx/subwaysurfers.wav', False)
 
 KermLib.ascii_run()
 print(f'Astrotool V{version} initialized')
@@ -128,14 +115,15 @@ flag_index = 0
 for x in range(len(user_flags)//2):
     print(user_flags[flag_index] + ' = ' + str(user_flags[flag_index+1]))
     flag_index += 2
-print(f'Telescope selected: {selected_telescope}')
-print(f'Cadence selected: {selected_cadence}')
 if file_saving_enabled is True:
     print(f'File saving format: {file_saving_format}')
+print(f'Telescope selected: {selected_telescope}')
+print(f'Cadence selected: {selected_cadence}')
 
 print('\n')
 
 while True:
+    play_sound('sfx/subwaysurfers.wav', False)
     function_index = 1
     print('Select desired function:')
     for function in list_of_tools:
@@ -157,14 +145,6 @@ while True:
     target_star = None
     star_radius = None
     depth_of_phase_fold = None
-    if user_input in [2, 3, 4]:
-        while True:
-            target_star = input('Target star: ')
-            if target_star is None or target_star.strip() == '':
-                print(prompt_input_not_recognized)
-            else:
-                target_star = target_star.strip()
-                break
 
     if user_input == 1:
         while True:
@@ -174,6 +154,24 @@ while True:
             else:
                 star_radius = float(star_radius.strip())
                 break
+
+        while True:
+            star_radius_uncertainty_positive = input("The 'greather than' uncertainty of transited star's radius (in solar radii): ")
+            if star_radius_uncertainty_positive is None or star_radius_uncertainty_positive.strip() == '':
+                print(prompt_input_not_recognized)
+            else:
+                star_radius_uncertainty_positive = float(star_radius_uncertainty_positive.strip())
+                break
+
+        while True:
+            star_radius_uncertainty_negative = input("The 'less than' uncertainty of transited star's radius (in solar radii): ")
+            if star_radius_uncertainty_negative is None or star_radius_uncertainty_negative.strip() == '':
+                print(prompt_input_not_recognized)
+            else:
+                star_radius_uncertainty_negative = float(star_radius_uncertainty_negative.strip())
+                break
+
+
         while True:
             if lowest_flux is None:
                 depth_of_phase_fold = input('Depth of Phase Fold: ')
@@ -183,7 +181,7 @@ while True:
                     depth_of_phase_fold = float(depth_of_phase_fold.strip())
                     break
             else:
-                use_last_value = input(f'Would you like to use last stored value ({lowest_flux})? (y/n): ')
+                use_last_value = input(f'Would you like to use the last stored lowest flux value ({lowest_flux})? (y/n): ')
                 if use_last_value.lower().strip() == 'y':
                     depth_of_phase_fold = lowest_flux
                     break
@@ -194,20 +192,27 @@ while True:
                     else:
                         depth_of_phase_fold = float(depth_of_phase_fold.strip())
                         break
-    
+
+    elif user_input in [2, 3]:
+        while True:
+            target_star = input('Target star: ')
+            if target_star is None or target_star.strip() == '':
+                print(prompt_input_not_recognized)
+            else:
+                target_star = target_star.strip()
+                break
+
     play_sound('sfx/nflsong.wav', True)
     if target_star:
         target_star = target_star.upper()
     print('\n')
     match user_input:
         case 1:
-            calculated_planet_radius = find_planet_radius(star_radius, depth_of_phase_fold)
+            calculated_planet_radius = find_planet_radius(star_radius, depth_of_phase_fold, star_radius_uncertainty_positive, star_radius_uncertainty_negative)
         case 2:
-            pixelfile = star_image_retrieval(target_star)
+            pixelfile = star_pixelfile_retrieval(target_star)
         case 3:
-            lightcurve = star_lightcurve_retrieval(target_star)
-        case 4:
-            lightcurve_collection = star_lightcurve_bulk_retrieval(target_star)
+            lightcurve_collection = star_lightcurve_retrieval(target_star)
             if lightcurve_collection == 'fail':
                 continue
             print('Stitching light curve collection...')
@@ -286,9 +291,6 @@ while True:
                 lowest_flux = f"{min_flux:.6f}"
                 lowest_flux = float(lowest_flux)
                 plt.show()
-
-
-
                 
                 print('\n')
                 print('Would you like to create another periodogram? (y/n)')
