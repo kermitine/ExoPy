@@ -35,7 +35,7 @@ def play_sound(file_path, loop_enabled):
         return 'sound effects are disabled'
 
 
-def find_planet_radius(star_radius, depth_of_phase_fold, star_radius_uncertainty_positive, star_radius_uncertainty_negative):
+def find_exoplanet_radius(star_radius, depth_of_phase_fold, star_radius_uncertainty_positive, star_radius_uncertainty_negative):
     """
     Estimates the radius of a transiting exoplanet using the radius of the transited star (given, solar radii)
     and the dip in the light emitted off the star (measured in flux.) The flux is found and automatically saved
@@ -43,7 +43,7 @@ def find_planet_radius(star_radius, depth_of_phase_fold, star_radius_uncertainty
     
     """
     planet_radius_solar_upperlimit_uncertainty = (star_radius + star_radius_uncertainty_positive) * math.sqrt(1-depth_of_phase_fold) # calculates highest possible value
-    planet_radius_solar_lowerlimit_uncertainty = (star_radius + star_radius_uncertainty_negative) * math.sqrt(1-depth_of_phase_fold) # calculates lowest possible value
+    planet_radius_solar_lowerlimit_uncertainty = (star_radius - star_radius_uncertainty_negative) * math.sqrt(1-depth_of_phase_fold) # calculates lowest possible value
     planet_radius_solar = star_radius * math.sqrt(1-depth_of_phase_fold)
     planet_radius_solar_positive_uncertainty = planet_radius_solar_upperlimit_uncertainty - planet_radius_solar
     planet_radius_solar_negative_uncertainty = planet_radius_solar - planet_radius_solar_lowerlimit_uncertainty
@@ -53,9 +53,9 @@ def find_planet_radius(star_radius, depth_of_phase_fold, star_radius_uncertainty
     planet_radius_earth_positive_uncertainty = planet_radius_solar_positive_uncertainty * 109.1223801222
     planet_radius_earth_negative_uncertainty = planet_radius_solar_negative_uncertainty * 109.1223801222
 
-    print(f'Calculated planet radius: {planet_radius_earth} (+{planet_radius_earth_positive_uncertainty} -{planet_radius_earth_negative_uncertainty})')
-    print(f'Upper limit: {planet_radius_earth + planet_radius_earth_positive_uncertainty}')
-    print(f'Lower limit: {planet_radius_earth - planet_radius_earth_negative_uncertainty}')
+    print(f'Calculated nominal planet radius: {planet_radius_earth} (Uncertainty: +{planet_radius_earth_positive_uncertainty} -{planet_radius_earth_negative_uncertainty})')
+    print(f'Highest uncertainty: {planet_radius_earth + planet_radius_earth_positive_uncertainty}')
+    print(f'Lowest uncertainty: {planet_radius_earth - planet_radius_earth_negative_uncertainty}')
     print('\n' * 3)
     return planet_radius_earth
 
@@ -146,7 +146,7 @@ while True:
     star_radius = None
     depth_of_phase_fold = None
 
-    if user_input == 1:
+    if user_input == 1: # parameters needed for planet radius calculator
         while True:
             star_radius = input("Transited star's radius (in solar radii): ")
             if star_radius is None or star_radius.strip() == '':
@@ -160,7 +160,7 @@ while True:
             if star_radius_uncertainty_positive is None or star_radius_uncertainty_positive.strip() == '':
                 print(prompt_input_not_recognized)
             else:
-                star_radius_uncertainty_positive = float(star_radius_uncertainty_positive.strip())
+                star_radius_uncertainty_positive = abs(float(star_radius_uncertainty_positive.strip()))
                 break
 
         while True:
@@ -168,7 +168,7 @@ while True:
             if star_radius_uncertainty_negative is None or star_radius_uncertainty_negative.strip() == '':
                 print(prompt_input_not_recognized)
             else:
-                star_radius_uncertainty_negative = float(star_radius_uncertainty_negative.strip())
+                star_radius_uncertainty_negative = abs(float(star_radius_uncertainty_negative.strip()))
                 break
 
 
@@ -208,7 +208,7 @@ while True:
     print('\n')
     match user_input:
         case 1:
-            calculated_planet_radius = find_planet_radius(star_radius, depth_of_phase_fold, star_radius_uncertainty_positive, star_radius_uncertainty_negative)
+            calculated_planet_radius = find_exoplanet_radius(star_radius, depth_of_phase_fold, star_radius_uncertainty_positive, star_radius_uncertainty_negative)
         case 2:
             pixelfile = star_pixelfile_retrieval(target_star)
         case 3:

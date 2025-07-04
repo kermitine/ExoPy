@@ -14,7 +14,19 @@ There are many variables and "flags" which can be adjusted, enabled, and disable
 <br/> <br/>
 
 ## Features
-To be added
+### Exoplanet Radius Calculator
+Calculate an exoplanets radius using the radius of its star, and the dip in the light emitted during the transit (phase fold, automatically calculated and saved during Lightcurve Retrieval.) Includes uncertanties.
+
+### Lightcurve Retrieval/Calculation
+Automatically retrieve, plot and graph lightcurves of stars. Automatically generate periodogram and phase folds based on user input, and save for use in radius calculations.
+
+### Pixelfile Retrieval
+Automatically retrieve the pixelfile of a star and display it.
+
+### Automated file saving/caching
+Automatically saves all plots to a file type of user's choosing, adjustable in vars. SVG recommended/default
+
+
 
 
 ![kermitine](https://github.com/kermitine/kermitine/blob/b523c5954ea8820f70eb6ff786f2dbec7ce08955/images/kermitine.png)
