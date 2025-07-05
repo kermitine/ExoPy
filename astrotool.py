@@ -20,22 +20,25 @@ def round_sig_fig(x, sig):
     return round(x, sig - int(math.floor(math.log10(abs(x)))) - 1)
 
 def find_significant_figures(float, integer):
+    """
+    calculate the sig figs of a number.
+    """
     significant_figures = 0
     leading_zero = True
-    if round(float) == 0:
+    if round(float) == 0: # disregard sig figs if 0
         return 100
-    if float:
+    if float: # convert to string
         string_float = str(float)
     if integer:
         string_integer = str(integer)
 
     if float:
         for char in string_float:
-            if char == '0' and leading_zero is True:
+            if char == '0' and leading_zero is True: # dont count leading zeros toward sig figs
                 continue
-            elif char == '.':
+            elif char == '.': # dont count decimal place as sig figs
                 continue
-            if char != '0' and char != '.' and leading_zero is True:
+            if char != '0' and char != '.' and leading_zero is True: 
                 leading_zero = False
                 significant_figures += 1
             else:
@@ -43,6 +46,9 @@ def find_significant_figures(float, integer):
     return significant_figures
 
 def save_plot(target_star, file_suffix):
+    """
+    Streamlined way to save matplotlib plots to /saved_data
+    """
     if file_saving_enabled is True:
         directory_name = 'saved_data/' + target_star
         file_name = directory_name + '/' + target_star + file_suffix
