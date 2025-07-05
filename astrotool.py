@@ -119,6 +119,7 @@ if file_saving_enabled is True:
     print(f'File saving format: {file_saving_format}')
 print(f'Telescope selected: {selected_telescope}')
 print(f'Cadence selected: {selected_cadence}')
+print(f'Bins: {selected_bins}')
 
 print('\n')
 
@@ -264,7 +265,7 @@ while True:
 
             while True:
                 play_sound('sfx/subwaysurfers.wav', True)
-                
+                print('Folding light curve...')
                 planet_period = periodogram_bls.period_at_max_power
                 planet_t0 = periodogram_bls.transit_time_at_max_power
                 planet_dur = periodogram_bls.duration_at_max_power
@@ -279,8 +280,8 @@ while True:
                 
                 folded_lc = lightcurve_stitched.fold(period=planet_period, epoch_time=planet_t0)
                 flux = folded_lc.flux
-
-                binned_phase_fold = folded_lc.bin(bins=100)
+                print('Binning...')
+                binned_phase_fold = folded_lc.bin(bins=selected_bins)
                 binned_phase_fold.plot()
                 save_plot(target_star, f'_PHASEFOLDBINNED_{alphabet_list[alphabet_index]}.{file_saving_format}')
 
