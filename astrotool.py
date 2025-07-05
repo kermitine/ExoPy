@@ -22,6 +22,8 @@ def round_sig_fig(x, sig):
 def find_significant_figures(float, integer):
     significant_figures = 0
     leading_zero = True
+    if round(float) == 0:
+        return 100
     if float:
         string_float = str(float)
     if integer:
@@ -161,6 +163,8 @@ for x in range(len(user_flags)//2):
     flag_index += 2
 if file_saving_enabled is True:
     print(f'File saving format: {file_saving_format}')
+if significant_figure_rounding is False:
+    print(f'Decimals to round to: {rounding_decimal_places}')
 print(f'Telescope selected: {selected_telescope}')
 print(f'Cadence selected: {selected_cadence}')
 print(f'Bins: {selected_bins}')

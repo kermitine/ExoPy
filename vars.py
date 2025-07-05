@@ -1,7 +1,7 @@
 # USER VARS BELOW
 masking_enabled = False # enable/disable cadence masking
 sound_enabled = False # enable/disable sound effects
-significant_figure_rounding = True # if disabled, rounds to 4 decimal places
+significant_figure_rounding = False # if disabled, rounds to 4 decimal places
 file_saving_enabled = True # enable/disable saving of plots
 
 periodogram_lower_bound_default = 0.5
@@ -18,7 +18,7 @@ prompt_input_not_recognized = 'Input not recognized. Please try again.'
 # do not edit below
 import string
 user_flags = ['masking_enabled', masking_enabled, 'sound_enabled', sound_enabled, 'significant_figure_rounding', significant_figure_rounding, 'file_saving_enabled', file_saving_enabled] # add any user vars to this list. First name in str, then variable itself
-version = '1.1.6'
+version = '1.1.7'
 list_of_tools = ['Exoplanet Radius Calculator','Star Pixelfile Retrieval', 'Star Light Curve Retrieval']
 alphabet_list = list(string.ascii_uppercase) # list of every individual letter from the alphabet, uppercase
 list_of_functions_index = []
