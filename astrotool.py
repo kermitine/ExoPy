@@ -53,9 +53,9 @@ def find_exoplanet_radius(star_radius, depth_of_phase_fold, star_radius_uncertai
     planet_radius_earth_positive_uncertainty = planet_radius_solar_positive_uncertainty * 109.1223801222
     planet_radius_earth_negative_uncertainty = planet_radius_solar_negative_uncertainty * 109.1223801222
 
-    print(f'Calculated nominal planet radius: {planet_radius_earth} (Uncertainty: +{planet_radius_earth_positive_uncertainty} -{planet_radius_earth_negative_uncertainty})')
-    print(f'Highest uncertainty: {planet_radius_earth + planet_radius_earth_positive_uncertainty}')
-    print(f'Lowest uncertainty: {planet_radius_earth - planet_radius_earth_negative_uncertainty}')
+    print(f'Calculated nominal planet radius: {planet_radius_earth} earth radii (Uncertainty: +{planet_radius_earth_positive_uncertainty} -{planet_radius_earth_negative_uncertainty})')
+    print(f'Highest uncertainty: {planet_radius_earth + planet_radius_earth_positive_uncertainty} earth radii')
+    print(f'Lowest uncertainty: {planet_radius_earth - planet_radius_earth_negative_uncertainty} earth radii')
     print('\n' * 3)
     return planet_radius_earth
 
