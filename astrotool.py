@@ -11,6 +11,34 @@ import math
 if sound_enabled is True:
     import winsound
 
+def round_sig_fig(x, sig):
+    """
+    Round x to sig significant figures. (COPIED FROM CHATGPT)
+    """
+    if x == 0:
+        return 0
+    return round(x, sig - int(math.floor(math.log10(abs(x)))) - 1)
+
+def find_significant_figures(float, integer):
+    significant_figures = 0
+    leading_zero = True
+    if float:
+        string_float = str(float)
+    if integer:
+        string_integer = str(integer)
+
+    if float:
+        for char in string_float:
+            if char == '0' and leading_zero is True:
+                continue
+            elif char == '.':
+                continue
+            if char != '0' and char != '.' and leading_zero is True:
+                leading_zero = False
+                significant_figures += 1
+            else:
+                significant_figures += 1
+    return significant_figures
 
 def save_plot(target_star, file_suffix):
     if file_saving_enabled is True:
@@ -42,6 +70,9 @@ def find_exoplanet_radius(star_radius, depth_of_phase_fold, star_radius_uncertai
     after retrieving light curve and creating phase fold.
     
     """
+    significant_figure_list = [] # iniitalizes significant figure list, which tracks sf of each calculated
+
+
     planet_radius_solar_upperlimit_uncertainty = (star_radius + star_radius_uncertainty_positive) * math.sqrt(1-depth_of_phase_fold) # calculates highest possible value
     planet_radius_solar_lowerlimit_uncertainty = (star_radius - star_radius_uncertainty_negative) * math.sqrt(1-depth_of_phase_fold) # calculates lowest possible value
     planet_radius_solar = star_radius * math.sqrt(1-depth_of_phase_fold)
@@ -53,9 +84,22 @@ def find_exoplanet_radius(star_radius, depth_of_phase_fold, star_radius_uncertai
     planet_radius_earth_positive_uncertainty = planet_radius_solar_positive_uncertainty * 109.1223801222
     planet_radius_earth_negative_uncertainty = planet_radius_solar_negative_uncertainty * 109.1223801222
 
-    print(f'Calculated nominal planet radius: {planet_radius_earth} earth radii (Uncertainty: +{planet_radius_earth_positive_uncertainty} -{planet_radius_earth_negative_uncertainty})')
-    print(f'Highest uncertainty: {planet_radius_earth + planet_radius_earth_positive_uncertainty} earth radii')
-    print(f'Lowest uncertainty: {planet_radius_earth - planet_radius_earth_negative_uncertainty} earth radii')
+    # SIGNIFICANT FIGURE ROUNDING HERE
+    significant_figure_list.append(find_significant_figures(star_radius, None))
+    significant_figure_list.append(find_significant_figures(depth_of_phase_fold, None))
+    significant_figure_list.append(find_significant_figures(star_radius_uncertainty_negative, None))
+    significant_figure_list.append(find_significant_figures(star_radius_uncertainty_positive, None))
+    lowest_sig_fig = min(significant_figure_list)
+
+    if significant_figure_rounding is True:
+        print(f'Calculated nominal planet radius: {round_sig_fig(planet_radius_earth, lowest_sig_fig)} earth radii (Uncertainty: +{round_sig_fig(planet_radius_earth_positive_uncertainty, lowest_sig_fig)} -{round_sig_fig(planet_radius_earth_negative_uncertainty, lowest_sig_fig)}) (Rounded to {lowest_sig_fig} sig figs)')
+        print(f'Highest uncertainty: {round_sig_fig(planet_radius_earth + planet_radius_earth_positive_uncertainty, lowest_sig_fig)} earth radii')
+        print(f'Lowest uncertainty: {round_sig_fig(planet_radius_earth - planet_radius_earth_negative_uncertainty, lowest_sig_fig)} earth radii')
+    else:
+        print(f'Calculated nominal planet radius: {round(planet_radius_earth, rounding_decimal_places)} earth radii (Uncertainty: +{round(planet_radius_earth_positive_uncertainty, rounding_decimal_places)} -{round(planet_radius_earth_negative_uncertainty, rounding_decimal_places)} (Rounded to {rounding_decimal_places} decimal places)')
+        print(f'Highest uncertainty: {round(planet_radius_earth + planet_radius_earth_positive_uncertainty, rounding_decimal_places)} earth radii')
+        print(f'Lowest uncertainty: {round(planet_radius_earth - planet_radius_earth_negative_uncertainty, rounding_decimal_places)} earth radii')
+
     print('\n' * 3)
     return planet_radius_earth
 
@@ -120,6 +164,7 @@ if file_saving_enabled is True:
 print(f'Telescope selected: {selected_telescope}')
 print(f'Cadence selected: {selected_cadence}')
 print(f'Bins: {selected_bins}')
+lowest_flux = None
 
 print('\n')
 
@@ -146,7 +191,6 @@ while True:
     target_star = None
     star_radius = None
     depth_of_phase_fold = None
-
     if user_input == 1: # parameters needed for planet radius calculator
         while True:
             star_radius = input("Transited star's radius (in solar radii): ")
