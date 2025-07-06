@@ -287,7 +287,7 @@ while True:
                 lower_bound = periodogram_lower_bound_default
             else:
                 try:
-                    lower_bound = int(periodogram_lower_bound_input)
+                    lower_bound = round(float(periodogram_lower_bound_input), 2)
                 except ValueError:
                     lower_bound = periodogram_lower_bound_default
             print(prompt_periodogram_upper_bound)
@@ -296,7 +296,7 @@ while True:
                 upper_bound = periodogram_upper_bound_default
             else:
                 try:
-                    upper_bound = int(periodogram_upper_bound_input)
+                    upper_bound = round(float(periodogram_upper_bound_input), 2)
                 except ValueError:
                     upper_bound = periodogram_upper_bound_default
 
@@ -374,7 +374,7 @@ while True:
                     lower_bound = periodogram_lower_bound_default
                 else:
                     try:
-                        lower_bound = int(periodogram_lower_bound_input)
+                        lower_bound = round(float(periodogram_lower_bound_input), 2)
                     except ValueError:
                         lower_bound = periodogram_lower_bound_default
 
@@ -384,7 +384,7 @@ while True:
                     upper_bound = periodogram_upper_bound_default
                 else:
                     try:
-                        upper_bound = int(periodogram_upper_bound_input)
+                        upper_bound = round(float(periodogram_upper_bound_input),2)
                     except ValueError:
                         upper_bound = periodogram_upper_bound_default
 
