@@ -104,7 +104,7 @@ def find_exoplanet_radius(star_radius, depth_of_phase_fold, star_radius_uncertai
         print(f'Highest uncertainty: {round_sig_fig(planet_radius_earth + planet_radius_earth_positive_uncertainty, lowest_sig_fig)} earth radii')
         print(f'Lowest uncertainty: {round_sig_fig(planet_radius_earth - planet_radius_earth_negative_uncertainty, lowest_sig_fig)} earth radii')
     else:
-        print(f'Calculated nominal planet radius: {round(planet_radius_earth, rounding_decimal_places)} earth radii (Uncertainty: +{round(planet_radius_earth_positive_uncertainty, rounding_decimal_places)} -{round(planet_radius_earth_negative_uncertainty, rounding_decimal_places)} (Rounded to {rounding_decimal_places} decimal places)')
+        print(f'Calculated nominal planet radius: {round(planet_radius_earth, rounding_decimal_places)} earth radii (Uncertainty: +{round(planet_radius_earth_positive_uncertainty, rounding_decimal_places)} -{round(planet_radius_earth_negative_uncertainty, rounding_decimal_places)}) (Rounded to {rounding_decimal_places} decimal places)')
         print(f'Highest uncertainty: {round(planet_radius_earth + planet_radius_earth_positive_uncertainty, rounding_decimal_places)} earth radii')
         print(f'Lowest uncertainty: {round(planet_radius_earth - planet_radius_earth_negative_uncertainty, rounding_decimal_places)} earth radii')
 
