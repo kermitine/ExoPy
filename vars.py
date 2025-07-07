@@ -1,16 +1,17 @@
-# USER VARS BELOW
+# ENABLE/DISABLE FUNCTIONALITY BELOW
 masking_enabled = False # enable/disable cadence masking
 sound_enabled = False # enable/disable sound effects
-significant_figure_rounding = False # if disabled, rounds to 4 decimal places
-file_saving_enabled = True # enable/disable saving of plots
-
+significant_figure_rounding = False # recommended disabled (fallback: 4 decimal place rounding)
+file_saving_enabled = True # recommended enabled (saves plots to saved_data/{starsystem})
+# UPDATE DEFAULTS
 periodogram_lower_bound_default = 0.5
 periodogram_upper_bound_default = 30
-file_saving_format = 'svg' # supports png, jpeg, pdf, svg (recommended)
-rounding_decimal_places = 4 # fallback decimal places to round to if significant_figure_rounding = False
-selected_telescope = 'Kepler' # options are Kepler, K2, Tess
-selected_cadence = 'long' # long or short
 selected_bins = 700 # default: 700
+rounding_decimal_places = 4 # fallback decimal places to round to if significant_figure_rounding = False
+file_saving_format = 'svg' # supports png, jpeg, pdf, svg (recommended)
+# TELESCOPE DATA
+selected_telescope = 'Kepler' # options are Kepler, K2, Tess (recommend Kepler)
+selected_cadence = 'long' # long or short
 # commonly used print statements for easy editing
 prompt_periodogram_upper_bound = f'Please input periodogram upper bound (if blank, default {periodogram_upper_bound_default}):'
 prompt_periodogram_lower_bound = f'Please input periodogram lower bound (if blank, default {periodogram_lower_bound_default}):'
