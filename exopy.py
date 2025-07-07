@@ -158,7 +158,7 @@ def star_lightcurve_retrieval(target_star):
 
 
 KermLib.ascii_run()
-print(f'Astrotool V{version} initialized')
+print(f'ExoPy V{version} initialized')
 print('Created by Ayrik Nabirahni')
 print('\n')
 
