@@ -100,13 +100,13 @@ def find_exoplanet_radius(star_radius, depth_of_phase_fold, star_radius_uncertai
     lowest_sig_fig = min(significant_figure_list)
 
     if significant_figure_rounding is True:
-        print(f'Calculated nominal planet radius: {round_sig_fig(planet_radius_earth, lowest_sig_fig)} earth radii (Uncertainty: +{round_sig_fig(planet_radius_earth_positive_uncertainty, lowest_sig_fig)} -{round_sig_fig(planet_radius_earth_negative_uncertainty, lowest_sig_fig)}) (Rounded to {lowest_sig_fig} sig figs)')
-        print(f'Highest uncertainty: {round_sig_fig(planet_radius_earth + planet_radius_earth_positive_uncertainty, lowest_sig_fig)} earth radii')
-        print(f'Lowest uncertainty: {round_sig_fig(planet_radius_earth - planet_radius_earth_negative_uncertainty, lowest_sig_fig)} earth radii')
+        print(f'Calculated nominal planet radius: {round_sig_fig(planet_radius_earth, lowest_sig_fig)} R⊕ ({round_sig_fig(planet_radius_earth*6378, lowest_sig_fig)} km) (Uncertainty: +{round_sig_fig(planet_radius_earth_positive_uncertainty, lowest_sig_fig)} -{round_sig_fig(planet_radius_earth_negative_uncertainty, lowest_sig_fig)}) (Rounded to {lowest_sig_fig} sig figs)')
+        print(f'Highest uncertainty: {round_sig_fig(planet_radius_earth + planet_radius_earth_positive_uncertainty, lowest_sig_fig)} R⊕ ({round_sig_fig((planet_radius_earth + planet_radius_earth_positive_uncertainty)*6378, lowest_sig_fig)} km)')
+        print(f'Lowest uncertainty: {round_sig_fig(planet_radius_earth - planet_radius_earth_negative_uncertainty, lowest_sig_fig)} R⊕ ({round_sig_fig((planet_radius_earth - planet_radius_earth_negative_uncertainty)*6378, lowest_sig_fig)} km)')
     else:
-        print(f'Calculated nominal planet radius: {round(planet_radius_earth, rounding_decimal_places)} earth radii (Uncertainty: +{round(planet_radius_earth_positive_uncertainty, rounding_decimal_places)} -{round(planet_radius_earth_negative_uncertainty, rounding_decimal_places)}) (Rounded to {rounding_decimal_places} decimal places)')
-        print(f'Highest uncertainty: {round(planet_radius_earth + planet_radius_earth_positive_uncertainty, rounding_decimal_places)} earth radii')
-        print(f'Lowest uncertainty: {round(planet_radius_earth - planet_radius_earth_negative_uncertainty, rounding_decimal_places)} earth radii')
+        print(f'Calculated nominal planet radius: {round(planet_radius_earth, rounding_decimal_places)} R⊕ ({round(planet_radius_earth*6378, rounding_decimal_places)} km) (Uncertainty: +{round(planet_radius_earth_positive_uncertainty, rounding_decimal_places)} -{round(planet_radius_earth_negative_uncertainty, rounding_decimal_places)}) (Rounded to {rounding_decimal_places} decimal places)')
+        print(f'Highest uncertainty: {round(planet_radius_earth + planet_radius_earth_positive_uncertainty, rounding_decimal_places)} R⊕ ({round((planet_radius_earth + planet_radius_earth_positive_uncertainty)*6378, rounding_decimal_places)} km)')
+        print(f'Lowest uncertainty: {round(planet_radius_earth - planet_radius_earth_negative_uncertainty, rounding_decimal_places)} R⊕ ({round((planet_radius_earth - planet_radius_earth_negative_uncertainty)*6378, rounding_decimal_places)} km)')
 
     print('\n' * 3)
     return planet_radius_earth
@@ -203,7 +203,7 @@ while True:
     depth_of_phase_fold = None
     if user_input == 1: # parameters needed for planet radius calculator
         while True:
-            star_radius = input("Transited star's radius (in solar radii): ")
+            star_radius = input("Transited star's radius (R☉): ")
             if star_radius is None or star_radius.strip() == '':
                 print(prompt_input_not_recognized)
             else:
@@ -211,7 +211,7 @@ while True:
                 break
 
         while True:
-            star_radius_uncertainty_positive = input("The 'greather than' uncertainty of transited star's radius (in solar radii): ")
+            star_radius_uncertainty_positive = input("The 'greather than' uncertainty of transited star's radius (R☉): ")
             if star_radius_uncertainty_positive is None or star_radius_uncertainty_positive.strip() == '':
                 print(prompt_input_not_recognized)
             else:
@@ -219,7 +219,7 @@ while True:
                 break
 
         while True:
-            star_radius_uncertainty_negative = input("The 'less than' uncertainty of transited star's radius (in solar radii): ")
+            star_radius_uncertainty_negative = input("The 'less than' uncertainty of transited star's radius (R☉): ")
             if star_radius_uncertainty_negative is None or star_radius_uncertainty_negative.strip() == '':
                 print(prompt_input_not_recognized)
             else:
@@ -229,7 +229,7 @@ while True:
 
         while True:
             if lowest_flux is None:
-                depth_of_phase_fold = input('Depth of Phase Fold: ')
+                depth_of_phase_fold = input('Minimum flux value during transit: ')
                 if depth_of_phase_fold is None or depth_of_phase_fold.strip() == '':
                         print(prompt_input_not_recognized)
                 else:
@@ -241,7 +241,7 @@ while True:
                     depth_of_phase_fold = lowest_flux
                     break
                 else:
-                    depth_of_phase_fold = input('Depth of Phase Fold: ')
+                    depth_of_phase_fold = input('Minimum flux value during transit: ')
                     if depth_of_phase_fold is None or depth_of_phase_fold.strip() == '':
                         print(prompt_input_not_recognized)
                     else:
