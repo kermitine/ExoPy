@@ -70,12 +70,20 @@ def play_sound(file_path, loop_enabled):
     else:
         return 'sound effects are disabled'
 
-def habitable_zone_calculator(star_luminosity, upper_luminosity_uncertainty, lower_luminosity_uncertainty):
+def habitable_zone_calculator(star_luminosity):
     inner_nominal_goldilocks_radius = math.sqrt(star_luminosity/1.1)
     outer_nominal_goldilocks_radius = math.sqrt(star_luminosity/0.53)
     print(f'Inner nominal goldilocks radius: {round(inner_nominal_goldilocks_radius, rounding_decimal_places)} AU')
     print(f'Outer nominal goldilocks radius: {round(outer_nominal_goldilocks_radius, rounding_decimal_places)} AU')
     print('\n' * 3)
+    return inner_nominal_goldilocks_radius, outer_nominal_goldilocks_radius
+
+def stefan_boltzmann_law_calculator(star_radius, star_luminosity):
+    star_radius_meters = star_radius * 6.957e8
+    star_luminosity_watts = star_luminosity * 3.828e26
+    star_temperature = ((star_luminosity_watts)/(4*math.pi*stefan_boltzmann_constant*(star_radius_meters)**2))**0.25
+    print(f'{star_temperature} Kelvin')
+    return star_temperature
 
 def find_exoplanet_radius(star_radius, depth_of_phase_fold, star_radius_uncertainty_positive, star_radius_uncertainty_negative):
     """
@@ -293,6 +301,25 @@ while True:
                 star_luminosity = float(star_luminosity.strip())
                 break
 
+    elif user_input == 5:
+        while True:
+            star_luminosity = input("Star's luminosity (solar luminosity): ")
+            if star_luminosity is None or star_luminosity.strip() == '':
+                print(prompt_input_not_recognized)
+            else:
+                star_luminosity = float(star_luminosity.strip())
+                break
+        while True:
+            star_radius = input("Star's radius (solar radius): ")
+            if star_radius is None or star_radius.strip() == '':
+                print(prompt_input_not_recognized)
+            else:
+                star_radius = float(star_radius.strip())
+                break
+
+        stefan_boltzmann_law_calculator(star_radius, star_luminosity)
+
+
 
 
     play_sound('sfx/nflsong.wav', True)
@@ -440,4 +467,9 @@ while True:
                 plt.show()
         case 4:
             habitable_zone_calculator(star_luminosity)
+
+        case 5:
+            stefan_boltzmann_law_calculator(star_radius, star_luminosity)
+
+        
                 
