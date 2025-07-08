@@ -23,10 +23,11 @@ Automatically retrieve, plot and graph lightcurves of stars. Automatically gener
 ### Pixelfile Retrieval
 Automatically retrieve the pixelfile of a star and display it.
 
-### Automated file saving/caching
-Automatically saves all plots to a file type of user's choosing, adjustable in vars. SVG recommended/default
+### Automated File Saving
+Automatically saves all plots to a file type of user's choosing, adjustable in vars. SVG recommended/default.
 
-
+### Significant Figure Rounding
+Toggleable via vars.py.
 
 
 ![kermitine](https://github.com/kermitine/kermitine/blob/b523c5954ea8820f70eb6ff786f2dbec7ce08955/images/kermitine.png)
