@@ -100,13 +100,30 @@ def find_exoplanet_radius(star_radius, depth_of_phase_fold, star_radius_uncertai
     lowest_sig_fig = min(significant_figure_list)
 
     if significant_figure_rounding is True:
-        print(f'Calculated nominal planet radius: {round_sig_fig(planet_radius_earth, lowest_sig_fig)} R⊕ ({round_sig_fig(planet_radius_earth*6378, lowest_sig_fig)} km) (Uncertainty: +{round_sig_fig(planet_radius_earth_positive_uncertainty, lowest_sig_fig)} -{round_sig_fig(planet_radius_earth_negative_uncertainty, lowest_sig_fig)}) (Rounded to {lowest_sig_fig} sig figs)')
+        print(f'Data rounded to {lowest_sig_fig} significant figures')
+        print(f'Calculated nominal planet radius: {round_sig_fig(planet_radius_earth, lowest_sig_fig)} R⊕ ({round_sig_fig(planet_radius_earth*6378, lowest_sig_fig)} km) (Uncertainty: +{round_sig_fig(planet_radius_earth_positive_uncertainty, lowest_sig_fig)} -{round_sig_fig(planet_radius_earth_negative_uncertainty, lowest_sig_fig)})')
         print(f'Highest uncertainty: {round_sig_fig(planet_radius_earth + planet_radius_earth_positive_uncertainty, lowest_sig_fig)} R⊕ ({round_sig_fig((planet_radius_earth + planet_radius_earth_positive_uncertainty)*6378, lowest_sig_fig)} km)')
         print(f'Lowest uncertainty: {round_sig_fig(planet_radius_earth - planet_radius_earth_negative_uncertainty, lowest_sig_fig)} R⊕ ({round_sig_fig((planet_radius_earth - planet_radius_earth_negative_uncertainty)*6378, lowest_sig_fig)} km)')
     else:
-        print(f'Calculated nominal planet radius: {round(planet_radius_earth, rounding_decimal_places)} R⊕ ({round(planet_radius_earth*6378, rounding_decimal_places)} km) (Uncertainty: +{round(planet_radius_earth_positive_uncertainty, rounding_decimal_places)} -{round(planet_radius_earth_negative_uncertainty, rounding_decimal_places)}) (Rounded to {rounding_decimal_places} decimal places)')
+        print(f'Data rounded to {rounding_decimal_places} decimal places')
+        print(f'Calculated nominal planet radius: {round(planet_radius_earth, rounding_decimal_places)} R⊕ ({round(planet_radius_earth*6378, rounding_decimal_places)} km) (Uncertainty: +{round(planet_radius_earth_positive_uncertainty, rounding_decimal_places)} -{round(planet_radius_earth_negative_uncertainty, rounding_decimal_places)})')
         print(f'Highest uncertainty: {round(planet_radius_earth + planet_radius_earth_positive_uncertainty, rounding_decimal_places)} R⊕ ({round((planet_radius_earth + planet_radius_earth_positive_uncertainty)*6378, rounding_decimal_places)} km)')
         print(f'Lowest uncertainty: {round(planet_radius_earth - planet_radius_earth_negative_uncertainty, rounding_decimal_places)} R⊕ ({round((planet_radius_earth - planet_radius_earth_negative_uncertainty)*6378, rounding_decimal_places)} km)')
+
+    if 0.6 > planet_radius_earth:
+        print('Predicted planet type: Sub-Earth')
+    elif 1.1 >= planet_radius_earth > 0.6:
+        print('Predicted planet type: Earth-Like')
+    elif 2.0 >= planet_radius_earth > 1.1:
+        print('Predicted planet type: Super-Earth')
+    elif 3.5 >= planet_radius_earth > 2.0:
+        print('Predicted planet type: Mini-Neptune')
+    elif 6.1 >= planet_radius_earth > 3.5:
+        print('Predicted planet type: Neptune-Like')
+    elif 14.2 >= planet_radius_earth > 6.1:
+        print('Predicted planet type: Jupiter-like')
+    elif planet_radius_earth > 14.2:
+        print('Predicted planet type: Super-Jupiter')
 
     print('\n' * 3)
     return planet_radius_earth
@@ -201,7 +218,11 @@ while True:
     target_star = None
     star_radius = None
     depth_of_phase_fold = None
-    if user_input == 1: # parameters needed for planet radius calculator
+    if user_input == 1: # parameters needed for planet radius calculator   
+        print('Unit legend:')
+        print('R☉ = Solar Radius')
+        print('R⊕ = Earth Radius')
+        print('\n')
         while True:
             star_radius = input("Transited star's radius (R☉): ")
             if star_radius is None or star_radius.strip() == '':
