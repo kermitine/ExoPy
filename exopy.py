@@ -70,6 +70,12 @@ def play_sound(file_path, loop_enabled):
     else:
         return 'sound effects are disabled'
 
+def habitable_zone_calculator(star_luminosity, upper_luminosity_uncertainty, lower_luminosity_uncertainty):
+    inner_nominal_goldilocks_radius = math.sqrt(star_luminosity/1.1)
+    outer_nominal_goldilocks_radius = math.sqrt(star_luminosity/0.53)
+    print(f'Inner nominal goldilocks radius: {round(inner_nominal_goldilocks_radius, rounding_decimal_places)} AU')
+    print(f'Outer nominal goldilocks radius: {round(outer_nominal_goldilocks_radius, rounding_decimal_places)} AU')
+    print('\n' * 3)
 
 def find_exoplanet_radius(star_radius, depth_of_phase_fold, star_radius_uncertainty_positive, star_radius_uncertainty_negative):
     """
@@ -114,9 +120,9 @@ def find_exoplanet_radius(star_radius, depth_of_phase_fold, star_radius_uncertai
         print('Predicted planet type: Sub-Earth')
     elif 1.1 >= planet_radius_earth > 0.6:
         print('Predicted planet type: Earth-Like')
-    elif 2.0 >= planet_radius_earth > 1.1:
+    elif 1.9 >= planet_radius_earth > 1.1:
         print('Predicted planet type: Super-Earth')
-    elif 3.5 >= planet_radius_earth > 2.0:
+    elif 3.5 >= planet_radius_earth > 1.9:
         print('Predicted planet type: Mini-Neptune')
     elif 6.1 >= planet_radius_earth > 3.5:
         print('Predicted planet type: Neptune-Like')
@@ -278,6 +284,17 @@ while True:
                 target_star = target_star.strip()
                 break
 
+    elif user_input == 4:
+        while True:
+            star_luminosity = input("Star's luminosity: ")
+            if star_luminosity is None or star_luminosity.strip() == '':
+                print(prompt_input_not_recognized)
+            else:
+                star_luminosity = float(star_luminosity.strip())
+                break
+
+
+
     play_sound('sfx/nflsong.wav', True)
     if target_star:
         target_star = target_star.upper()
@@ -421,4 +438,6 @@ while True:
                 time.sleep(2)
                 save_plot(target_star, f'_LIGHTCURVEPERIODOGRAM_{alphabet_list[alphabet_index]}.{file_saving_format}')
                 plt.show()
+        case 4:
+            habitable_zone_calculator(star_luminosity)
                 
