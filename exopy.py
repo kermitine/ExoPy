@@ -11,40 +11,6 @@ import math
 if sound_enabled is True:
     import winsound
 
-def round_sig_fig(x, sig):
-    """
-    Round x to sig significant figures. (COPIED FROM CHATGPT)
-    """
-    if x == 0:
-        return 0
-    return round(x, sig - int(math.floor(math.log10(abs(x)))) - 1)
-
-def find_significant_figures(float, integer):
-    """
-    calculate the sig figs of a number.
-    """
-    significant_figures = 0
-    leading_zero = True
-    if round(float) == 0: # disregard sig figs if 0
-        return 100
-    if float: # convert to string
-        string_float = str(float)
-    if integer:
-        string_integer = str(integer)
-
-    if float:
-        for char in string_float:
-            if char == '0' and leading_zero is True: # dont count leading zeros toward sig figs
-                continue
-            elif char == '.': # dont count decimal place as sig figs
-                continue
-            if char != '0' and char != '.' and leading_zero is True: 
-                leading_zero = False
-                significant_figures += 1
-            else:
-                significant_figures += 1
-    return significant_figures
-
 def save_plot(target_star, file_suffix):
     """
     Streamlined way to save matplotlib plots to /saved_data
@@ -69,6 +35,14 @@ def play_sound(file_path, loop_enabled):
         return 'sound played'
     else:
         return 'sound effects are disabled'
+
+def exoplanet_flux_received(star_luminosity, exoplanet_orbital_radius_astronomicalunits):
+    star_luminosity_watts = star_luminosity * 3.827e+26
+    exoplanet_orbital_radius_meters = exoplanet_orbital_radius_astronomicalunits * 1.496e+11
+    flux_watts = star_luminosity_watts / (4 * math.pi * exoplanet_orbital_radius_meters ** 2)
+    print(f'Calculated nominal flux received by exoplanet: {round(flux_watts, rounding_decimal_places)} W/(m^2)')
+    print('\n' * 3)
+    return flux_watts
 
 def habitable_zone_calculator(star_luminosity):
     inner_nominal_goldilocks_radius = math.sqrt(star_luminosity/1.1)
@@ -107,23 +81,9 @@ def find_exoplanet_radius(star_radius, depth_of_phase_fold, star_radius_uncertai
     planet_radius_earth_positive_uncertainty = planet_radius_solar_positive_uncertainty * 109.1223801222
     planet_radius_earth_negative_uncertainty = planet_radius_solar_negative_uncertainty * 109.1223801222
 
-    # SIGNIFICANT FIGURE ROUNDING HERE
-    significant_figure_list.append(find_significant_figures(star_radius, None))
-    significant_figure_list.append(find_significant_figures(depth_of_phase_fold, None))
-    significant_figure_list.append(find_significant_figures(star_radius_uncertainty_negative, None))
-    significant_figure_list.append(find_significant_figures(star_radius_uncertainty_positive, None))
-    lowest_sig_fig = min(significant_figure_list)
-
-    if significant_figure_rounding is True:
-        print(f'Data rounded to {lowest_sig_fig} significant figures')
-        print(f'Calculated nominal planet radius: {round_sig_fig(planet_radius_earth, lowest_sig_fig)} R⊕ ({round_sig_fig(planet_radius_earth*6378, lowest_sig_fig)} km) (Uncertainty: +{round_sig_fig(planet_radius_earth_positive_uncertainty, lowest_sig_fig)} -{round_sig_fig(planet_radius_earth_negative_uncertainty, lowest_sig_fig)})')
-        print(f'Highest uncertainty: {round_sig_fig(planet_radius_earth + planet_radius_earth_positive_uncertainty, lowest_sig_fig)} R⊕ ({round_sig_fig((planet_radius_earth + planet_radius_earth_positive_uncertainty)*6378, lowest_sig_fig)} km)')
-        print(f'Lowest uncertainty: {round_sig_fig(planet_radius_earth - planet_radius_earth_negative_uncertainty, lowest_sig_fig)} R⊕ ({round_sig_fig((planet_radius_earth - planet_radius_earth_negative_uncertainty)*6378, lowest_sig_fig)} km)')
-    else:
-        print(f'Data rounded to {rounding_decimal_places} decimal places')
-        print(f'Calculated nominal planet radius: {round(planet_radius_earth, rounding_decimal_places)} R⊕ ({round(planet_radius_earth*6378, rounding_decimal_places)} km) (Uncertainty: +{round(planet_radius_earth_positive_uncertainty, rounding_decimal_places)} -{round(planet_radius_earth_negative_uncertainty, rounding_decimal_places)})')
-        print(f'Highest uncertainty: {round(planet_radius_earth + planet_radius_earth_positive_uncertainty, rounding_decimal_places)} R⊕ ({round((planet_radius_earth + planet_radius_earth_positive_uncertainty)*6378, rounding_decimal_places)} km)')
-        print(f'Lowest uncertainty: {round(planet_radius_earth - planet_radius_earth_negative_uncertainty, rounding_decimal_places)} R⊕ ({round((planet_radius_earth - planet_radius_earth_negative_uncertainty)*6378, rounding_decimal_places)} km)')
+    print(f'Calculated nominal planet radius: {round(planet_radius_earth, rounding_decimal_places)} R⊕ ({round(planet_radius_earth*6378, rounding_decimal_places)} km) (Uncertainty: +{round(planet_radius_earth_positive_uncertainty, rounding_decimal_places)} -{round(planet_radius_earth_negative_uncertainty, rounding_decimal_places)})')
+    print(f'Highest uncertainty: {round(planet_radius_earth + planet_radius_earth_positive_uncertainty, rounding_decimal_places)} R⊕ ({round((planet_radius_earth + planet_radius_earth_positive_uncertainty)*6378, rounding_decimal_places)} km)')
+    print(f'Lowest uncertainty: {round(planet_radius_earth - planet_radius_earth_negative_uncertainty, rounding_decimal_places)} R⊕ ({round((planet_radius_earth - planet_radius_earth_negative_uncertainty)*6378, rounding_decimal_places)} km)')
 
     if 0.5 >= planet_radius_earth:
         print('Predicted planet type: Sub-Earth')
@@ -212,8 +172,6 @@ for x in range(len(user_flags)//2):
     flag_index += 2
 if file_saving_enabled is True:
     print(f'File saving format: {file_saving_format}')
-if significant_figure_rounding is False:
-    print(f'Decimals to round to: {rounding_decimal_places}')
 print(f'Telescope selected: {selected_telescope}')
 print(f'Cadence selected: {selected_cadence}')
 print(f'Bins: {selected_bins}')
@@ -358,6 +316,28 @@ while True:
                 print(prompt_input_not_recognized)
             else:
                 star_mass_solarmass = float(star_mass_solarmass.strip())
+                break
+
+    elif user_input == 7:
+        print('Unit legend:')
+        print('L☉ = Solar Luminosity')
+        print('AU = Astronomical Units')
+        print('W = Watts')
+        print('m = Meters')
+        print('\n')
+        while True:
+            star_luminosity = input("Star's luminosity (L☉): ")
+            if star_luminosity is None or star_luminosity.strip() == '':
+                print(prompt_input_not_recognized)
+            else:
+                star_luminosity = float(star_luminosity.strip())
+                break
+        while True:
+            exoplanet_orbital_radius_astronomicalunits = input("Semi-major axis of exoplanet's orbit (AU): ")
+            if exoplanet_orbital_radius_astronomicalunits is None or exoplanet_orbital_radius_astronomicalunits.strip() == '':
+                print(prompt_input_not_recognized)
+            else:
+                exoplanet_orbital_radius_astronomicalunits = float(exoplanet_orbital_radius_astronomicalunits.strip())
                 break
 
     play_sound('sfx/nflsong.wav', True)
@@ -511,6 +491,9 @@ while True:
 
         case 6:
             kepler_orbital_radius_calculator(orbital_period_days, star_mass_solarmass)
+        
+        case 7:
+            exoplanet_flux_received(star_luminosity, exoplanet_orbital_radius_astronomicalunits)
 
         
                 
