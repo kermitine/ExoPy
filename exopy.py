@@ -125,23 +125,32 @@ def find_exoplanet_radius(star_radius, depth_of_phase_fold, star_radius_uncertai
         print(f'Highest uncertainty: {round(planet_radius_earth + planet_radius_earth_positive_uncertainty, rounding_decimal_places)} R⊕ ({round((planet_radius_earth + planet_radius_earth_positive_uncertainty)*6378, rounding_decimal_places)} km)')
         print(f'Lowest uncertainty: {round(planet_radius_earth - planet_radius_earth_negative_uncertainty, rounding_decimal_places)} R⊕ ({round((planet_radius_earth - planet_radius_earth_negative_uncertainty)*6378, rounding_decimal_places)} km)')
 
-    if 0.6 >= planet_radius_earth:
+    if 0.5 >= planet_radius_earth:
         print('Predicted planet type: Sub-Earth')
-    elif 1.1 >= planet_radius_earth > 0.6:
+    elif 1.1 >= planet_radius_earth > 0.5:
         print('Predicted planet type: Earth-Like')
-    elif 2.3 >= planet_radius_earth > 1.1:
+    elif 1.75 >= planet_radius_earth > 1.1:
         print('Predicted planet type: Super-Earth')
-    elif 3.5 >= planet_radius_earth > 2.3:
-        print('Predicted planet type: Mini-Neptune')
+    elif 3.5 >= planet_radius_earth > 1.75:
+        print('Predicted planet type: Sub-Neptune')
     elif 6.1 >= planet_radius_earth > 3.5:
-        print('Predicted planet type: Neptune-Like')
-    elif 14.2 >= planet_radius_earth > 6.1:
+        print('Predicted planet type: Sub-Jupiter')
+    elif 14.3 >= planet_radius_earth > 6.1:
         print('Predicted planet type: Jupiter-like')
-    elif planet_radius_earth > 14.2:
+    elif planet_radius_earth > 14.3:
         print('Predicted planet type: Super-Jupiter')
 
     print('\n' * 3)
     return planet_radius_earth
+
+def kepler_orbital_radius_calculator(orbital_period_days, star_mass_solarmass):
+    orbital_period_seconds = orbital_period_days * 86400 # convert from days to seconds
+    star_mass_kg = star_mass_solarmass * 1.989e+30
+    semi_major_axis = ((gravitational_constant*star_mass_kg*(orbital_period_seconds**2))/(4*(math.pi**2)))**(1/3)
+    print(f'Calculated nominal semi-major axis: {round(semi_major_axis/1000, rounding_decimal_places)} km')
+    print(f'Alternative units: {round(semi_major_axis/1.496e+11, rounding_decimal_places)} AU, {round(semi_major_axis, rounding_decimal_places)} m')
+    print('\n' * 3)
+    return semi_major_axis
 
 def star_pixelfile_retrieval(target_star):
     """
@@ -329,6 +338,28 @@ while True:
                 star_radius = float(star_radius.strip())
                 break
 
+    elif user_input == 6:
+        print('Unit legend:')
+        print('d = Days')
+        print('M☉ = Solar Masses')
+        print('km = Kilometers')
+        print('AU = Astronomical Units')
+        while True:
+            orbital_period_days = input("Enter planet's orbital period (d): ")
+            if orbital_period_days is None or orbital_period_days.strip() == '':
+                print(prompt_input_not_recognized)
+            else:
+                orbital_period_days = float(orbital_period_days.strip())
+                break
+        
+        while True:
+            star_mass_solarmass = input("Enter star's mass (M☉): ")
+            if star_mass_solarmass is None or star_mass_solarmass.strip() == '':
+                print(prompt_input_not_recognized)
+            else:
+                star_mass_solarmass = float(star_mass_solarmass.strip())
+                break
+
     play_sound('sfx/nflsong.wav', True)
     if target_star:
         target_star = target_star.upper()
@@ -477,6 +508,9 @@ while True:
 
         case 5:
             stefan_boltzmann_star_temperature_calculator(star_radius, star_luminosity)
+
+        case 6:
+            kepler_orbital_radius_calculator(orbital_period_days, star_mass_solarmass)
 
         
                 
