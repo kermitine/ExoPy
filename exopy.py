@@ -78,11 +78,12 @@ def habitable_zone_calculator(star_luminosity):
     print('\n' * 3)
     return inner_nominal_goldilocks_radius, outer_nominal_goldilocks_radius
 
-def stefan_boltzmann_law_calculator(star_radius, star_luminosity):
+def stefan_boltzmann_star_temperature_calculator(star_radius, star_luminosity):
     star_radius_meters = star_radius * 6.957e8
     star_luminosity_watts = star_luminosity * 3.828e26
     star_temperature = ((star_luminosity_watts)/(4*math.pi*stefan_boltzmann_constant*(star_radius_meters)**2))**0.25
-    print(f'{star_temperature} Kelvin')
+    print(f'Calculated nominal star temperature: {star_temperature} K')
+    print('\n' * 3)
     return star_temperature
 
 def find_exoplanet_radius(star_radius, depth_of_phase_fold, star_radius_uncertainty_positive, star_radius_uncertainty_negative):
@@ -124,13 +125,13 @@ def find_exoplanet_radius(star_radius, depth_of_phase_fold, star_radius_uncertai
         print(f'Highest uncertainty: {round(planet_radius_earth + planet_radius_earth_positive_uncertainty, rounding_decimal_places)} R⊕ ({round((planet_radius_earth + planet_radius_earth_positive_uncertainty)*6378, rounding_decimal_places)} km)')
         print(f'Lowest uncertainty: {round(planet_radius_earth - planet_radius_earth_negative_uncertainty, rounding_decimal_places)} R⊕ ({round((planet_radius_earth - planet_radius_earth_negative_uncertainty)*6378, rounding_decimal_places)} km)')
 
-    if 0.6 > planet_radius_earth:
+    if 0.6 >= planet_radius_earth:
         print('Predicted planet type: Sub-Earth')
     elif 1.1 >= planet_radius_earth > 0.6:
         print('Predicted planet type: Earth-Like')
-    elif 1.9 >= planet_radius_earth > 1.1:
+    elif 2.3 >= planet_radius_earth > 1.1:
         print('Predicted planet type: Super-Earth')
-    elif 3.5 >= planet_radius_earth > 1.9:
+    elif 3.5 >= planet_radius_earth > 2.3:
         print('Predicted planet type: Mini-Neptune')
     elif 6.1 >= planet_radius_earth > 3.5:
         print('Predicted planet type: Neptune-Like')
@@ -162,6 +163,7 @@ def star_pixelfile_retrieval(target_star):
     print(f'took {round((end_time - start_time), 1)} seconds to retrieve')
     save_plot(target_star, f'_PIXELFILE.{file_saving_format}')
     plt.show()
+    print('\n' * 3)
     return pixelfile
 
 def star_lightcurve_retrieval(target_star):
@@ -185,6 +187,7 @@ def star_lightcurve_retrieval(target_star):
     print(f'took {round((end_time - start_time), 1)} seconds to retrieve')
     save_plot(target_star, f'_LIGHTCURVECOLLECTION.{file_saving_format}')
     plt.show()
+    print('\n' * 3)
     return lightcurve_collection
 
 
@@ -293,8 +296,12 @@ while True:
                 break
 
     elif user_input == 4:
+        print('Unit legend:')
+        print('L☉ = Solar Luminosity')
+        print('AU = Astronomical Units')
+        print('\n')
         while True:
-            star_luminosity = input("Star's luminosity: ")
+            star_luminosity = input("Star's luminosity (L☉): ")
             if star_luminosity is None or star_luminosity.strip() == '':
                 print(prompt_input_not_recognized)
             else:
@@ -302,25 +309,25 @@ while True:
                 break
 
     elif user_input == 5:
+        print('Unit legend:')
+        print('L☉ = Solar Luminosity')
+        print('R☉ = Solar Radius')
+        print('K = Kelvin')
+        print('\n')
         while True:
-            star_luminosity = input("Star's luminosity (solar luminosity): ")
+            star_luminosity = input("Star's luminosity (L☉): ")
             if star_luminosity is None or star_luminosity.strip() == '':
                 print(prompt_input_not_recognized)
             else:
                 star_luminosity = float(star_luminosity.strip())
                 break
         while True:
-            star_radius = input("Star's radius (solar radius): ")
+            star_radius = input("Star's radius (R☉): ")
             if star_radius is None or star_radius.strip() == '':
                 print(prompt_input_not_recognized)
             else:
                 star_radius = float(star_radius.strip())
                 break
-
-        stefan_boltzmann_law_calculator(star_radius, star_luminosity)
-
-
-
 
     play_sound('sfx/nflsong.wav', True)
     if target_star:
@@ -464,12 +471,12 @@ while True:
                 play_sound("sfx/ovending.wav", False)
                 time.sleep(2)
                 save_plot(target_star, f'_LIGHTCURVEPERIODOGRAM_{alphabet_list[alphabet_index]}.{file_saving_format}')
-                plt.show()
+                plt.show()           
         case 4:
             habitable_zone_calculator(star_luminosity)
 
         case 5:
-            stefan_boltzmann_law_calculator(star_radius, star_luminosity)
+            stefan_boltzmann_star_temperature_calculator(star_radius, star_luminosity)
 
         
                 
