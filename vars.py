@@ -19,12 +19,18 @@ prompt_input_not_recognized = 'Input not recognized. Please try again.'
 # do not edit below
 import string
 user_flags = ['masking_enabled', masking_enabled, 'sound_enabled', sound_enabled, 'file_saving_enabled', file_saving_enabled] # add any user vars to this list. First name in str, then variable itself
-version = '1.5.1'
-list_of_tools = ['Exoplanet Radius Calculator','Star Pixelfile Retrieval', 'Star Light Curve Retrieval', 'Star Habitable Zone Calculator', 'Stefan-Boltzmann Star Temperature Calculator', 'Kepler Orbital Radius Calculator', 'Inverse-Square Exoplanet Flux Received Calculator']
+version = '1.5.2'
+list_of_tools = ['Exoplanet Radius Calculator','Star Pixelfile Retrieval', 'Star Light Curve Analysis', 'Star Habitable Zone Calculator', 'Stefan-Boltzmann Star Temperature Calculator', 'Kepler Orbital Radius Calculator', 'Inverse-Square Exoplanet Steller Energy Calculator']
 alphabet_list = list(string.ascii_uppercase) # list of every individual letter from the alphabet, uppercase
 list_of_functions_index = []
 
 
 # SCIENTIFIC CONSTANTS
-stefan_boltzmann_constant = scipy.constants.Stefan_Boltzmann
-gravitational_constant = scipy.constants.gravitational_constant
+constant_stefan_boltzmann = scipy.constants.Stefan_Boltzmann
+constant_gravitational = scipy.constants.gravitational_constant
+# CONVERSION CONSTANTS
+constant_m_TO_AU = 6.68459e-12
+constant_AU_TO_m = 1.496e+11
+constant_d_TO_s = 86400
+constant_solarmass_TO_kg = 1.989e+30
+constant_solarluminosity_TO_W = 3.827e+26

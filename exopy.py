@@ -36,21 +36,41 @@ def play_sound(file_path, loop_enabled):
     else:
         return 'sound effects are disabled'
 
-def exoplanet_flux_received(star_luminosity, exoplanet_orbital_radius_astronomicalunits):
-    star_luminosity_watts = star_luminosity * 3.827e+26
-    exoplanet_orbital_radius_meters = exoplanet_orbital_radius_astronomicalunits * 1.496e+11
-    flux_watts = star_luminosity_watts / (4 * math.pi * exoplanet_orbital_radius_meters ** 2)
-    print(f'Calculated nominal flux received by exoplanet: {round(flux_watts, rounding_decimal_places)} W/(m^2)')
-    print('\n' * 3)
-    return flux_watts
+def exoplanet_flux_received(star_luminosity, star_luminosity_uncertainty_positive, star_luminosity_uncertainty_negative, exoplanet_orbital_radius_AU, exoplanet_orbital_radius_AU_uncertainty_positive, exoplanet_orbital_radius_AU_uncertainty_negative):
+    star_luminosity_watts_upper = (star_luminosity+star_luminosity_uncertainty_positive) * constant_solarluminosity_TO_W
+    star_luminosity_watts_nominal = star_luminosity * constant_solarluminosity_TO_W
+    star_luminosity_watts_lower = (star_luminosity-star_luminosity_uncertainty_negative) * constant_solarluminosity_TO_W
 
-def habitable_zone_calculator(star_luminosity):
-    inner_nominal_goldilocks_radius = math.sqrt(star_luminosity/1.1)
-    outer_nominal_goldilocks_radius = math.sqrt(star_luminosity/0.53)
-    print(f'Inner nominal goldilocks radius: {round(inner_nominal_goldilocks_radius, rounding_decimal_places)} AU')
-    print(f'Outer nominal goldilocks radius: {round(outer_nominal_goldilocks_radius, rounding_decimal_places)} AU')
+    exoplanet_orbital_radius_meters_upper = (exoplanet_orbital_radius_AU+exoplanet_orbital_radius_AU_uncertainty_positive) * constant_AU_TO_m
+    exoplanet_orbital_radius_meters_nominal = exoplanet_orbital_radius_AU * constant_AU_TO_m
+    exoplanet_orbital_radius_meters_lower = (exoplanet_orbital_radius_AU-exoplanet_orbital_radius_AU_uncertainty_negative) * constant_AU_TO_m
+
+    flux_watts_upper = star_luminosity_watts_upper / (4 * math.pi * exoplanet_orbital_radius_meters_lower ** 2)
+    flux_watts_nominal = star_luminosity_watts_nominal / (4 * math.pi * exoplanet_orbital_radius_meters_nominal ** 2)
+    flux_watts_lower = star_luminosity_watts_lower / (4 * math.pi * exoplanet_orbital_radius_meters_upper ** 2)
+
+    flux_watts_upper_diff = flux_watts_upper - flux_watts_nominal
+    flux_watts_lower_diff = flux_watts_nominal - flux_watts_lower
+
+    print(f"Calculated nominal stellar energy received by exoplanet's atmosphere: {round(flux_watts_nominal, rounding_decimal_places)} W/m^2 (+{round(flux_watts_upper_diff, rounding_decimal_places)} W/m^2 -{round(flux_watts_lower_diff, rounding_decimal_places)} W/m^2)")
     print('\n' * 3)
-    return inner_nominal_goldilocks_radius, outer_nominal_goldilocks_radius
+    return flux_watts_nominal, flux_watts_upper_diff, flux_watts_lower_diff
+
+def habitable_zone_calculator(star_luminosity, star_luminosity_uncertainty_positive, star_luminosity_uncertainty_negative):
+
+    inner_goldilocks_radius_lower = math.sqrt((star_luminosity-star_luminosity_uncertainty_negative)/1.1)
+    inner_goldilocks_radius_nominal = math.sqrt(star_luminosity/1.1)
+
+    outer_goldilocks_radius_nominal = math.sqrt(star_luminosity/0.53)
+    outer_goldilocks_radius_upper = math.sqrt((star_luminosity+star_luminosity_uncertainty_positive)/0.53)
+
+    inner_goldilocks_radius_lower_diff = inner_goldilocks_radius_nominal-inner_goldilocks_radius_lower
+    outer_goldilocks_radius_upper_diff = outer_goldilocks_radius_upper-outer_goldilocks_radius_nominal
+
+    print(f'Calculated nominal inner goldilocks zone radius: {round(inner_goldilocks_radius_nominal, rounding_decimal_places)} AU (-{round(inner_goldilocks_radius_lower_diff, rounding_decimal_places)} AU)')
+    print(f'Calculated nominal outer goldilocks zone radius: {round(outer_goldilocks_radius_nominal, rounding_decimal_places)} AU (+{round(outer_goldilocks_radius_upper_diff, rounding_decimal_places)} AU)')
+    print('\n' * 3)
+    return inner_goldilocks_radius_nominal, inner_goldilocks_radius_lower_diff, outer_goldilocks_radius_nominal, outer_goldilocks_radius_upper_diff
 
 def stefan_boltzmann_star_temperature_calculator(star_radius, star_luminosity, star_radius_uncertainty_positive, star_radius_uncertainty_negative, star_luminosity_uncertainty_positive, star_luminosity_uncertainty_negative):
     
@@ -64,13 +84,16 @@ def stefan_boltzmann_star_temperature_calculator(star_radius, star_luminosity, s
     star_radius_meters_lower = (star_radius-star_radius_uncertainty_negative) * 6.957e8
     star_luminosity_watts_lower = (star_luminosity-star_luminosity_uncertainty_negative) * 3.828e26
 
-    star_temperature_upper = ((star_luminosity_watts_upper)/(4*math.pi*stefan_boltzmann_constant*(star_radius_meters_lower)**2))**0.25
-    star_temperature_nominal = ((star_luminosity_watts_nominal)/(4*math.pi*stefan_boltzmann_constant*(star_radius_meters_nominal)**2))**0.25
-    star_temperature_lower = ((star_luminosity_watts_lower)/(4*math.pi*stefan_boltzmann_constant*(star_radius_meters_upper)**2))**0.25
+    star_temperature_upper = ((star_luminosity_watts_upper)/(4*math.pi*constant_stefan_boltzmann*(star_radius_meters_lower)**2))**0.25
+    star_temperature_nominal = ((star_luminosity_watts_nominal)/(4*math.pi*constant_stefan_boltzmann*(star_radius_meters_nominal)**2))**0.25
+    star_temperature_lower = ((star_luminosity_watts_lower)/(4*math.pi*constant_stefan_boltzmann*(star_radius_meters_upper)**2))**0.25
 
-    print(f'Calculated nominal star temperature: {round(star_temperature_nominal, rounding_decimal_places)} K (+{round(star_temperature_upper-star_temperature_nominal, rounding_decimal_places)} K -{round(star_temperature_nominal-star_temperature_lower, rounding_decimal_places)} K)')
+    star_temperature_upper_diff = star_temperature_upper-star_temperature_nominal
+    star_temperature_lower_diff = star_temperature_nominal-star_temperature_lower
+
+    print(f'Calculated nominal star temperature: {round(star_temperature_nominal, rounding_decimal_places)} K (+{round(star_temperature_upper_diff, rounding_decimal_places)} K -{round(star_temperature_lower_diff, rounding_decimal_places)} K)')
     print('\n' * 3)
-    return star_temperature_nominal
+    return star_temperature_nominal, star_temperature_upper_diff, star_temperature_lower_diff
 
 def find_exoplanet_radius(star_radius, depth_of_phase_fold, star_radius_uncertainty_positive, star_radius_uncertainty_negative):
     """
@@ -88,37 +111,48 @@ def find_exoplanet_radius(star_radius, depth_of_phase_fold, star_radius_uncertai
     planet_radius_solar_negative_uncertainty = planet_radius_solar - planet_radius_solar_lowerlimit_uncertainty
 
 
-    planet_radius_earth = planet_radius_solar * 109.1223801222 # converts solar radii to earth radii
-    planet_radius_earth_positive_uncertainty = planet_radius_solar_positive_uncertainty * 109.1223801222
-    planet_radius_earth_negative_uncertainty = planet_radius_solar_negative_uncertainty * 109.1223801222
+    planet_radius_earth_nominal = planet_radius_solar * 109.1223801222 # converts solar radii to earth radii
+    planet_radius_earth_upper_diff = planet_radius_solar_positive_uncertainty * 109.1223801222
+    planet_radius_earth_lower_diff = planet_radius_solar_negative_uncertainty * 109.1223801222
 
-    print(f'Calculated nominal planet radius: {round(planet_radius_earth, rounding_decimal_places)} R⊕ (+{round(planet_radius_earth_positive_uncertainty, rounding_decimal_places)} R⊕ -{round(planet_radius_earth_negative_uncertainty, rounding_decimal_places)} R⊕)')
+    print(f'Calculated nominal planet radius: {round(planet_radius_earth_nominal, rounding_decimal_places)} R⊕ (+{round(planet_radius_earth_upper_diff, rounding_decimal_places)} R⊕ -{round(planet_radius_earth_lower_diff, rounding_decimal_places)} R⊕)')
 
-    if 0.5 >= planet_radius_earth:
+    if 0.5 >= planet_radius_earth_nominal:
         print('Predicted planet type: Sub-Earth')
-    elif 1.1 >= planet_radius_earth > 0.5:
+    elif 1.1 >= planet_radius_earth_nominal > 0.5:
         print('Predicted planet type: Earth-Like')
-    elif 1.75 >= planet_radius_earth > 1.1:
+    elif 1.75 >= planet_radius_earth_nominal > 1.1:
         print('Predicted planet type: Super-Earth')
-    elif 3.5 >= planet_radius_earth > 1.75:
+    elif 3.5 >= planet_radius_earth_nominal > 1.75:
         print('Predicted planet type: Sub-Neptune')
-    elif 6.1 >= planet_radius_earth > 3.5:
+    elif 6.1 >= planet_radius_earth_nominal > 3.5:
         print('Predicted planet type: Sub-Jupiter')
-    elif 14.3 >= planet_radius_earth > 6.1:
+    elif 14.3 >= planet_radius_earth_nominal > 6.1:
         print('Predicted planet type: Jupiter-like')
-    elif planet_radius_earth > 14.3:
+    elif planet_radius_earth_nominal > 14.3:
         print('Predicted planet type: Super-Jupiter')
 
     print('\n' * 3)
-    return planet_radius_earth
+    return planet_radius_earth_nominal, planet_radius_earth_upper_diff, planet_radius_earth_lower_diff
 
-def kepler_orbital_radius_calculator(orbital_period_days, star_mass_solarmass):
-    orbital_period_seconds = orbital_period_days * 86400 # convert from days to seconds
-    star_mass_kg = star_mass_solarmass * 1.989e+30
-    semi_major_axis = ((gravitational_constant*star_mass_kg*(orbital_period_seconds**2))/(4*(math.pi**2)))**(1/3)
-    print(f'Calculated nominal semi-major axis: {round(semi_major_axis/1000, rounding_decimal_places)} km')
+def kepler_orbital_radius_calculator(orbital_period_days, star_mass_solarmass, star_mass_solarmass_uncertainty_positive, star_mass_solarmass_uncertainty_negative):
+    orbital_period_seconds = orbital_period_days * constant_d_TO_s 
+
+    star_mass_kg_upper = (star_mass_solarmass + star_mass_solarmass_uncertainty_positive) * constant_solarmass_TO_kg 
+    star_mass_kg_nominal = star_mass_solarmass * constant_solarmass_TO_kg 
+    star_mass_kg_lower = (star_mass_solarmass - star_mass_solarmass_uncertainty_negative) * constant_solarmass_TO_kg 
+
+    semi_major_axis_upper = ((constant_gravitational*star_mass_kg_upper*(orbital_period_seconds**2))/(4*(math.pi**2)))**(1/3)
+    semi_major_axis_nominal = ((constant_gravitational*star_mass_kg_nominal*(orbital_period_seconds**2))/(4*(math.pi**2)))**(1/3)
+    semi_major_axis_lower = ((constant_gravitational*star_mass_kg_lower*(orbital_period_seconds**2))/(4*(math.pi**2)))**(1/3)
+
+    semi_major_axis_nominal_AU = semi_major_axis_nominal * constant_m_TO_AU
+    semi_major_axis_upper_diff_AU = (semi_major_axis_upper-semi_major_axis_nominal)*constant_m_TO_AU
+    semi_major_axis_lower_diff_AU = (semi_major_axis_nominal-semi_major_axis_lower)*constant_m_TO_AU
+
+    print(f'Calculated nominal semi-major axis: {round(semi_major_axis_nominal_AU, rounding_decimal_places)} AU (+{round(semi_major_axis_upper_diff_AU, rounding_decimal_places)} AU -{round(semi_major_axis_lower_diff_AU, rounding_decimal_places)} AU)')
     print('\n' * 3)
-    return semi_major_axis
+    return semi_major_axis_nominal_AU, semi_major_axis_upper_diff_AU, semi_major_axis_lower_diff_AU
 
 def star_pixelfile_retrieval(target_star):
     """
@@ -143,7 +177,7 @@ def star_pixelfile_retrieval(target_star):
     print('\n' * 3)
     return pixelfile
 
-def star_lightcurve_retrieval(target_star):
+def star_lightcurve_analysis(target_star):
     """
     Retrieves multiple light curves of star. Automatically graphs and saves light curve, periodogram,
     binned lightcurve and saves values for radius calculations.
@@ -282,6 +316,21 @@ while True:
             else:
                 star_luminosity = float(star_luminosity.strip())
                 break
+        while True:
+            star_luminosity_uncertainty_positive = input("The 'greather than' uncertainty of transited star's luminosity (L☉): ")
+            if star_luminosity_uncertainty_positive is None or star_luminosity_uncertainty_positive.strip() == '':
+                print(prompt_input_not_recognized)
+            else:
+                star_luminosity_uncertainty_positive = abs(float(star_luminosity_uncertainty_positive.strip()))
+                break
+
+        while True:
+            star_luminosity_uncertainty_negative = input("The 'less than' uncertainty of transited star's luminosity (L☉): ")
+            if star_luminosity_uncertainty_negative is None or star_luminosity_uncertainty_negative.strip() == '':
+                print(prompt_input_not_recognized)
+            else:
+                star_luminosity_uncertainty_negative = abs(float(star_luminosity_uncertainty_negative.strip()))
+                break
 
     elif user_input == 5:
         print('Unit legend:')
@@ -354,6 +403,23 @@ while True:
                 print(prompt_input_not_recognized)
             else:
                 star_mass_solarmass = float(star_mass_solarmass.strip())
+
+                break
+            
+        while True:
+            star_mass_solarmass_uncertainty_positive = input("The 'greather than' uncertainty of transited star's mass (M☉): ")
+            if star_mass_solarmass_uncertainty_positive is None or star_mass_solarmass_uncertainty_positive.strip() == '':
+                print(prompt_input_not_recognized)
+            else:
+                star_mass_solarmass_uncertainty_positive = abs(float(star_mass_solarmass_uncertainty_positive.strip()))
+                break
+
+        while True:
+            star_mass_solarmass_uncertainty_negative = input("The 'less than' uncertainty of transited star's mass (M☉): ")
+            if star_mass_solarmass_uncertainty_negative is None or star_mass_solarmass_uncertainty_negative.strip() == '':
+                print(prompt_input_not_recognized)
+            else:
+                star_mass_solarmass_uncertainty_negative = abs(float(star_mass_solarmass_uncertainty_negative.strip()))
                 break
 
     elif user_input == 7:
@@ -371,11 +437,41 @@ while True:
                 star_luminosity = float(star_luminosity.strip())
                 break
         while True:
-            exoplanet_orbital_radius_astronomicalunits = input("Semi-major axis of exoplanet's orbit (AU): ")
-            if exoplanet_orbital_radius_astronomicalunits is None or exoplanet_orbital_radius_astronomicalunits.strip() == '':
+            star_luminosity_uncertainty_positive = input("The 'greather than' uncertainty of transited star's luminosity (L☉): ")
+            if star_luminosity_uncertainty_positive is None or star_luminosity_uncertainty_positive.strip() == '':
                 print(prompt_input_not_recognized)
             else:
-                exoplanet_orbital_radius_astronomicalunits = float(exoplanet_orbital_radius_astronomicalunits.strip())
+                star_luminosity_uncertainty_positive = abs(float(star_luminosity_uncertainty_positive.strip()))
+                break
+
+        while True:
+            star_luminosity_uncertainty_negative = input("The 'less than' uncertainty of transited star's luminosity (L☉): ")
+            if star_luminosity_uncertainty_negative is None or star_luminosity_uncertainty_negative.strip() == '':
+                print(prompt_input_not_recognized)
+            else:
+                star_luminosity_uncertainty_negative = abs(float(star_luminosity_uncertainty_negative.strip()))
+                break
+        while True:
+            exoplanet_orbital_radius_AU = input("Semi-major axis of exoplanet's orbit (AU): ")
+            if exoplanet_orbital_radius_AU is None or exoplanet_orbital_radius_AU.strip() == '':
+                print(prompt_input_not_recognized)
+            else:
+                exoplanet_orbital_radius_AU = float(exoplanet_orbital_radius_AU.strip())
+                break
+        while True:
+            exoplanet_orbital_radius_AU_uncertainty_positive = input("The 'greather than' uncertainty of the exoplanet's semi-major axis (AU): ")
+            if exoplanet_orbital_radius_AU_uncertainty_positive is None or exoplanet_orbital_radius_AU_uncertainty_positive.strip() == '':
+                print(prompt_input_not_recognized)
+            else:
+                exoplanet_orbital_radius_AU_uncertainty_positive = abs(float(exoplanet_orbital_radius_AU_uncertainty_positive.strip()))
+                break
+
+        while True:
+            exoplanet_orbital_radius_AU_uncertainty_negative = input("The 'less than' uncertainty of the exoplanet's semi-major axis (AU): ")
+            if exoplanet_orbital_radius_AU_uncertainty_negative is None or exoplanet_orbital_radius_AU_uncertainty_negative.strip() == '':
+                print(prompt_input_not_recognized)
+            else:
+                exoplanet_orbital_radius_AU_uncertainty_negative = abs(float(exoplanet_orbital_radius_AU_uncertainty_negative.strip()))
                 break
 
     play_sound('sfx/nflsong.wav', True)
@@ -384,11 +480,11 @@ while True:
     print('\n')
     match user_input:
         case 1:
-            calculated_planet_radius = find_exoplanet_radius(star_radius, depth_of_phase_fold, star_radius_uncertainty_positive, star_radius_uncertainty_negative)
+            find_exoplanet_radius(star_radius, depth_of_phase_fold, star_radius_uncertainty_positive, star_radius_uncertainty_negative)
         case 2:
-            pixelfile = star_pixelfile_retrieval(target_star)
+            star_pixelfile_retrieval(target_star)
         case 3:
-            lightcurve_collection = star_lightcurve_retrieval(target_star)
+            lightcurve_collection = star_lightcurve_analysis(target_star)
             if lightcurve_collection == 'fail':
                 continue
             print('Stitching light curve collection...')
@@ -522,16 +618,16 @@ while True:
                 save_plot(target_star, f'_LIGHTCURVEPERIODOGRAM_{alphabet_list[alphabet_index]}.{file_saving_format}')
                 plt.show()           
         case 4:
-            habitable_zone_calculator(star_luminosity)
+            habitable_zone_calculator(star_luminosity, star_luminosity_uncertainty_positive, star_luminosity_uncertainty_negative)
 
         case 5:
             stefan_boltzmann_star_temperature_calculator(star_radius, star_luminosity, star_radius_uncertainty_positive, star_radius_uncertainty_negative, star_luminosity_uncertainty_positive, star_luminosity_uncertainty_negative)
 
         case 6:
-            kepler_orbital_radius_calculator(orbital_period_days, star_mass_solarmass)
+            kepler_orbital_radius_calculator(orbital_period_days, star_mass_solarmass, star_mass_solarmass_uncertainty_positive, star_mass_solarmass_uncertainty_negative)
         
         case 7:
-            exoplanet_flux_received(star_luminosity, exoplanet_orbital_radius_astronomicalunits)
+            exoplanet_flux_received(star_luminosity, star_luminosity_uncertainty_positive, star_luminosity_uncertainty_negative, exoplanet_orbital_radius_AU, exoplanet_orbital_radius_AU_uncertainty_positive, exoplanet_orbital_radius_AU_uncertainty_negative)
 
         
                 
