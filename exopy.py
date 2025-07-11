@@ -237,7 +237,7 @@ star_mass_solarmass = '(Not Generated)'
 planet_radius_earth_nominal = '(Not Generated)'
 exoplanet_k_temperature_nominal = '(Not Generated)'
 target_star = None
-
+planet_period_float = None
 planet_radius_earth_upper_diff = planet_radius_earth_lower_diff = '0.0'
 flux_watts_upper_diff = flux_watts_lower_diff = '0.0'
 semi_major_axis_upper_diff_AU = semi_major_axis_lower_diff_AU = '0.0'
@@ -421,12 +421,25 @@ while True:
         print('km = Kilometers')
         print('AU = Astronomical Units')
         while True:
-            orbital_period_days = input("Enter planet's orbital period (d): ")
-            if orbital_period_days is None or orbital_period_days.strip() == '':
-                print(prompt_input_not_recognized)
+            if planet_period_float is None:
+                orbital_period_days = input("Enter planet's orbital period (d): ")
+                if orbital_period_days is None or orbital_period_days.strip() == '':
+                        print(prompt_input_not_recognized)
+                else:
+                    orbital_period_days = float(orbital_period_days.strip())
+                    break
             else:
-                orbital_period_days = float(orbital_period_days.strip())
-                break
+                use_last_value = input(f'Would you like to use the last stored orbital period ({planet_period_float} d)? (y/n): ')
+                if use_last_value.lower().strip() == 'y':
+                    orbital_period_days = planet_period_float
+                    break
+                else:
+                    orbital_period_days = input('Minimum flux value during transit: ')
+                    if orbital_period_days is None or orbital_period_days.strip() == '':
+                        print(prompt_input_not_recognized)
+                    else:
+                        orbital_period_days = float(orbital_period_days.strip())
+                        break
         
         while True:
             star_mass_solarmass = input("Enter star's mass (M☉): ")
@@ -625,7 +638,6 @@ while True:
                 planet_period = periodogram_bls.period_at_max_power
                 planet_t0 = periodogram_bls.transit_time_at_max_power
                 planet_dur = periodogram_bls.duration_at_max_power
-
                 ax = lightcurve_stitched.fold(period=planet_period, epoch_time=planet_t0).scatter()
                 ax.set_xlim(-5, 5)
                 ax.plot(title=f'Phasefold of Planet {alphabet_list[alphabet_index]}')
@@ -643,8 +655,10 @@ while True:
 
                 min_idx = np.nanargmin(binned_phase_fold.flux)
                 min_flux  = binned_phase_fold.flux[min_idx]
-                print(f"Lowest flux = {min_flux:.6f}. Saved to memory.")
 
+                planet_period_float = planet_period.value # convert to float
+                print(f"Lowest flux = {min_flux:.6f}. Saved to memory.")
+                print(f"Likely Period = {planet_period_float} days. Saved to memory.")
                 lowest_flux = f"{min_flux:.6f}"
                 lowest_flux = float(lowest_flux)
                 plt.show()
@@ -858,12 +872,25 @@ while True:
                                 break
 
                         while True:
-                            orbital_period_days = input("Enter planet's orbital period (d): ")
-                            if orbital_period_days is None or orbital_period_days.strip() == '':
-                                print(prompt_input_not_recognized)
+                            if planet_period_float is None:
+                                orbital_period_days = input("Enter planet's orbital period (d): ")
+                                if orbital_period_days is None or orbital_period_days.strip() == '':
+                                        print(prompt_input_not_recognized)
+                                else:
+                                    orbital_period_days = float(orbital_period_days.strip())
+                                    break
                             else:
-                                orbital_period_days = float(orbital_period_days.strip())
-                                break
+                                use_last_value = input(f'Would you like to use the last stored orbital period ({planet_period_float} d)? (y/n): ')
+                                if use_last_value.lower().strip() == 'y':
+                                    orbital_period_days = planet_period_float
+                                    break
+                                else:
+                                    orbital_period_days = input('Minimum flux value during transit: ')
+                                    if orbital_period_days is None or orbital_period_days.strip() == '':
+                                        print(prompt_input_not_recognized)
+                                    else:
+                                        orbital_period_days = float(orbital_period_days.strip())
+                                        break
                         
                         while True:
                             star_mass_solarmass = input("Enter star's mass (M☉): ")
