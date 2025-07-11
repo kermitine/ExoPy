@@ -301,7 +301,6 @@ while True:
                 star_radius_uncertainty_negative = abs(float(star_radius_uncertainty_negative.strip()))
                 break
 
-
         while True:
             if lowest_flux is None:
                 depth_of_phase_fold = input('Minimum flux value during transit: ')
@@ -712,67 +711,208 @@ while True:
         case 8:
             exoplanet_k_temperature_nominal, exoplanet_k_temperature_upper_diff, exoplanet_k_temperature_lower_diff = blackbody_temperature_calculator(star_luminosity, star_luminosity_uncertainty_positive, star_luminosity_uncertainty_negative, exoplanet_orbital_radius_AU, exoplanet_orbital_radius_AU_uncertainty_positive, exoplanet_orbital_radius_AU_uncertainty_negative)
         case 9:
-            print('Current Report Status')
-            current_date = str(date.today())
-            print(f'Date: {current_date}')
-            data_star = {'Star Data': ['Radius:', 'Temperature:', 'Goldilocks Zone Inner Radius:', 'Goldilocks Zone Outer Radius:', 'Luminosity:', 'Mass:'],'Value': [f'{star_radius} R☉ (+{star_radius_uncertainty_positive} R☉ -{star_radius_uncertainty_negative} R☉)', f'{star_temperature_nominal} K (+{star_temperature_upper_diff} K -{star_temperature_lower_diff} K)', f'{inner_goldilocks_radius_nominal} AU (-{inner_goldilocks_radius_lower_diff} AU)', f'{outer_goldilocks_radius_nominal} AU (+{outer_goldilocks_radius_upper_diff} AU)', f'{star_luminosity} L☉ (+{star_luminosity_uncertainty_positive} L☉ -{star_luminosity_uncertainty_negative} L☉)', f'{star_mass_solarmass} M☉ (+{star_mass_solarmass_uncertainty_positive} M☉ -{star_mass_solarmass_uncertainty_negative} M☉)']}
-            table_star = pd.DataFrame(data_star) # HERE IS TABLE FOR STARS
-            print(table_star)
-            print('\n')
-
-            if semi_major_axis_nominal_AU != '(Not Generated)' and inner_goldilocks_radius_nominal != '(Not Generated)':
-                if outer_goldilocks_radius_nominal > semi_major_axis_nominal_AU > inner_goldilocks_radius_nominal:
-                    in_habitable_zone = 'Yes (Nominal)'
-                elif (outer_goldilocks_radius_nominal+outer_goldilocks_radius_upper_diff) > (semi_major_axis_nominal_AU+semi_major_axis_upper_diff_AU) > (inner_goldilocks_radius_nominal-inner_goldilocks_radius_lower_diff) or (outer_goldilocks_radius_nominal+outer_goldilocks_radius_upper_diff) > (semi_major_axis_nominal_AU-semi_major_axis_lower_diff_AU) > (inner_goldilocks_radius_nominal-inner_goldilocks_radius_lower_diff) or (outer_goldilocks_radius_nominal+outer_goldilocks_radius_upper_diff) > semi_major_axis_nominal_AU > (inner_goldilocks_radius_nominal-inner_goldilocks_radius_lower_diff):
-                    in_habitable_zone = 'Possible'
-                else:
-                    in_habitable_zone = 'No'
-            else:
-                in_habitable_zone = '(Data Not Available)'
-
-            if planet_radius_earth_nominal != '(Not Generated)' and exoplanet_k_temperature_nominal != '(Not Generated)':
-                if exoplanet_k_temperature_nominal >= 1000:
-                    exoplanet_temperature_prefix = 'Hot '
-                elif 1000 > exoplanet_k_temperature_nominal > 300:
-                    exoplanet_temperature_prefix = 'Warm '
-                else:
-                    exoplanet_temperature_prefix = 'Cold '
-
-                if planet_radius_earth_nominal >= 7:
-                    exoplanet_size_suffix = 'Jupiter-like'
-                elif 7 > planet_radius_earth_nominal >= 3.8:
-                    exoplanet_size_suffix = 'Neptune-like'
-                elif 3.8 > planet_radius_earth_nominal >= 2.2:
-                    exoplanet_size_suffix = 'Mini-Neptune'
-                elif 2.2 > planet_radius_earth_nominal >= 1.5:
-                    exoplanet_size_suffix = 'Super-Earth'
-                else:
-                    exoplanet_size_suffix = 'Earth-Like'
-            else:
-                exoplanet_temperature_prefix = ''
-                exoplanet_size_suffix = '(Data Not Available)'
-
-
-
-            data_exoplanet = {'Exoplanet Data': ['Radius:', 'Temperature:', 'Semi-major axis of orbit:', 'Stellar Flux Received:', 'In Goldilocks Zone?', 'Planet Classification:'],'Value': [f'{planet_radius_earth_nominal} R⊕ (+{planet_radius_earth_upper_diff} R⊕ -{planet_radius_earth_lower_diff} R⊕)', f'{exoplanet_k_temperature_nominal} K (+{exoplanet_k_temperature_upper_diff} K -{exoplanet_k_temperature_lower_diff} K)', f'{semi_major_axis_nominal_AU} AU (+{semi_major_axis_upper_diff_AU} AU -{semi_major_axis_lower_diff_AU} AU)', f'{flux_watts_nominal} W/m^2 (+{flux_watts_upper_diff} W/m^2 -{flux_watts_lower_diff} W/m^2)', f'{in_habitable_zone}', f'{exoplanet_temperature_prefix}{exoplanet_size_suffix}']}
-            table_exoplanet = pd.DataFrame(data_exoplanet) # HERE IS TABLE FOR STARS
-            print(table_exoplanet)
-
-            print('\n')
             while True:
-                user_decision = input('Would you like to proceed in exporting report (y/n)? ')
-                if user_decision.lower().strip() in ['y', 'n']:
+                print('Current Report Status')
+                current_date = str(date.today())
+                print(f'Date: {current_date}')
+                data_star = {'Star Data': ['Radius:', 'Temperature:', 'Goldilocks Zone Inner Radius:', 'Goldilocks Zone Outer Radius:', 'Luminosity:', 'Mass:'],'Value': [f'{star_radius} R☉ (+{star_radius_uncertainty_positive} R☉ -{star_radius_uncertainty_negative} R☉)', f'{star_temperature_nominal} K (+{star_temperature_upper_diff} K -{star_temperature_lower_diff} K)', f'{inner_goldilocks_radius_nominal} AU (-{inner_goldilocks_radius_lower_diff} AU)', f'{outer_goldilocks_radius_nominal} AU (+{outer_goldilocks_radius_upper_diff} AU)', f'{star_luminosity} L☉ (+{star_luminosity_uncertainty_positive} L☉ -{star_luminosity_uncertainty_negative} L☉)', f'{star_mass_solarmass} M☉ (+{star_mass_solarmass_uncertainty_positive} M☉ -{star_mass_solarmass_uncertainty_negative} M☉)']}
+                table_star = pd.DataFrame(data_star) # HERE IS TABLE FOR STARS
+                print(table_star)
+                print('\n')
+
+                if semi_major_axis_nominal_AU != '(Not Generated)' and inner_goldilocks_radius_nominal != '(Not Generated)':
+                    if outer_goldilocks_radius_nominal > semi_major_axis_nominal_AU > inner_goldilocks_radius_nominal:
+                        in_habitable_zone = 'Yes (Nominal)'
+                    elif (outer_goldilocks_radius_nominal+outer_goldilocks_radius_upper_diff) > (semi_major_axis_nominal_AU+semi_major_axis_upper_diff_AU) > (inner_goldilocks_radius_nominal-inner_goldilocks_radius_lower_diff) or (outer_goldilocks_radius_nominal+outer_goldilocks_radius_upper_diff) > (semi_major_axis_nominal_AU-semi_major_axis_lower_diff_AU) > (inner_goldilocks_radius_nominal-inner_goldilocks_radius_lower_diff) or (outer_goldilocks_radius_nominal+outer_goldilocks_radius_upper_diff) > semi_major_axis_nominal_AU > (inner_goldilocks_radius_nominal-inner_goldilocks_radius_lower_diff):
+                        in_habitable_zone = 'Possible'
+                    else:
+                        in_habitable_zone = 'No'
+                else:
+                    in_habitable_zone = '(Data Not Available)'
+
+                if planet_radius_earth_nominal != '(Not Generated)' and exoplanet_k_temperature_nominal != '(Not Generated)':
+                    if exoplanet_k_temperature_nominal >= 1000:
+                        exoplanet_temperature_prefix = 'Hot '
+                    elif 1000 > exoplanet_k_temperature_nominal > 300:
+                        exoplanet_temperature_prefix = 'Warm '
+                    else:
+                        exoplanet_temperature_prefix = 'Cold '
+
+                    if planet_radius_earth_nominal >= 7:
+                        exoplanet_size_suffix = 'Jupiter-like'
+                    elif 7 > planet_radius_earth_nominal >= 3.8:
+                        exoplanet_size_suffix = 'Neptune-like'
+                    elif 3.8 > planet_radius_earth_nominal >= 2.2:
+                        exoplanet_size_suffix = 'Mini-Neptune'
+                    elif 2.2 > planet_radius_earth_nominal >= 1.5:
+                        exoplanet_size_suffix = 'Super-Earth'
+                    else:
+                        exoplanet_size_suffix = 'Earth-Like'
+                else:
+                    exoplanet_temperature_prefix = ''
+                    exoplanet_size_suffix = '(Data Not Available)'
+
+
+
+                data_exoplanet = {'Exoplanet Data': ['Radius:', 'Blackbody Temperature:', 'Semi-major axis of orbit:', 'Stellar Flux Received:', 'In Goldilocks Zone?', 'Planet Classification:'],'Value': [f'{planet_radius_earth_nominal} R⊕ (+{planet_radius_earth_upper_diff} R⊕ -{planet_radius_earth_lower_diff} R⊕)', f'{exoplanet_k_temperature_nominal} K (+{exoplanet_k_temperature_upper_diff} K -{exoplanet_k_temperature_lower_diff} K)', f'{semi_major_axis_nominal_AU} AU (+{semi_major_axis_upper_diff_AU} AU -{semi_major_axis_lower_diff_AU} AU)', f'{flux_watts_nominal} W/m^2 (+{flux_watts_upper_diff} W/m^2 -{flux_watts_lower_diff} W/m^2)', f'{in_habitable_zone}', f'{exoplanet_temperature_prefix}{exoplanet_size_suffix}']}
+                table_exoplanet = pd.DataFrame(data_exoplanet) # HERE IS TABLE FOR STARS
+                print(table_exoplanet)
+
+                print('\n')
+
+                has_not_generated_star = table_star.map(lambda x: "(Not Generated)" in str(x)).any().any() # CHECK IF ANY DATA NOT GENERATED
+                has_not_generated_exoplanet = table_exoplanet.map(lambda x: "(Not Generated)" in str(x)).any().any() # CHECK IF ANY DATA NOT GENERATED
+
+                if has_not_generated_star or has_not_generated_exoplanet:
+                    while True:
+                        user_decision = input('WARNING: Missing table data. Would you like to bulk calculate ALL values? (y/n) ')
+                        if user_decision.lower().strip() in ['y', 'n']:
+                            break
+                        else:
+                            print(prompt_input_not_recognized)
+
+                    if user_decision == 'y': # TAKE ALL VALUES AND CALCULATE AT ONCE
+                        # STAR RADIUS + UNC, LOWEST FLUX, LUMINOSITY + UNC, orb period, STAR MASS + UNC
+                        while True:
+                            star_radius = input("Transited star's radius (R☉): ")
+                            if star_radius is None or star_radius.strip() == '':
+                                print(prompt_input_not_recognized)
+                            else:
+                                star_radius = float(star_radius.strip())
+                                break
+
+                        while True:
+                            star_radius_uncertainty_positive = input("The 'greather than' uncertainty of transited star's radius (R☉): ")
+                            if star_radius_uncertainty_positive is None or star_radius_uncertainty_positive.strip() == '':
+                                print(prompt_input_not_recognized)
+                            else:
+                                star_radius_uncertainty_positive = abs(float(star_radius_uncertainty_positive.strip()))
+                                break
+
+                        while True:
+                            star_radius_uncertainty_negative = input("The 'less than' uncertainty of transited star's radius (R☉): ")
+                            if star_radius_uncertainty_negative is None or star_radius_uncertainty_negative.strip() == '':
+                                print(prompt_input_not_recognized)
+                            else:
+                                star_radius_uncertainty_negative = abs(float(star_radius_uncertainty_negative.strip()))
+                                break
+
+                        while True:
+                            if lowest_flux is None:
+                                depth_of_phase_fold = input('Minimum flux value during transit: ')
+                                if depth_of_phase_fold is None or depth_of_phase_fold.strip() == '':
+                                        print(prompt_input_not_recognized)
+                                else:
+                                    depth_of_phase_fold = float(depth_of_phase_fold.strip())
+                                    break
+                            else:
+                                use_last_value = input(f'Would you like to use the last stored lowest flux value ({lowest_flux})? (y/n): ')
+                                if use_last_value.lower().strip() == 'y':
+                                    depth_of_phase_fold = lowest_flux
+                                    break
+                                else:
+                                    depth_of_phase_fold = input('Minimum flux value during transit: ')
+                                    if depth_of_phase_fold is None or depth_of_phase_fold.strip() == '':
+                                        print(prompt_input_not_recognized)
+                                    else:
+                                        depth_of_phase_fold = float(depth_of_phase_fold.strip())
+                                        break
+                        
+                        while True:
+                            star_luminosity = input("Star's luminosity (L☉): ")
+                            if star_luminosity is None or star_luminosity.strip() == '':
+                                print(prompt_input_not_recognized)
+                            else:
+                                star_luminosity = float(star_luminosity.strip())
+                                break
+                        while True:
+                            star_luminosity_uncertainty_positive = input("The 'greather than' uncertainty of transited star's luminosity (L☉): ")
+                            if star_luminosity_uncertainty_positive is None or star_luminosity_uncertainty_positive.strip() == '':
+                                print(prompt_input_not_recognized)
+                            else:
+                                star_luminosity_uncertainty_positive = abs(float(star_luminosity_uncertainty_positive.strip()))
+                                break
+
+                        while True:
+                            star_luminosity_uncertainty_negative = input("The 'less than' uncertainty of transited star's luminosity (L☉): ")
+                            if star_luminosity_uncertainty_negative is None or star_luminosity_uncertainty_negative.strip() == '':
+                                print(prompt_input_not_recognized)
+                            else:
+                                star_luminosity_uncertainty_negative = abs(float(star_luminosity_uncertainty_negative.strip()))
+                                break
+
+                        while True:
+                            orbital_period_days = input("Enter planet's orbital period (d): ")
+                            if orbital_period_days is None or orbital_period_days.strip() == '':
+                                print(prompt_input_not_recognized)
+                            else:
+                                orbital_period_days = float(orbital_period_days.strip())
+                                break
+                        
+                        while True:
+                            star_mass_solarmass = input("Enter star's mass (M☉): ")
+                            if star_mass_solarmass is None or star_mass_solarmass.strip() == '':
+                                print(prompt_input_not_recognized)
+                            else:
+                                star_mass_solarmass = float(star_mass_solarmass.strip())
+
+                                break
+                            
+                        while True:
+                            star_mass_solarmass_uncertainty_positive = input("The 'greather than' uncertainty of transited star's mass (M☉): ")
+                            if star_mass_solarmass_uncertainty_positive is None or star_mass_solarmass_uncertainty_positive.strip() == '':
+                                print(prompt_input_not_recognized)
+                            else:
+                                star_mass_solarmass_uncertainty_positive = abs(float(star_mass_solarmass_uncertainty_positive.strip()))
+                                break
+
+                        while True:
+                            star_mass_solarmass_uncertainty_negative = input("The 'less than' uncertainty of transited star's mass (M☉): ")
+                            if star_mass_solarmass_uncertainty_negative is None or star_mass_solarmass_uncertainty_negative.strip() == '':
+                                print(prompt_input_not_recognized)
+                            else:
+                                star_mass_solarmass_uncertainty_negative = abs(float(star_mass_solarmass_uncertainty_negative.strip()))
+                                break
+                        
+                        print('\n' * 3)
+
+                        semi_major_axis_nominal_AU, semi_major_axis_upper_diff_AU, semi_major_axis_lower_diff_AU = kepler_orbital_radius_calculator(orbital_period_days, star_mass_solarmass, star_mass_solarmass_uncertainty_positive, star_mass_solarmass_uncertainty_negative)
+
+                        planet_radius_earth_nominal, planet_radius_earth_upper_diff, planet_radius_earth_lower_diff = find_exoplanet_radius(star_radius, depth_of_phase_fold, star_radius_uncertainty_positive, star_radius_uncertainty_negative)
+
+                        inner_goldilocks_radius_nominal, inner_goldilocks_radius_lower_diff, outer_goldilocks_radius_nominal, outer_goldilocks_radius_upper_diff = habitable_zone_calculator(star_luminosity, star_luminosity_uncertainty_positive, star_luminosity_uncertainty_negative)
+
+                        star_temperature_nominal, star_temperature_upper_diff, star_temperature_lower_diff = stefan_boltzmann_star_temperature_calculator(star_radius, star_luminosity, star_radius_uncertainty_positive, star_radius_uncertainty_negative, star_luminosity_uncertainty_positive, star_luminosity_uncertainty_negative)
+
+                        flux_watts_nominal, flux_watts_upper_diff, flux_watts_lower_diff = exoplanet_flux_received(star_luminosity, star_luminosity_uncertainty_positive, star_luminosity_uncertainty_negative, semi_major_axis_nominal_AU, semi_major_axis_upper_diff_AU, semi_major_axis_lower_diff_AU)
+
+                        exoplanet_k_temperature_nominal, exoplanet_k_temperature_upper_diff, exoplanet_k_temperature_lower_diff = blackbody_temperature_calculator(star_luminosity, star_luminosity_uncertainty_positive, star_luminosity_uncertainty_negative, semi_major_axis_nominal_AU, semi_major_axis_upper_diff_AU, semi_major_axis_lower_diff_AU)
+
+                        continue
+
+                while True:
+                    user_decision = input('Would you like to proceed in exporting current report (y/n)? ')
+                    if user_decision.lower().strip() in ['y', 'n']:
+                        break
+                    else:
+                        print(prompt_input_not_recognized)
+                
+                if user_decision == 'y':
+                    while True:
+                        target_star = input('Enter system/star name: ')
+                        target_star = target_star.strip().upper()
+                        if target_star == '' or target_star is None:
+                            print(prompt_input_not_recognized)
+                        else:
+                            break
+                    file_path = f'saved_data/{target_star}/{current_date}'
+                    os.makedirs(os.path.dirname(file_path), exist_ok=True)
+                    table_exoplanet.to_csv(f'{file_path}-EXOPLANET_REPORT.csv', sep ='\t')
+                    table_star.to_csv(f'{file_path}-STAR_REPORT.csv', sep ='\t')
+                    print(f'Dataframe sucessfully exported to {file_path}-EXOPLANET_REPORT as csv')
+                    print(f'Dataframe sucessfully exported to {file_path}-STAR_REPORT as csv')
+                    print('\n' * 3)
                     break
                 else:
-                    print(prompt_input_not_recognized)
-            
-            if user_decision == 'y':
-                if target_star is None:
-                    target_star = 'UNKNOWN'
-                file_path = f'saved_data/{target_star}/{current_date}'
-                os.makedirs(os.path.dirname(file_path), exist_ok=True)
-                table_exoplanet.to_csv(f'{file_path}-EXOPLANET_REPORT.csv', sep ='\t')
-                table_star.to_csv(f'{file_path}-STAR_REPORT.csv', sep ='\t')
-                print(f'Dataframe sucessfully exported to {file_path}-EXOPLANET_REPORT as csv')
-                print(f'Dataframe sucessfully exported to {file_path}-STAR_REPORT as csv')
-            print('\n' * 3)
+                    print('\n' * 3)
+                    break
