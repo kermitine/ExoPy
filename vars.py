@@ -19,7 +19,7 @@ prompt_input_not_recognized = 'Input not recognized. Please try again.'
 # do not edit below
 import string
 user_flags = ['masking_enabled', masking_enabled, 'sound_enabled', sound_enabled, 'file_saving_enabled', file_saving_enabled] # add any user vars to this list. First name in str, then variable itself
-version = '1.8.0'
+version = '1.8.1'
 list_of_tools = ['Star Pixelfile Retrieval', 'Star Light Curve Analysis', 'Exoplanet Radius Calculator', 'Star Habitable Zone Calculator', 'Stefan-Boltzmann Star Temperature Calculator', 'Kepler Orbital Radius Calculator', 'Inverse-Square Exoplanet Stellar Energy Calculator', 'Blackbody Exoplanet Temperature Calculator', 'Generate Full Report']
 alphabet_list = list(string.ascii_uppercase) # list of every individual letter from the alphabet, uppercase
 list_of_functions_index = []

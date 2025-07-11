@@ -270,9 +270,9 @@ while True:
             user_input = int(user_input)
             break
     print('\n')
-    print('Parameters')
     depth_of_phase_fold = None
-    if user_input == 3: # parameters needed for planet radius calculator   
+    if user_input == 3: # parameters needed for planet radius calculator  
+        print('Parameters') 
         print('Unit legend:')
         print('R☉ = Solar Radius')
         print('R⊕ = Earth Radius')
@@ -323,6 +323,7 @@ while True:
                         break
 
     elif user_input in [1, 2]:
+        print('Parameters') 
         while True:
             target_star = input('Target star: ')
             if target_star is None or target_star.strip() == '':
@@ -332,6 +333,7 @@ while True:
                 break
 
     elif user_input == 4:
+        print('Parameters') 
         print('Unit legend:')
         print('L☉ = Solar Luminosity')
         print('AU = Astronomical Units')
@@ -360,6 +362,7 @@ while True:
                 break
 
     elif user_input == 5:
+        print('Parameters') 
         print('Unit legend:')
         print('L☉ = Solar Luminosity')
         print('R☉ = Solar Radius')
@@ -411,6 +414,7 @@ while True:
                 break
 
     elif user_input == 6:
+        print('Parameters') 
         print('Unit legend:')
         print('d = Days')
         print('M☉ = Solar Masses')
@@ -450,6 +454,7 @@ while True:
                 break
 
     elif user_input == 7:
+        print('Parameters') 
         print('Unit legend:')
         print('L☉ = Solar Luminosity')
         print('AU = Astronomical Units')
@@ -502,6 +507,7 @@ while True:
                 break
 
     elif user_input == 8:
+        print('Parameters') 
         print('Unit legend:')
         print('L☉ = Solar Luminosity')
         print('AU = Astronomical Units')
@@ -772,7 +778,17 @@ while True:
                             print(prompt_input_not_recognized)
 
                     if user_decision == 'y': # TAKE ALL VALUES AND CALCULATE AT ONCE
-                        # STAR RADIUS + UNC, LOWEST FLUX, LUMINOSITY + UNC, orb period, STAR MASS + UNC
+                        print('Unit legend:')
+                        print('R☉ = Solar Radius')
+                        print('R⊕ = Earth Radius')
+                        print('L☉ = Solar Luminosity')
+                        print('M☉ = Solar Masses')
+                        print('AU = Astronomical Units')
+                        print('K = Kelvin')
+                        print('d = Days')
+                        print('W = Watts')
+                        print('km = Kilometers')
+                        print('m = Meters')
                         while True:
                             star_radius = input("Transited star's radius (R☉): ")
                             if star_radius is None or star_radius.strip() == '':
