@@ -236,7 +236,7 @@ star_radius = '(Not Generated)'
 star_mass_solarmass = '(Not Generated)'
 planet_radius_earth_nominal = '(Not Generated)'
 exoplanet_k_temperature_nominal = '(Not Generated)'
-target_star = None
+target_star = 'None'
 planet_period_float = None
 planet_radius_earth_upper_diff = planet_radius_earth_lower_diff = '0.0'
 flux_watts_upper_diff = flux_watts_lower_diff = '0.0'
@@ -826,27 +826,6 @@ while True:
                             else:
                                 star_radius_uncertainty_negative = abs(float(star_radius_uncertainty_negative.strip()))
                                 break
-
-                        while True:
-                            if lowest_flux is None:
-                                depth_of_phase_fold = input('Minimum flux value during transit: ')
-                                if depth_of_phase_fold is None or depth_of_phase_fold.strip() == '':
-                                        print(prompt_input_not_recognized)
-                                else:
-                                    depth_of_phase_fold = float(depth_of_phase_fold.strip())
-                                    break
-                            else:
-                                use_last_value = input(f'Would you like to use the last stored lowest flux value ({lowest_flux})? (y/n): ')
-                                if use_last_value.lower().strip() == 'y':
-                                    depth_of_phase_fold = lowest_flux
-                                    break
-                                else:
-                                    depth_of_phase_fold = input('Minimum flux value during transit: ')
-                                    if depth_of_phase_fold is None or depth_of_phase_fold.strip() == '':
-                                        print(prompt_input_not_recognized)
-                                    else:
-                                        depth_of_phase_fold = float(depth_of_phase_fold.strip())
-                                        break
                         
                         while True:
                             star_luminosity = input("Star's luminosity (L☉): ")
@@ -872,27 +851,6 @@ while True:
                                 break
 
                         while True:
-                            if planet_period_float is None:
-                                orbital_period_days = input("Enter planet's orbital period (d): ")
-                                if orbital_period_days is None or orbital_period_days.strip() == '':
-                                        print(prompt_input_not_recognized)
-                                else:
-                                    orbital_period_days = float(orbital_period_days.strip())
-                                    break
-                            else:
-                                use_last_value = input(f'Would you like to use the last stored orbital period ({planet_period_float} d)? (y/n): ')
-                                if use_last_value.lower().strip() == 'y':
-                                    orbital_period_days = planet_period_float
-                                    break
-                                else:
-                                    orbital_period_days = input('Minimum flux value during transit: ')
-                                    if orbital_period_days is None or orbital_period_days.strip() == '':
-                                        print(prompt_input_not_recognized)
-                                    else:
-                                        orbital_period_days = float(orbital_period_days.strip())
-                                        break
-                        
-                        while True:
                             star_mass_solarmass = input("Enter star's mass (M☉): ")
                             if star_mass_solarmass is None or star_mass_solarmass.strip() == '':
                                 print(prompt_input_not_recognized)
@@ -916,6 +874,49 @@ while True:
                             else:
                                 star_mass_solarmass_uncertainty_negative = abs(float(star_mass_solarmass_uncertainty_negative.strip()))
                                 break
+
+                        while True:
+                            if lowest_flux is None:
+                                depth_of_phase_fold = input('Minimum flux value during transit: ')
+                                if depth_of_phase_fold is None or depth_of_phase_fold.strip() == '':
+                                        print(prompt_input_not_recognized)
+                                else:
+                                    depth_of_phase_fold = float(depth_of_phase_fold.strip())
+                                    break
+                            else:
+                                use_last_value = input(f'Would you like to use the last stored lowest flux value ({lowest_flux})? (y/n): ')
+                                if use_last_value.lower().strip() == 'y':
+                                    depth_of_phase_fold = lowest_flux
+                                    break
+                                else:
+                                    depth_of_phase_fold = input('Minimum flux value during transit: ')
+                                    if depth_of_phase_fold is None or depth_of_phase_fold.strip() == '':
+                                        print(prompt_input_not_recognized)
+                                    else:
+                                        depth_of_phase_fold = float(depth_of_phase_fold.strip())
+                                        break
+
+                        while True:
+                            if planet_period_float is None:
+                                orbital_period_days = input("Enter planet's orbital period (d): ")
+                                if orbital_period_days is None or orbital_period_days.strip() == '':
+                                        print(prompt_input_not_recognized)
+                                else:
+                                    orbital_period_days = float(orbital_period_days.strip())
+                                    break
+                            else:
+                                use_last_value = input(f'Would you like to use the last stored orbital period ({planet_period_float} d)? (y/n): ')
+                                if use_last_value.lower().strip() == 'y':
+                                    orbital_period_days = planet_period_float
+                                    break
+                                else:
+                                    orbital_period_days = input('Minimum flux value during transit: ')
+                                    if orbital_period_days is None or orbital_period_days.strip() == '':
+                                        print(prompt_input_not_recognized)
+                                    else:
+                                        orbital_period_days = float(orbital_period_days.strip())
+                                        break
+                        
                         
                         print('\n' * 3)
 
@@ -931,6 +932,8 @@ while True:
 
                         exoplanet_k_temperature_nominal, exoplanet_k_temperature_upper_diff, exoplanet_k_temperature_lower_diff = blackbody_temperature_calculator(star_luminosity, star_luminosity_uncertainty_positive, star_luminosity_uncertainty_negative, semi_major_axis_nominal_AU, semi_major_axis_upper_diff_AU, semi_major_axis_lower_diff_AU)
 
+                        print('\n' * 3)
+
                         continue
 
                 while True:
@@ -942,7 +945,7 @@ while True:
                 
                 if user_decision == 'y':
                     while True:
-                        target_star = input('Enter system/star name: ')
+                        target_star = input(f'Enter system/star name (Last used: {target_star}): ')
                         target_star = target_star.strip().upper()
                         if target_star == '' or target_star is None:
                             print(prompt_input_not_recognized)
