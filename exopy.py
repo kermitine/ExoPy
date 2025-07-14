@@ -223,6 +223,8 @@ if file_saving_enabled is True:
     print(f'File saving format: {file_saving_format}')
 print(f'Telescope selected: {selected_telescope}')
 print(f'Cadence selected: {selected_cadence}')
+if selected_cadence.lower() == 'short':
+    print('WARNING: short cadence selected. Expect long loading times.')
 print(f'Bins: {selected_bins}')
 
 #INITIALIZE VALUES FOR THE FIRST TIME HERE
@@ -325,7 +327,7 @@ while True:
     elif user_input in [1, 2]:
         print('Parameters') 
         while True:
-            target_star = input('Target star: ')
+            target_star = input(f'Enter system/star name (Last used: {target_star}): ')
             if target_star is None or target_star.strip() == '':
                 print(prompt_input_not_recognized)
             else:
@@ -658,7 +660,7 @@ while True:
 
                 planet_period_float = planet_period.value # convert to float
                 print(f"Lowest flux = {min_flux:.6f}. Saved to memory.")
-                print(f"Likely Period = {planet_period_float} days. Saved to memory.")
+                print(f"Likely period = {planet_period_float} days. Saved to memory.")
                 lowest_flux = f"{min_flux:.6f}"
                 lowest_flux = float(lowest_flux)
                 plt.show()
