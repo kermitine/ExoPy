@@ -1,3 +1,9 @@
+##################3 TODOTOTOTODODODODODODODODOD
+# FIX ALL CONSTANTS
+
+
+
+
 from lightkurve import search_targetpixelfile
 from lightkurve import search_lightcurve
 import matplotlib.pyplot as plt
@@ -196,7 +202,7 @@ def star_lightcurve_analysis(target_star):
     lightcurve_collection = search_result.download_all()
     try:
         lightcurve_collection.plot(title=plot_title)
-    except:
+    except ValueError:
         print(f"ERROR: Either no data available for {target_star}, or system doesn't exist.")
         print('\n')
         return 'fail'
@@ -256,13 +262,11 @@ print('\n')
 while True:
     play_sound('sfx/subwaysurfers.wav', False)
     function_index = 1
-    print('Select desired function:')
     for function in list_of_tools:
         print(function_index, '--', function)
         list_of_functions_index.append(str(function_index))
         function_index += 1
-
-    user_input = input()
+    user_input = input('Select desired function: ')
 
     while True: # PREVENTS CRASHES FROM UNRECOGNIZED INPUTS
         if user_input not in list_of_functions_index:
@@ -271,6 +275,7 @@ while True:
         else:
             user_input = int(user_input)
             break
+
     print('\n')
     depth_of_phase_fold = None
     if user_input == 3: # parameters needed for planet radius calculator  
@@ -280,28 +285,37 @@ while True:
         print('R⊕ = Earth Radius')
         print('\n')
         while True:
-            star_radius = input("Transited star's radius (R☉): ")
-            if star_radius is None or star_radius.strip() == '':
+            try:
+                star_radius = input("Transited star's radius (R☉): ")
+                if star_radius is None or star_radius.strip() == '':
+                    print(prompt_input_not_recognized)
+                else:
+                    star_radius = float(star_radius.strip())
+                    break
+            except ValueError:
                 print(prompt_input_not_recognized)
-            else:
-                star_radius = float(star_radius.strip())
-                break
 
         while True:
-            star_radius_uncertainty_positive = input("The 'greather than' uncertainty of transited star's radius (R☉): ")
-            if star_radius_uncertainty_positive is None or star_radius_uncertainty_positive.strip() == '':
+            try:
+                star_radius_uncertainty_positive = input("The 'greather than' uncertainty of transited star's radius (R☉): ")
+                if star_radius_uncertainty_positive is None or star_radius_uncertainty_positive.strip() == '':
+                    print(prompt_input_not_recognized)
+                else:
+                    star_radius_uncertainty_positive = abs(float(star_radius_uncertainty_positive.strip()))
+                    break
+            except ValueError:
                 print(prompt_input_not_recognized)
-            else:
-                star_radius_uncertainty_positive = abs(float(star_radius_uncertainty_positive.strip()))
-                break
 
         while True:
-            star_radius_uncertainty_negative = input("The 'less than' uncertainty of transited star's radius (R☉): ")
-            if star_radius_uncertainty_negative is None or star_radius_uncertainty_negative.strip() == '':
+            try:
+                star_radius_uncertainty_negative = input("The 'less than' uncertainty of transited star's radius (R☉): ")
+                if star_radius_uncertainty_negative is None or star_radius_uncertainty_negative.strip() == '':
+                    print(prompt_input_not_recognized)
+                else:
+                    star_radius_uncertainty_negative = abs(float(star_radius_uncertainty_negative.strip()))
+                    break
+            except ValueError:
                 print(prompt_input_not_recognized)
-            else:
-                star_radius_uncertainty_negative = abs(float(star_radius_uncertainty_negative.strip()))
-                break
 
         while True:
             if lowest_flux is None:
@@ -309,7 +323,11 @@ while True:
                 if depth_of_phase_fold is None or depth_of_phase_fold.strip() == '':
                         print(prompt_input_not_recognized)
                 else:
-                    depth_of_phase_fold = float(depth_of_phase_fold.strip())
+                    try:
+                        depth_of_phase_fold = float(depth_of_phase_fold.strip())
+                    except ValueError:
+                        print(prompt_input_not_recognized)
+                        continue
                     break
             else:
                 use_last_value = input(f'Would you like to use the last stored lowest flux value ({lowest_flux})? (y/n): ')
@@ -321,7 +339,11 @@ while True:
                     if depth_of_phase_fold is None or depth_of_phase_fold.strip() == '':
                         print(prompt_input_not_recognized)
                     else:
-                        depth_of_phase_fold = float(depth_of_phase_fold.strip())
+                        try:
+                            depth_of_phase_fold = float(depth_of_phase_fold.strip())
+                        except ValueError:
+                            print(prompt_input_not_recognized)
+                            continue
                         break
 
     elif user_input in [1, 2]:
@@ -345,23 +367,32 @@ while True:
             if star_luminosity is None or star_luminosity.strip() == '':
                 print(prompt_input_not_recognized)
             else:
-                star_luminosity = float(star_luminosity.strip())
-                break
+                try:
+                    star_luminosity = float(star_luminosity.strip())
+                    break
+                except ValueError:
+                    prompt_input_not_recognized
         while True:
             star_luminosity_uncertainty_positive = input("The 'greather than' uncertainty of transited star's luminosity (L☉): ")
             if star_luminosity_uncertainty_positive is None or star_luminosity_uncertainty_positive.strip() == '':
                 print(prompt_input_not_recognized)
             else:
-                star_luminosity_uncertainty_positive = abs(float(star_luminosity_uncertainty_positive.strip()))
-                break
+                try:
+                    star_luminosity_uncertainty_positive = abs(float(star_luminosity_uncertainty_positive.strip()))
+                    break
+                except ValueError:
+                    print(prompt_input_not_recognized)
 
         while True:
             star_luminosity_uncertainty_negative = input("The 'less than' uncertainty of transited star's luminosity (L☉): ")
             if star_luminosity_uncertainty_negative is None or star_luminosity_uncertainty_negative.strip() == '':
                 print(prompt_input_not_recognized)
             else:
-                star_luminosity_uncertainty_negative = abs(float(star_luminosity_uncertainty_negative.strip()))
-                break
+                try:
+                    star_luminosity_uncertainty_negative = abs(float(star_luminosity_uncertainty_negative.strip()))
+                    break
+                except ValueError:
+                    prompt_input_not_recognized
 
     elif user_input == 5:
         print('Parameters') 
@@ -375,45 +406,65 @@ while True:
             if star_luminosity is None or star_luminosity.strip() == '':
                 print(prompt_input_not_recognized)
             else:
-                star_luminosity = float(star_luminosity.strip())
-                break
+                try:
+                    star_luminosity = float(star_luminosity.strip())
+                    break
+                except ValueError:
+                    print(prompt_input_not_recognized)
+                
         while True:
             star_luminosity_uncertainty_positive = input("The 'greather than' uncertainty of transited star's luminosity (L☉): ")
             if star_luminosity_uncertainty_positive is None or star_luminosity_uncertainty_positive.strip() == '':
                 print(prompt_input_not_recognized)
             else:
-                star_luminosity_uncertainty_positive = abs(float(star_luminosity_uncertainty_positive.strip()))
-                break
+                try:
+                    star_luminosity_uncertainty_positive = abs(float(star_luminosity_uncertainty_positive.strip()))
+                    break
+                except ValueError:
+                    print(prompt_input_not_recognized)
 
         while True:
             star_luminosity_uncertainty_negative = input("The 'less than' uncertainty of transited star's luminosity (L☉): ")
             if star_luminosity_uncertainty_negative is None or star_luminosity_uncertainty_negative.strip() == '':
                 print(prompt_input_not_recognized)
             else:
-                star_luminosity_uncertainty_negative = abs(float(star_luminosity_uncertainty_negative.strip()))
-                break
+                try:
+                    star_luminosity_uncertainty_negative = abs(float(star_luminosity_uncertainty_negative.strip()))
+                    break
+                except ValueError:
+                    print(prompt_input_not_recognized)
+
         while True:
             star_radius = input("Star's radius (R☉): ")
             if star_radius is None or star_radius.strip() == '':
                 print(prompt_input_not_recognized)
             else:
-                star_radius = float(star_radius.strip())
-                break
+                try:
+                    star_radius = float(star_radius.strip())
+                    break
+                except ValueError:
+                    print(prompt_input_not_recognized)
         while True:
             star_radius_uncertainty_positive = input("The 'greather than' uncertainty of transited star's radius (R☉): ")
             if star_radius_uncertainty_positive is None or star_radius_uncertainty_positive.strip() == '':
                 print(prompt_input_not_recognized)
             else:
-                star_radius_uncertainty_positive = abs(float(star_radius_uncertainty_positive.strip()))
-                break
+                try:
+                    star_radius_uncertainty_positive = abs(float(star_radius_uncertainty_positive.strip()))
+                    break
+                except ValueError:
+                    print(prompt_input_not_recognized)
 
         while True:
             star_radius_uncertainty_negative = input("The 'less than' uncertainty of transited star's radius (R☉): ")
             if star_radius_uncertainty_negative is None or star_radius_uncertainty_negative.strip() == '':
                 print(prompt_input_not_recognized)
             else:
-                star_radius_uncertainty_negative = abs(float(star_radius_uncertainty_negative.strip()))
-                break
+                try:
+                    star_radius_uncertainty_negative = abs(float(star_radius_uncertainty_negative.strip()))
+                    break
+                except ValueError:
+                    print(prompt_input_not_recognized)
 
     elif user_input == 6:
         print('Parameters') 
@@ -428,7 +479,11 @@ while True:
                 if orbital_period_days is None or orbital_period_days.strip() == '':
                         print(prompt_input_not_recognized)
                 else:
-                    orbital_period_days = float(orbital_period_days.strip())
+                    try:
+                        orbital_period_days = float(orbital_period_days.strip())
+                    except ValueError:
+                        print(prompt_input_not_recognized)
+                        continue
                     break
             else:
                 use_last_value = input(f'Would you like to use the last stored orbital period ({planet_period_float} d)? (y/n): ')
@@ -440,7 +495,11 @@ while True:
                     if orbital_period_days is None or orbital_period_days.strip() == '':
                         print(prompt_input_not_recognized)
                     else:
-                        orbital_period_days = float(orbital_period_days.strip())
+                        try:
+                            orbital_period_days = float(orbital_period_days.strip())
+                        except ValueError:
+                            print(prompt_input_not_recognized)
+                            continue
                         break
         
         while True:
@@ -448,25 +507,33 @@ while True:
             if star_mass_solarmass is None or star_mass_solarmass.strip() == '':
                 print(prompt_input_not_recognized)
             else:
-                star_mass_solarmass = float(star_mass_solarmass.strip())
-
-                break
+                try:
+                    star_mass_solarmass = float(star_mass_solarmass.strip())
+                    break
+                except ValueError:
+                    print(prompt_input_not_recognized)
             
         while True:
             star_mass_solarmass_uncertainty_positive = input("The 'greather than' uncertainty of transited star's mass (M☉): ")
             if star_mass_solarmass_uncertainty_positive is None or star_mass_solarmass_uncertainty_positive.strip() == '':
                 print(prompt_input_not_recognized)
             else:
-                star_mass_solarmass_uncertainty_positive = abs(float(star_mass_solarmass_uncertainty_positive.strip()))
-                break
+                try:
+                    star_mass_solarmass_uncertainty_positive = abs(float(star_mass_solarmass_uncertainty_positive.strip()))
+                    break
+                except ValueError:
+                    print(prompt_input_not_recognized)
 
         while True:
             star_mass_solarmass_uncertainty_negative = input("The 'less than' uncertainty of transited star's mass (M☉): ")
             if star_mass_solarmass_uncertainty_negative is None or star_mass_solarmass_uncertainty_negative.strip() == '':
                 print(prompt_input_not_recognized)
             else:
-                star_mass_solarmass_uncertainty_negative = abs(float(star_mass_solarmass_uncertainty_negative.strip()))
-                break
+                try:
+                    star_mass_solarmass_uncertainty_negative = abs(float(star_mass_solarmass_uncertainty_negative.strip()))
+                    break
+                except ValueError:
+                    print(prompt_input_not_recognized)
 
     elif user_input == 7:
         print('Parameters') 
@@ -481,45 +548,65 @@ while True:
             if star_luminosity is None or star_luminosity.strip() == '':
                 print(prompt_input_not_recognized)
             else:
-                star_luminosity = float(star_luminosity.strip())
-                break
+                try:
+                    star_luminosity = float(star_luminosity.strip())
+                    break
+                except ValueError:
+                    print(prompt_input_not_recognized)
         while True:
             star_luminosity_uncertainty_positive = input("The 'greather than' uncertainty of transited star's luminosity (L☉): ")
             if star_luminosity_uncertainty_positive is None or star_luminosity_uncertainty_positive.strip() == '':
                 print(prompt_input_not_recognized)
             else:
-                star_luminosity_uncertainty_positive = abs(float(star_luminosity_uncertainty_positive.strip()))
-                break
+                try:
+                    star_luminosity_uncertainty_positive = abs(float(star_luminosity_uncertainty_positive.strip()))
+                    break
+                except ValueError:
+                    print(prompt_input_not_recognized)
 
         while True:
             star_luminosity_uncertainty_negative = input("The 'less than' uncertainty of transited star's luminosity (L☉): ")
             if star_luminosity_uncertainty_negative is None or star_luminosity_uncertainty_negative.strip() == '':
                 print(prompt_input_not_recognized)
             else:
-                star_luminosity_uncertainty_negative = abs(float(star_luminosity_uncertainty_negative.strip()))
-                break
+                try:
+                    star_luminosity_uncertainty_negative = abs(float(star_luminosity_uncertainty_negative.strip()))
+                    break
+                except ValueError:
+                    print(prompt_input_not_recognized)
+
         while True:
             exoplanet_orbital_radius_AU = input("Semi-major axis of exoplanet's orbit (AU): ")
             if exoplanet_orbital_radius_AU is None or exoplanet_orbital_radius_AU.strip() == '':
                 print(prompt_input_not_recognized)
             else:
-                exoplanet_orbital_radius_AU = float(exoplanet_orbital_radius_AU.strip())
-                break
+                try:
+                    exoplanet_orbital_radius_AU = float(exoplanet_orbital_radius_AU.strip())
+                    break
+                except ValueError:
+                    print(prompt_input_not_recognized)
+
         while True:
             exoplanet_orbital_radius_AU_uncertainty_positive = input("The 'greather than' uncertainty of the exoplanet's semi-major axis (AU): ")
             if exoplanet_orbital_radius_AU_uncertainty_positive is None or exoplanet_orbital_radius_AU_uncertainty_positive.strip() == '':
                 print(prompt_input_not_recognized)
             else:
-                exoplanet_orbital_radius_AU_uncertainty_positive = abs(float(exoplanet_orbital_radius_AU_uncertainty_positive.strip()))
-                break
+                try:
+                    exoplanet_orbital_radius_AU_uncertainty_positive = abs(float(exoplanet_orbital_radius_AU_uncertainty_positive.strip()))
+                    break
+                except ValueError:
+                    print(prompt_input_not_recognized)
 
         while True:
             exoplanet_orbital_radius_AU_uncertainty_negative = input("The 'less than' uncertainty of the exoplanet's semi-major axis (AU): ")
             if exoplanet_orbital_radius_AU_uncertainty_negative is None or exoplanet_orbital_radius_AU_uncertainty_negative.strip() == '':
                 print(prompt_input_not_recognized)
             else:
-                exoplanet_orbital_radius_AU_uncertainty_negative = abs(float(exoplanet_orbital_radius_AU_uncertainty_negative.strip()))
-                break
+                try:
+                    exoplanet_orbital_radius_AU_uncertainty_negative = abs(float(exoplanet_orbital_radius_AU_uncertainty_negative.strip()))
+                    break
+                except ValueError:
+                    print(prompt_input_not_recognized)
 
     elif user_input == 8:
         print('Parameters') 
@@ -533,45 +620,64 @@ while True:
             if star_luminosity is None or star_luminosity.strip() == '':
                 print(prompt_input_not_recognized)
             else:
-                star_luminosity = float(star_luminosity.strip())
-                break
+                try:
+                    star_luminosity = float(star_luminosity.strip())
+                    break
+                except ValueError:
+                    print(prompt_input_not_recognized)
         while True:
             star_luminosity_uncertainty_positive = input("The 'greather than' uncertainty of transited star's luminosity (L☉): ")
             if star_luminosity_uncertainty_positive is None or star_luminosity_uncertainty_positive.strip() == '':
                 print(prompt_input_not_recognized)
             else:
-                star_luminosity_uncertainty_positive = abs(float(star_luminosity_uncertainty_positive.strip()))
-                break
+                try:
+                    star_luminosity_uncertainty_positive = abs(float(star_luminosity_uncertainty_positive.strip()))
+                    break
+                except ValueError:
+                    print(prompt_input_not_recognized)
 
         while True:
             star_luminosity_uncertainty_negative = input("The 'less than' uncertainty of transited star's luminosity (L☉): ")
             if star_luminosity_uncertainty_negative is None or star_luminosity_uncertainty_negative.strip() == '':
                 print(prompt_input_not_recognized)
             else:
-                star_luminosity_uncertainty_negative = abs(float(star_luminosity_uncertainty_negative.strip()))
-                break
+                try:
+                    star_luminosity_uncertainty_negative = abs(float(star_luminosity_uncertainty_negative.strip()))
+                    break
+                except ValueError:
+                    print(prompt_input_not_recognized)
         while True:
             exoplanet_orbital_radius_AU = input("Semi-major axis of exoplanet's orbit (AU): ")
             if exoplanet_orbital_radius_AU is None or exoplanet_orbital_radius_AU.strip() == '':
                 print(prompt_input_not_recognized)
             else:
-                exoplanet_orbital_radius_AU = float(exoplanet_orbital_radius_AU.strip())
-                break
+                try:
+                    exoplanet_orbital_radius_AU = float(exoplanet_orbital_radius_AU.strip())
+                    break
+                except ValueError:
+                    print(prompt_input_not_recognized)
+
         while True:
             exoplanet_orbital_radius_AU_uncertainty_positive = input("The 'greather than' uncertainty of the exoplanet's semi-major axis (AU): ")
             if exoplanet_orbital_radius_AU_uncertainty_positive is None or exoplanet_orbital_radius_AU_uncertainty_positive.strip() == '':
                 print(prompt_input_not_recognized)
             else:
-                exoplanet_orbital_radius_AU_uncertainty_positive = abs(float(exoplanet_orbital_radius_AU_uncertainty_positive.strip()))
-                break
+                try:
+                    exoplanet_orbital_radius_AU_uncertainty_positive = abs(float(exoplanet_orbital_radius_AU_uncertainty_positive.strip()))
+                    break
+                except ValueError:
+                    print(prompt_input_not_recognized)
 
         while True:
             exoplanet_orbital_radius_AU_uncertainty_negative = input("The 'less than' uncertainty of the exoplanet's semi-major axis (AU): ")
             if exoplanet_orbital_radius_AU_uncertainty_negative is None or exoplanet_orbital_radius_AU_uncertainty_negative.strip() == '':
                 print(prompt_input_not_recognized)
             else:
-                exoplanet_orbital_radius_AU_uncertainty_negative = abs(float(exoplanet_orbital_radius_AU_uncertainty_negative.strip()))
-                break
+                try:
+                    exoplanet_orbital_radius_AU_uncertainty_negative = abs(float(exoplanet_orbital_radius_AU_uncertainty_negative.strip()))
+                    break
+                except ValueError:
+                    print(prompt_input_not_recognized)
 
 
     play_sound('sfx/nflsong.wav', True)
@@ -806,76 +912,104 @@ while True:
                         print('km = Kilometers')
                         print('m = Meters')
                         while True:
-                            star_radius = input("Transited star's radius (R☉): ")
-                            if star_radius is None or star_radius.strip() == '':
+                            try:
+                                star_radius = input("Transited star's radius (R☉): ")
+                                if star_radius is None or star_radius.strip() == '':
+                                    print(prompt_input_not_recognized)
+                                else:
+                                    star_radius = float(star_radius.strip())
+                                    break
+                            except ValueError:
                                 print(prompt_input_not_recognized)
-                            else:
-                                star_radius = float(star_radius.strip())
-                                break
 
                         while True:
-                            star_radius_uncertainty_positive = input("The 'greather than' uncertainty of transited star's radius (R☉): ")
-                            if star_radius_uncertainty_positive is None or star_radius_uncertainty_positive.strip() == '':
+                            try:
+                                star_radius_uncertainty_positive = input("The 'greather than' uncertainty of transited star's radius (R☉): ")
+                                if star_radius_uncertainty_positive is None or star_radius_uncertainty_positive.strip() == '':
+                                    print(prompt_input_not_recognized)
+                                else:
+                                    star_radius_uncertainty_positive = abs(float(star_radius_uncertainty_positive.strip()))
+                                    break
+                            except ValueError:
                                 print(prompt_input_not_recognized)
-                            else:
-                                star_radius_uncertainty_positive = abs(float(star_radius_uncertainty_positive.strip()))
-                                break
 
                         while True:
-                            star_radius_uncertainty_negative = input("The 'less than' uncertainty of transited star's radius (R☉): ")
-                            if star_radius_uncertainty_negative is None or star_radius_uncertainty_negative.strip() == '':
+                            try:
+                                star_radius_uncertainty_negative = input("The 'less than' uncertainty of transited star's radius (R☉): ")
+                                if star_radius_uncertainty_negative is None or star_radius_uncertainty_negative.strip() == '':
+                                    print(prompt_input_not_recognized)
+                                else:
+                                    star_radius_uncertainty_negative = abs(float(star_radius_uncertainty_negative.strip()))
+                                    break
+                            except ValueError:
                                 print(prompt_input_not_recognized)
-                            else:
-                                star_radius_uncertainty_negative = abs(float(star_radius_uncertainty_negative.strip()))
-                                break
                         
                         while True:
-                            star_luminosity = input("Star's luminosity (L☉): ")
-                            if star_luminosity is None or star_luminosity.strip() == '':
+                            try:
+                                star_luminosity = input("Star's luminosity (L☉): ")
+                                if star_luminosity is None or star_luminosity.strip() == '':
+                                    print(prompt_input_not_recognized)
+                                else:
+                                    star_luminosity = float(star_luminosity.strip())
+                                    break
+                            except ValueError:
                                 print(prompt_input_not_recognized)
-                            else:
-                                star_luminosity = float(star_luminosity.strip())
-                                break
-                        while True:
-                            star_luminosity_uncertainty_positive = input("The 'greather than' uncertainty of transited star's luminosity (L☉): ")
-                            if star_luminosity_uncertainty_positive is None or star_luminosity_uncertainty_positive.strip() == '':
-                                print(prompt_input_not_recognized)
-                            else:
-                                star_luminosity_uncertainty_positive = abs(float(star_luminosity_uncertainty_positive.strip()))
-                                break
 
                         while True:
-                            star_luminosity_uncertainty_negative = input("The 'less than' uncertainty of transited star's luminosity (L☉): ")
-                            if star_luminosity_uncertainty_negative is None or star_luminosity_uncertainty_negative.strip() == '':
+                            try:
+                                star_luminosity_uncertainty_positive = input("The 'greather than' uncertainty of transited star's luminosity (L☉): ")
+                                if star_luminosity_uncertainty_positive is None or star_luminosity_uncertainty_positive.strip() == '':
+                                    print(prompt_input_not_recognized)
+                                else:
+                                    star_luminosity_uncertainty_positive = abs(float(star_luminosity_uncertainty_positive.strip()))
+                                    break
+                            except ValueError:
                                 print(prompt_input_not_recognized)
-                            else:
-                                star_luminosity_uncertainty_negative = abs(float(star_luminosity_uncertainty_negative.strip()))
-                                break
 
                         while True:
-                            star_mass_solarmass = input("Enter star's mass (M☉): ")
-                            if star_mass_solarmass is None or star_mass_solarmass.strip() == '':
+                            try:
+                                star_luminosity_uncertainty_negative = input("The 'less than' uncertainty of transited star's luminosity (L☉): ")
+                                if star_luminosity_uncertainty_negative is None or star_luminosity_uncertainty_negative.strip() == '':
+                                    print(prompt_input_not_recognized)
+                                else:
+                                    star_luminosity_uncertainty_negative = abs(float(star_luminosity_uncertainty_negative.strip()))
+                                    break
+                            except ValueError:
                                 print(prompt_input_not_recognized)
-                            else:
-                                star_mass_solarmass = float(star_mass_solarmass.strip())
 
-                                break
+                        while True:
+                            try:
+                                star_mass_solarmass = input("Enter star's mass (M☉): ")
+                                if star_mass_solarmass is None or star_mass_solarmass.strip() == '':
+                                    print(prompt_input_not_recognized)
+                                else:
+                                    star_mass_solarmass = float(star_mass_solarmass.strip())
+                                    break
+                            except ValueError:
+                                print(prompt_input_not_recognized)
+                            
                             
                         while True:
-                            star_mass_solarmass_uncertainty_positive = input("The 'greather than' uncertainty of transited star's mass (M☉): ")
-                            if star_mass_solarmass_uncertainty_positive is None or star_mass_solarmass_uncertainty_positive.strip() == '':
+                            try:
+                                star_mass_solarmass_uncertainty_positive = input("The 'greather than' uncertainty of transited star's mass (M☉): ")
+                                if star_mass_solarmass_uncertainty_positive is None or star_mass_solarmass_uncertainty_positive.strip() == '':
+                                    print(prompt_input_not_recognized)
+                                else:
+                                    star_mass_solarmass_uncertainty_positive = abs(float(star_mass_solarmass_uncertainty_positive.strip()))
+                                    break
+                            except ValueError:
                                 print(prompt_input_not_recognized)
-                            else:
-                                star_mass_solarmass_uncertainty_positive = abs(float(star_mass_solarmass_uncertainty_positive.strip()))
-                                break
 
                         while True:
-                            star_mass_solarmass_uncertainty_negative = input("The 'less than' uncertainty of transited star's mass (M☉): ")
-                            if star_mass_solarmass_uncertainty_negative is None or star_mass_solarmass_uncertainty_negative.strip() == '':
+                            try:
+                                star_mass_solarmass_uncertainty_negative = input("The 'less than' uncertainty of transited star's mass (M☉): ")
+                                if star_mass_solarmass_uncertainty_negative is None or star_mass_solarmass_uncertainty_negative.strip() == '':
+                                    print(prompt_input_not_recognized)
+                                else:
+                                    star_mass_solarmass_uncertainty_negative = abs(float(star_mass_solarmass_uncertainty_negative.strip()))
+                                    break
+                            except ValueError:
                                 print(prompt_input_not_recognized)
-                            else:
-                                star_mass_solarmass_uncertainty_negative = abs(float(star_mass_solarmass_uncertainty_negative.strip()))
-                                break
 
                         while True:
                             if lowest_flux is None:
@@ -883,7 +1017,11 @@ while True:
                                 if depth_of_phase_fold is None or depth_of_phase_fold.strip() == '':
                                         print(prompt_input_not_recognized)
                                 else:
-                                    depth_of_phase_fold = float(depth_of_phase_fold.strip())
+                                    try:
+                                        depth_of_phase_fold = float(depth_of_phase_fold.strip())
+                                    except ValueError:
+                                        print(prompt_input_not_recognized)
+                                        continue
                                     break
                             else:
                                 use_last_value = input(f'Would you like to use the last stored lowest flux value ({lowest_flux})? (y/n): ')
@@ -895,7 +1033,11 @@ while True:
                                     if depth_of_phase_fold is None or depth_of_phase_fold.strip() == '':
                                         print(prompt_input_not_recognized)
                                     else:
-                                        depth_of_phase_fold = float(depth_of_phase_fold.strip())
+                                        try:
+                                            depth_of_phase_fold = float(depth_of_phase_fold.strip())
+                                        except ValueError:
+                                            print(prompt_input_not_recognized)
+                                            continue
                                         break
 
                         while True:
@@ -904,7 +1046,11 @@ while True:
                                 if orbital_period_days is None or orbital_period_days.strip() == '':
                                         print(prompt_input_not_recognized)
                                 else:
-                                    orbital_period_days = float(orbital_period_days.strip())
+                                    try:
+                                        orbital_period_days = float(orbital_period_days.strip())
+                                    except ValueError:
+                                        print(prompt_input_not_recognized)
+                                        continue
                                     break
                             else:
                                 use_last_value = input(f'Would you like to use the last stored orbital period ({planet_period_float} d)? (y/n): ')
@@ -916,7 +1062,11 @@ while True:
                                     if orbital_period_days is None or orbital_period_days.strip() == '':
                                         print(prompt_input_not_recognized)
                                     else:
-                                        orbital_period_days = float(orbital_period_days.strip())
+                                        try:
+                                            orbital_period_days = float(orbital_period_days.strip())
+                                        except ValueError:
+                                            print(prompt_input_not_recognized)
+                                            continue
                                         break
                         
                         
