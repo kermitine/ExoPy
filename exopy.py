@@ -775,9 +775,9 @@ while True:
                 plt.show()
                 
                 print('\n')
-                print('Would you like to create another periodogram? (y/n)')
+                
                 while True:
-                    exit_function = input()
+                    exit_function = input('Would you like to create another periodogram? (y/n): ')
                     if exit_function is None or exit_function.strip() == '' or exit_function.lower().strip() not in ['y', 'n']:
                         print(prompt_input_not_recognized)
                     else:
@@ -896,7 +896,7 @@ while True:
 
                 if has_not_generated_star or has_not_generated_exoplanet:
                     while True:
-                        user_decision = input('WARNING: Missing table data. Would you like to bulk calculate ALL values? (y/n) ')
+                        user_decision = input('WARNING: Missing table data. Would you like to bulk calculate ALL values? (y/n): ')
                         if user_decision.lower().strip() in ['y', 'n']:
                             break
                         else:
@@ -1092,7 +1092,7 @@ while True:
                         continue
 
                 while True:
-                    user_decision = input('Would you like to proceed in exporting current report (y/n)? ')
+                    user_decision = input('Would you like to proceed in exporting current report? (y/n): ')
                     if user_decision.lower().strip() in ['y', 'n']:
                         break
                     else:
