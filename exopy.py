@@ -704,9 +704,7 @@ while True:
             save_plot(target_star, f'_LIGHTCURVECOLLECTIONSTITCHED.{file_saving_format}')
             plt.show()
             alphabet_index = 0
-            
-            print(prompt_periodogram_lower_bound)
-            periodogram_lower_bound_input = input()
+            periodogram_lower_bound_input = input(prompt_periodogram_lower_bound)
             if periodogram_lower_bound_input.strip() == "":
                 lower_bound = periodogram_lower_bound_default
             else:
@@ -714,8 +712,7 @@ while True:
                     lower_bound = round(float(periodogram_lower_bound_input), 2)
                 except ValueError:
                     lower_bound = periodogram_lower_bound_default
-            print(prompt_periodogram_upper_bound)
-            periodogram_upper_bound_input = input()
+            periodogram_upper_bound_input = input(prompt_periodogram_upper_bound)
             if periodogram_upper_bound_input.strip() == "":
                 upper_bound = periodogram_upper_bound_default
             else:
