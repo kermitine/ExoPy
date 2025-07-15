@@ -103,14 +103,14 @@ def habitable_zone_calculator(star_luminosity, star_luminosity_uncertainty_posit
 def stefan_boltzmann_star_temperature_calculator(star_radius, star_luminosity, star_radius_uncertainty_positive, star_radius_uncertainty_negative, star_luminosity_uncertainty_positive, star_luminosity_uncertainty_negative):
     
 
-    star_radius_meters_upper = (star_radius+star_radius_uncertainty_positive) * 6.957e8
-    star_luminosity_watts_upper = (star_luminosity+star_luminosity_uncertainty_positive) * 3.828e26
+    star_radius_meters_upper = (star_radius+star_radius_uncertainty_positive) * constant_solarradii_TO_m
+    star_luminosity_watts_upper = (star_luminosity+star_luminosity_uncertainty_positive) * constant_solarluminosity_TO_W
 
-    star_radius_meters_nominal = star_radius * 6.957e8
-    star_luminosity_watts_nominal = star_luminosity * 3.828e26
+    star_radius_meters_nominal = star_radius * constant_solarradii_TO_m
+    star_luminosity_watts_nominal = star_luminosity * constant_solarluminosity_TO_W
 
-    star_radius_meters_lower = (star_radius-star_radius_uncertainty_negative) * 6.957e8
-    star_luminosity_watts_lower = (star_luminosity-star_luminosity_uncertainty_negative) * 3.828e26
+    star_radius_meters_lower = (star_radius-star_radius_uncertainty_negative) * constant_solarradii_TO_m
+    star_luminosity_watts_lower = (star_luminosity-star_luminosity_uncertainty_negative) * constant_solarluminosity_TO_W
 
     star_temperature_upper = ((star_luminosity_watts_upper)/(4*math.pi*constant_stefan_boltzmann*(star_radius_meters_lower)**2))**0.25
     star_temperature_nominal = ((star_luminosity_watts_nominal)/(4*math.pi*constant_stefan_boltzmann*(star_radius_meters_nominal)**2))**0.25
@@ -139,9 +139,9 @@ def find_exoplanet_radius(star_radius, depth_of_phase_fold, star_radius_uncertai
     planet_radius_solar_negative_uncertainty = planet_radius_solar - planet_radius_solar_lowerlimit_uncertainty
 
 
-    planet_radius_earth_nominal = planet_radius_solar * 109.1223801222 # converts solar radii to earth radii
-    planet_radius_earth_upper_diff = planet_radius_solar_positive_uncertainty * 109.1223801222
-    planet_radius_earth_lower_diff = planet_radius_solar_negative_uncertainty * 109.1223801222
+    planet_radius_earth_nominal = planet_radius_solar * constant_solarradii_TO_earthradii # converts solar radii to earth radii
+    planet_radius_earth_upper_diff = planet_radius_solar_positive_uncertainty * constant_solarradii_TO_earthradii
+    planet_radius_earth_lower_diff = planet_radius_solar_negative_uncertainty * constant_solarradii_TO_earthradii
 
     print(f'Calculated nominal planet radius: {round(planet_radius_earth_nominal, rounding_decimal_places)} R⊕ (+{round(planet_radius_earth_upper_diff, rounding_decimal_places)} R⊕ -{round(planet_radius_earth_lower_diff, rounding_decimal_places)} R⊕)')
 
@@ -244,6 +244,7 @@ star_radius = '(Not Generated)'
 star_mass_solarmass = '(Not Generated)'
 planet_radius_earth_nominal = '(Not Generated)'
 exoplanet_k_temperature_nominal = '(Not Generated)'
+orbital_period_days = '(Not Generated)'
 target_star = 'None'
 planet_period_float = None
 planet_radius_earth_upper_diff = planet_radius_earth_lower_diff = '0.0'
@@ -882,7 +883,7 @@ while True:
 
 
 
-                data_exoplanet = {'Exoplanet Data': ['Radius:', 'Blackbody Temperature:', 'Semi-major axis of orbit:', 'Stellar Flux Received:', 'In Goldilocks Zone?', 'Planet Classification:'],'Value': [f'{planet_radius_earth_nominal} R⊕ (+{planet_radius_earth_upper_diff} R⊕ -{planet_radius_earth_lower_diff} R⊕)', f'{exoplanet_k_temperature_nominal} K (+{exoplanet_k_temperature_upper_diff} K -{exoplanet_k_temperature_lower_diff} K)', f'{semi_major_axis_nominal_AU} AU (+{semi_major_axis_upper_diff_AU} AU -{semi_major_axis_lower_diff_AU} AU)', f'{flux_watts_nominal} W/m^2 (+{flux_watts_upper_diff} W/m^2 -{flux_watts_lower_diff} W/m^2)', f'{in_habitable_zone}', f'{exoplanet_temperature_prefix}{exoplanet_size_suffix}']}
+                data_exoplanet = {'Exoplanet Data': ['Radius:', 'Orbital Period:', 'Blackbody Temperature:', 'Semi-major axis of orbit:', 'Stellar Flux Received:', 'In Goldilocks Zone?', 'Planet Classification:'],'Value': [f'{planet_radius_earth_nominal} R⊕ (+{planet_radius_earth_upper_diff} R⊕ -{planet_radius_earth_lower_diff} R⊕)', f'{orbital_period_days} d',f'{exoplanet_k_temperature_nominal} K (+{exoplanet_k_temperature_upper_diff} K -{exoplanet_k_temperature_lower_diff} K)', f'{semi_major_axis_nominal_AU} AU (+{semi_major_axis_upper_diff_AU} AU -{semi_major_axis_lower_diff_AU} AU)', f'{flux_watts_nominal} W/m^2 (+{flux_watts_upper_diff} W/m^2 -{flux_watts_lower_diff} W/m^2)', f'{in_habitable_zone}', f'{exoplanet_temperature_prefix}{exoplanet_size_suffix}']}
                 table_exoplanet = pd.DataFrame(data_exoplanet) # HERE IS TABLE FOR STARS
                 print(table_exoplanet)
 
@@ -1055,7 +1056,7 @@ while True:
                             else:
                                 use_last_value = input(f'Would you like to use the last stored orbital period ({planet_period_float} d)? (y/n): ')
                                 if use_last_value.lower().strip() == 'y':
-                                    orbital_period_days = planet_period_float
+                                    orbital_period_days = round(planet_period_float, rounding_decimal_places)
                                     break
                                 else:
                                     orbital_period_days = input('Minimum flux value during transit: ')
@@ -1063,7 +1064,7 @@ while True:
                                         print(prompt_input_not_recognized)
                                     else:
                                         try:
-                                            orbital_period_days = float(orbital_period_days.strip())
+                                            orbital_period_days = round(float(orbital_period_days.strip()), rounding_decimal_places)
                                         except ValueError:
                                             print(prompt_input_not_recognized)
                                             continue
