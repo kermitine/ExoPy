@@ -12,11 +12,11 @@ import pandas as pd
 try:
     from lightkurve import search_targetpixelfile
     from lightkurve import search_lightcurve
+    lightkurve_enabled = True
 except ModuleNotFoundError:
-    print('ERROR: Lightkurve module not found. please use "pip install lightkurve" and try running again. Program closing...')
-    time.sleep(3)
-    quit()
-
+    print('ERROR: Lightkurve module not found; Lightcurve Analysis and Pixelfile Retrieval will be unavailable. Please read README.md')
+    time.sleep(4)
+    lightkurve_enabled = False
 
 if sound_enabled is True:
     import winsound
@@ -274,9 +274,15 @@ while True:
         user_input = input('Select desired function: ')
         if user_input not in list_of_functions_index:
             print(prompt_input_not_recognized)
+            continue
+        elif user_input in ['1', '2'] and lightkurve_enabled == False:
+            print('ERROR: Lightcurve Analysis and Pixelfile Retrieval is disabled. Please install Lightkurve and try again.')
         else:
-            user_input = int(user_input)
-            break
+            try:
+                user_input = int(user_input)
+                break
+            except ValueError:
+                print(prompt_input_not_recognized)
 
     print('\n')
     depth_of_phase_fold = None
@@ -693,8 +699,6 @@ while True:
             star_pixelfile_retrieval(target_star)
         case 2:
             lightcurve_collection = star_lightcurve_analysis(target_star)
-            if lightcurve_collection == 'fail':
-                continue
             print('Stitching light curve collection...')
             lightcurve_stitched = lightcurve_collection.stitch()
             plot_title = f'Stitched lightcurve of {target_star}'
