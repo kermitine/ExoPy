@@ -1,11 +1,4 @@
-##################3 TODOTOTOTODODODODODODODODOD
-# FIX ALL CONSTANTS
 
-
-
-
-from lightkurve import search_targetpixelfile
-from lightkurve import search_lightcurve
 import matplotlib.pyplot as plt
 import time
 from vars import *
@@ -15,6 +8,15 @@ import os
 import math
 from datetime import date
 import pandas as pd
+
+try:
+    from lightkurve import search_targetpixelfile
+    from lightkurve import search_lightcurve
+except ModuleNotFoundError:
+    print('ERROR: Lightkurve module not found. please use "pip install lightkurve" and try running again. Program closing...')
+    time.sleep(3)
+    quit()
+
 
 if sound_enabled is True:
     import winsound
@@ -267,12 +269,11 @@ while True:
         print(function_index, '--', function)
         list_of_functions_index.append(str(function_index))
         function_index += 1
-    user_input = input('Select desired function: ')
 
     while True: # PREVENTS CRASHES FROM UNRECOGNIZED INPUTS
+        user_input = input('Select desired function: ')
         if user_input not in list_of_functions_index:
             print(prompt_input_not_recognized)
-            user_input = input()
         else:
             user_input = int(user_input)
             break
@@ -372,7 +373,7 @@ while True:
                     star_luminosity = float(star_luminosity.strip())
                     break
                 except ValueError:
-                    prompt_input_not_recognized
+                    print(prompt_input_not_recognized)
         while True:
             star_luminosity_uncertainty_positive = input("The 'greather than' uncertainty of transited star's luminosity (L☉): ")
             if star_luminosity_uncertainty_positive is None or star_luminosity_uncertainty_positive.strip() == '':
@@ -393,7 +394,7 @@ while True:
                     star_luminosity_uncertainty_negative = abs(float(star_luminosity_uncertainty_negative.strip()))
                     break
                 except ValueError:
-                    prompt_input_not_recognized
+                    print(prompt_input_not_recognized)
 
     elif user_input == 5:
         print('Parameters') 

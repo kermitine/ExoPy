@@ -1,6 +1,6 @@
 import scipy.constants
 
-version = '1.8.8'
+version = '1.8.9'
 # ENABLE/DISABLE FUNCTIONALITY BELOW
 masking_enabled = False # enable/disable cadence masking
 sound_enabled = False # enable/disable sound effects
