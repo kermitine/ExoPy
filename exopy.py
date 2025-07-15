@@ -276,7 +276,7 @@ while True:
             print(prompt_input_not_recognized)
             continue
         elif user_input in ['1', '2'] and lightkurve_enabled == False:
-            print('ERROR: Lightcurve Analysis and Pixelfile Retrieval is disabled. Please install Lightkurve and try again.')
+            print('ERROR: Lightcurve Analysis and Pixelfile Retrieval are disabled. Please install the Lightkurve module and try again.')
         else:
             try:
                 user_input = int(user_input)
