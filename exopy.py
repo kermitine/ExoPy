@@ -237,14 +237,14 @@ print(f'Bins: {selected_bins}')
 lowest_flux = None
 flux_watts_nominal = '(Not Generated)'
 semi_major_axis_nominal_AU = '(Not Generated)'
-star_temperature_nominal = '(Not Generated)'
+star_temperature_nominal = '(Data Not Available)'
 inner_goldilocks_radius_nominal = outer_goldilocks_radius_nominal = '(Not Generated)'
-star_luminosity = '(Not Generated)'
-star_radius = '(Not Generated)'
-star_mass_solarmass = '(Not Generated)'
+star_luminosity = '(Data Not Available)'
+star_radius = '(Data Not Available)'
+star_mass_solarmass = '(Data Not Available)'
 planet_radius_earth_nominal = '(Not Generated)'
 exoplanet_k_temperature_nominal = '(Not Generated)'
-orbital_period_days = '(Not Generated)'
+orbital_period_days = '(Data Not Available)'
 target_star = 'None'
 planet_period_float = None
 planet_radius_earth_upper_diff = planet_radius_earth_lower_diff = '0.0'
@@ -876,7 +876,7 @@ while True:
                         exoplanet_size_suffix = 'Earth-Like'
                 else:
                     exoplanet_temperature_prefix = ''
-                    exoplanet_size_suffix = '(Data Not Available)'
+                    exoplanet_size_suffix = '(Not Generated)'
 
 
 
