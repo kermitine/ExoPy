@@ -17,6 +17,16 @@ There are many variables and "flags" which can be adjusted, enabled, and disable
 ### Exoplanet Radius Calculator
 Calculate an exoplanets radius using the radius of its star, and the dip in the light emitted during the transit (phase fold, automatically calculated and saved during Lightcurve Retrieval.) Includes uncertanties.
 
+### Star Habitable Zone Calculator
+
+### Star Temperature Calculator
+
+### Orbital Radius Calculator
+
+### Exoplanet Stellar Energy Calculator
+
+### Blackbody Exoplanet Temperature Calculator
+
 ### Lightcurve Retrieval/Calculation
 Automatically retrieve, plot and graph lightcurves of stars. Automatically generate periodogram and phase folds based on user input, and save for use in radius calculations.
 
@@ -26,8 +36,7 @@ Automatically retrieve the pixelfile of a star and display it.
 ### Automated File Saving
 Automatically saves all plots to a file type of user's choosing, adjustable in vars. SVG recommended/default.
 
-### Significant Figure Rounding
-Toggleable via vars.py.
+### Robust Error and Crash Handling
 
 
 ![kermitine](https://github.com/kermitine/kermitine/blob/b523c5954ea8820f70eb6ff786f2dbec7ce08955/images/kermitine.png)
