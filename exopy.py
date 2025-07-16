@@ -55,10 +55,16 @@ def blackbody_temperature_calculator(star_luminosity, star_luminosity_uncertaint
     exoplanet_orbital_radius_m_nominal = exoplanet_orbital_radius_AU * constant_AU_TO_m
     exoplanet_orbital_radius_m_lower = (exoplanet_orbital_radius_AU-exoplanet_orbital_radius_AU_uncertainty_negative) * constant_AU_TO_m
 
-    exoplanet_temperature_k_upper = ((star_luminosity_watts_upper)/(16*math.pi*((exoplanet_orbital_radius_m_lower)**2)*constant_stefan_boltzmann))**0.25
-    exoplanet_temperature_k_nominal = ((star_luminosity_watts_nominal)/(16*math.pi*((exoplanet_orbital_radius_m_nominal)**2)*constant_stefan_boltzmann))**0.25
-    exoplanet_temperature_k_lower = ((star_luminosity_watts_lower)/(16*math.pi*((exoplanet_orbital_radius_m_upper)**2)*constant_stefan_boltzmann))**0.25
+    try:
+        exoplanet_temperature_k_upper = ((star_luminosity_watts_upper)/(16*math.pi*((exoplanet_orbital_radius_m_lower)**2)*constant_stefan_boltzmann))**0.25
+        exoplanet_temperature_k_nominal = ((star_luminosity_watts_nominal)/(16*math.pi*((exoplanet_orbital_radius_m_nominal)**2)*constant_stefan_boltzmann))**0.25
+        exoplanet_temperature_k_lower = ((star_luminosity_watts_lower)/(16*math.pi*((exoplanet_orbital_radius_m_upper)**2)*constant_stefan_boltzmann))**0.25
 
+    except ZeroDivisionError:
+        print('ERROR: Divison by zero. Did you enter the correct exoplanet radius data?')
+        print('\n' * 3)
+        return 'Not Generated', 0, 0
+    
     exoplanet_temperature_k_upper_diff = exoplanet_temperature_k_upper - exoplanet_temperature_k_nominal
     exoplanet_temperature_k_lower_diff = exoplanet_temperature_k_nominal - exoplanet_temperature_k_lower
 
@@ -75,9 +81,14 @@ def exoplanet_flux_received(star_luminosity, star_luminosity_uncertainty_positiv
     exoplanet_orbital_radius_meters_nominal = exoplanet_orbital_radius_AU * constant_AU_TO_m
     exoplanet_orbital_radius_meters_lower = (exoplanet_orbital_radius_AU-exoplanet_orbital_radius_AU_uncertainty_negative) * constant_AU_TO_m
 
-    flux_watts_upper = star_luminosity_watts_upper / (4 * math.pi * exoplanet_orbital_radius_meters_lower ** 2)
-    flux_watts_nominal = star_luminosity_watts_nominal / (4 * math.pi * exoplanet_orbital_radius_meters_nominal ** 2)
-    flux_watts_lower = star_luminosity_watts_lower / (4 * math.pi * exoplanet_orbital_radius_meters_upper ** 2)
+    try:
+        flux_watts_upper = star_luminosity_watts_upper / (4 * math.pi * exoplanet_orbital_radius_meters_lower ** 2)
+        flux_watts_nominal = star_luminosity_watts_nominal / (4 * math.pi * exoplanet_orbital_radius_meters_nominal ** 2)
+        flux_watts_lower = star_luminosity_watts_lower / (4 * math.pi * exoplanet_orbital_radius_meters_upper ** 2)
+    except ZeroDivisionError:
+        print("ERROR: Divison by Zero. Did you enter the correct semi-major axis data of the exoplanet's orbit?")
+        print('\n' * 3)
+        return '(Not Generated)', 0, 0
 
     flux_watts_upper_diff = flux_watts_upper - flux_watts_nominal
     flux_watts_lower_diff = flux_watts_nominal - flux_watts_lower
@@ -87,12 +98,16 @@ def exoplanet_flux_received(star_luminosity, star_luminosity_uncertainty_positiv
     return round(flux_watts_nominal, rounding_decimal_places), round(flux_watts_upper_diff, rounding_decimal_places), round(flux_watts_lower_diff, rounding_decimal_places)
 
 def habitable_zone_calculator(star_luminosity, star_luminosity_uncertainty_positive, star_luminosity_uncertainty_negative):
+    try:
+        inner_goldilocks_radius_lower = math.sqrt((star_luminosity-star_luminosity_uncertainty_negative)/1.1)
+        inner_goldilocks_radius_nominal = math.sqrt(star_luminosity/1.1)
 
-    inner_goldilocks_radius_lower = math.sqrt((star_luminosity-star_luminosity_uncertainty_negative)/1.1)
-    inner_goldilocks_radius_nominal = math.sqrt(star_luminosity/1.1)
-
-    outer_goldilocks_radius_nominal = math.sqrt(star_luminosity/0.53)
-    outer_goldilocks_radius_upper = math.sqrt((star_luminosity+star_luminosity_uncertainty_positive)/0.53)
+        outer_goldilocks_radius_nominal = math.sqrt(star_luminosity/0.53)
+        outer_goldilocks_radius_upper = math.sqrt((star_luminosity+star_luminosity_uncertainty_positive)/0.53)
+    except ValueError:
+        print('ERROR: Negative root. Did you enter the correct luminosity incertanties?')
+        print('\n' * 3)
+        return '(Not Generated)', 0, '(Not Generated)', 0
 
     inner_goldilocks_radius_lower_diff = inner_goldilocks_radius_nominal-inner_goldilocks_radius_lower
     outer_goldilocks_radius_upper_diff = outer_goldilocks_radius_upper-outer_goldilocks_radius_nominal
@@ -114,9 +129,14 @@ def stefan_boltzmann_star_temperature_calculator(star_radius, star_luminosity, s
     star_radius_meters_lower = (star_radius-star_radius_uncertainty_negative) * constant_solarradii_TO_m
     star_luminosity_watts_lower = (star_luminosity-star_luminosity_uncertainty_negative) * constant_solarluminosity_TO_W
 
-    star_temperature_upper = ((star_luminosity_watts_upper)/(4*math.pi*constant_stefan_boltzmann*(star_radius_meters_lower)**2))**0.25
-    star_temperature_nominal = ((star_luminosity_watts_nominal)/(4*math.pi*constant_stefan_boltzmann*(star_radius_meters_nominal)**2))**0.25
-    star_temperature_lower = ((star_luminosity_watts_lower)/(4*math.pi*constant_stefan_boltzmann*(star_radius_meters_upper)**2))**0.25
+    try:
+        star_temperature_upper = ((star_luminosity_watts_upper)/(4*math.pi*constant_stefan_boltzmann*(star_radius_meters_lower)**2))**0.25
+        star_temperature_nominal = ((star_luminosity_watts_nominal)/(4*math.pi*constant_stefan_boltzmann*(star_radius_meters_nominal)**2))**0.25
+        star_temperature_lower = ((star_luminosity_watts_lower)/(4*math.pi*constant_stefan_boltzmann*(star_radius_meters_upper)**2))**0.25
+    except ZeroDivisionError:
+        print('ERROR: Division by zero. Did you enter the correct star radius data?')
+        print('\n' * 3)
+        return '(Not Generated)', 0, 0
 
     star_temperature_upper_diff = star_temperature_upper-star_temperature_nominal
     star_temperature_lower_diff = star_temperature_nominal-star_temperature_lower
@@ -132,11 +152,14 @@ def find_exoplanet_radius(star_radius, depth_of_phase_fold, star_radius_uncertai
     after retrieving light curve and creating phase fold.
     
     """
-
-
-    planet_radius_solar_upperlimit_uncertainty = (star_radius + star_radius_uncertainty_positive) * math.sqrt(1-depth_of_phase_fold) # calculates highest possible value
-    planet_radius_solar_lowerlimit_uncertainty = (star_radius - star_radius_uncertainty_negative) * math.sqrt(1-depth_of_phase_fold) # calculates lowest possible value
-    planet_radius_solar = star_radius * math.sqrt(1-depth_of_phase_fold)
+    try:
+        planet_radius_solar_upperlimit_uncertainty = (star_radius + star_radius_uncertainty_positive) * math.sqrt(1-depth_of_phase_fold) # calculates highest possible value
+        planet_radius_solar_lowerlimit_uncertainty = (star_radius - star_radius_uncertainty_negative) * math.sqrt(1-depth_of_phase_fold) # calculates lowest possible value
+        planet_radius_solar = star_radius * math.sqrt(1-depth_of_phase_fold)
+    except ValueError:
+        print('ERROR: Negative root. Did you enter the correct flux data?')
+        print('\n' * 3)
+        return '(Not Generated)', 0, 0 
     planet_radius_solar_positive_uncertainty = planet_radius_solar_upperlimit_uncertainty - planet_radius_solar
     planet_radius_solar_negative_uncertainty = planet_radius_solar - planet_radius_solar_lowerlimit_uncertainty
 
@@ -146,7 +169,6 @@ def find_exoplanet_radius(star_radius, depth_of_phase_fold, star_radius_uncertai
     planet_radius_earth_lower_diff = planet_radius_solar_negative_uncertainty * constant_solarradii_TO_earthradii
 
     print(f'Calculated nominal planet radius: {round(planet_radius_earth_nominal, rounding_decimal_places)} R⊕ (+{round(planet_radius_earth_upper_diff, rounding_decimal_places)} R⊕ -{round(planet_radius_earth_lower_diff, rounding_decimal_places)} R⊕)')
-
     print('\n' * 3)
     return round(planet_radius_earth_nominal, rounding_decimal_places), round(planet_radius_earth_upper_diff, rounding_decimal_places), round(planet_radius_earth_lower_diff, rounding_decimal_places)
 
@@ -156,7 +178,7 @@ def kepler_orbital_radius_calculator(orbital_period_days, star_mass_solarmass, s
     star_mass_kg_upper = (star_mass_solarmass + star_mass_solarmass_uncertainty_positive) * constant_solarmass_TO_kg 
     star_mass_kg_nominal = star_mass_solarmass * constant_solarmass_TO_kg 
     star_mass_kg_lower = (star_mass_solarmass - star_mass_solarmass_uncertainty_negative) * constant_solarmass_TO_kg 
-
+    
     semi_major_axis_upper = ((constant_gravitational*star_mass_kg_upper*(orbital_period_seconds**2))/(4*(math.pi**2)))**(1/3)
     semi_major_axis_nominal = ((constant_gravitational*star_mass_kg_nominal*(orbital_period_seconds**2))/(4*(math.pi**2)))**(1/3)
     semi_major_axis_lower = ((constant_gravitational*star_mass_kg_lower*(orbital_period_seconds**2))/(4*(math.pi**2)))**(1/3)
@@ -293,37 +315,37 @@ while True:
         print('R⊕ = Earth Radius')
         print('\n')
         while True:
-            try:
-                star_radius = input("Transited star's radius (R☉): ")
-                if star_radius is None or star_radius.strip() == '':
-                    print(prompt_input_not_recognized)
-                else:
+            star_radius = input("Transited star's radius (R☉): ")
+            if star_radius is None or star_radius.strip() == '':
+                print(prompt_input_not_recognized)
+            else:
+                try:
                     star_radius = float(star_radius.strip())
                     break
-            except ValueError:
-                print(prompt_input_not_recognized)
+                except ValueError:
+                    print(prompt_input_not_recognized)
 
         while True:
-            try:
-                star_radius_uncertainty_positive = input("The 'greather than' uncertainty of transited star's radius (R☉): ")
-                if star_radius_uncertainty_positive is None or star_radius_uncertainty_positive.strip() == '':
-                    print(prompt_input_not_recognized)
-                else:
+            star_radius_uncertainty_positive = input("The 'greather than' uncertainty of transited star's radius (R☉): ")
+            if star_radius_uncertainty_positive is None or star_radius_uncertainty_positive.strip() == '':
+                print(prompt_input_not_recognized)
+            else:
+                try:
                     star_radius_uncertainty_positive = abs(float(star_radius_uncertainty_positive.strip()))
                     break
-            except ValueError:
-                print(prompt_input_not_recognized)
+                except ValueError:
+                    print(prompt_input_not_recognized)
 
         while True:
-            try:
-                star_radius_uncertainty_negative = input("The 'less than' uncertainty of transited star's radius (R☉): ")
-                if star_radius_uncertainty_negative is None or star_radius_uncertainty_negative.strip() == '':
-                    print(prompt_input_not_recognized)
-                else:
+            star_radius_uncertainty_negative = input("The 'less than' uncertainty of transited star's radius (R☉): ")
+            if star_radius_uncertainty_negative is None or star_radius_uncertainty_negative.strip() == '':
+                print(prompt_input_not_recognized)
+            else:
+                try:
                     star_radius_uncertainty_negative = abs(float(star_radius_uncertainty_negative.strip()))
                     break
-            except ValueError:
-                print(prompt_input_not_recognized)
+                except ValueError:
+                    print(prompt_input_not_recognized)
 
         while True:
             if lowest_flux is None:
