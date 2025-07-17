@@ -68,9 +68,15 @@ def blackbody_temperature_calculator(star_luminosity, star_luminosity_uncertaint
     exoplanet_temperature_k_upper_diff = exoplanet_temperature_k_upper - exoplanet_temperature_k_nominal
     exoplanet_temperature_k_lower_diff = exoplanet_temperature_k_nominal - exoplanet_temperature_k_lower
 
-    print(f'Calculated nominal exoplanet temperature (assuming blackbody): {round(exoplanet_temperature_k_nominal, rounding_decimal_places)} K (+{round(exoplanet_temperature_k_upper_diff, rounding_decimal_places)} K -{round(exoplanet_temperature_k_lower_diff, rounding_decimal_places)} K)')
+    try:
+        print(f'Calculated nominal exoplanet temperature (assuming blackbody): {round(exoplanet_temperature_k_nominal, rounding_decimal_places)} K (+{round(exoplanet_temperature_k_upper_diff, rounding_decimal_places)} K -{round(exoplanet_temperature_k_lower_diff, rounding_decimal_places)} K)')
+        print('\n' * 3)
+        return round(exoplanet_temperature_k_nominal, rounding_decimal_places), round(exoplanet_temperature_k_upper_diff, rounding_decimal_places), round(exoplanet_temperature_k_lower_diff, rounding_decimal_places)
 
-    return round(exoplanet_temperature_k_nominal, rounding_decimal_places), round(exoplanet_temperature_k_upper_diff, rounding_decimal_places), round(exoplanet_temperature_k_lower_diff, rounding_decimal_places)
+    except TypeError:
+        print('ERROR: Complex number. Are you sure you entered the correct data?')
+        print('\n' * 3)
+        return '(Not Generated)', 0, 0
 
 def exoplanet_flux_received(star_luminosity, star_luminosity_uncertainty_positive, star_luminosity_uncertainty_negative, exoplanet_orbital_radius_AU, exoplanet_orbital_radius_AU_uncertainty_positive, exoplanet_orbital_radius_AU_uncertainty_negative):
     star_luminosity_watts_upper = (star_luminosity+star_luminosity_uncertainty_positive) * constant_solarluminosity_TO_W
@@ -141,9 +147,14 @@ def stefan_boltzmann_star_temperature_calculator(star_radius, star_luminosity, s
     star_temperature_upper_diff = star_temperature_upper-star_temperature_nominal
     star_temperature_lower_diff = star_temperature_nominal-star_temperature_lower
 
-    print(f'Calculated nominal star temperature: {round(star_temperature_nominal, rounding_decimal_places)} K (+{round(star_temperature_upper_diff, rounding_decimal_places)} K -{round(star_temperature_lower_diff, rounding_decimal_places)} K)')
-    print('\n' * 3)
-    return round(star_temperature_nominal, rounding_decimal_places), round(star_temperature_upper_diff, rounding_decimal_places), round(star_temperature_lower_diff, rounding_decimal_places)
+    try:
+        print(f'Calculated nominal star temperature: {round(star_temperature_nominal, rounding_decimal_places)} K (+{round(star_temperature_upper_diff, rounding_decimal_places)} K -{round(star_temperature_lower_diff, rounding_decimal_places)} K)')
+        print('\n' * 3)
+        return round(star_temperature_nominal, rounding_decimal_places), round(star_temperature_upper_diff, rounding_decimal_places), round(star_temperature_lower_diff, rounding_decimal_places)
+    except TypeError:
+        print('ERROR: Complex number. Are you sure you entered the correct data?')
+        print('\n' * 3)
+        return '(Not Generated)', 0, 0
 
 def find_exoplanet_radius(star_radius, depth_of_phase_fold, star_radius_uncertainty_positive, star_radius_uncertainty_negative):
     """
@@ -187,10 +198,15 @@ def kepler_orbital_radius_calculator(orbital_period_days, star_mass_solarmass, s
     semi_major_axis_upper_diff_AU = (semi_major_axis_upper-semi_major_axis_nominal)*constant_m_TO_AU
     semi_major_axis_lower_diff_AU = (semi_major_axis_nominal-semi_major_axis_lower)*constant_m_TO_AU
 
-    print(f'Calculated nominal semi-major axis: {round(semi_major_axis_nominal_AU, rounding_decimal_places)} AU (+{round(semi_major_axis_upper_diff_AU, rounding_decimal_places)} AU -{round(semi_major_axis_lower_diff_AU, rounding_decimal_places)} AU)')
-    print('\n' * 3)
-    return round(semi_major_axis_nominal_AU, rounding_decimal_places), round(semi_major_axis_upper_diff_AU, rounding_decimal_places), round(semi_major_axis_lower_diff_AU, rounding_decimal_places)
-
+    try:
+        print(f'Calculated nominal semi-major axis: {round(semi_major_axis_nominal_AU, rounding_decimal_places)} AU (+{round(semi_major_axis_upper_diff_AU, rounding_decimal_places)} AU -{round(semi_major_axis_lower_diff_AU, rounding_decimal_places)} AU)')
+        print('\n' * 3)
+        return round(semi_major_axis_nominal_AU, rounding_decimal_places), round(semi_major_axis_upper_diff_AU, rounding_decimal_places), round(semi_major_axis_lower_diff_AU, rounding_decimal_places)
+    except TypeError:
+        print('ERROR: Complex number. Are you sure you entered the correct data?')
+        print('\n' * 3)
+        return '(Not Generated)', 0, 0
+    
 def star_pixelfile_retrieval(target_star):
     """
     Retrieves and displays pixelfile of star.
@@ -817,8 +833,7 @@ while True:
                     lightcurve_stitched = lightcurve_stitched[~planet_mask]
                     print('Masking enabled ' + '(' + alphabet_list[alphabet_index] + ')...')
 
-                print(prompt_periodogram_lower_bound) # input lower bound
-                periodogram_lower_bound_input = input()
+                periodogram_lower_bound_input = input(prompt_periodogram_lower_bound)
                 if periodogram_lower_bound_input.strip() == "":
                     lower_bound = periodogram_lower_bound_default
                 else:
@@ -827,8 +842,7 @@ while True:
                     except ValueError:
                         lower_bound = periodogram_lower_bound_default
 
-                print(prompt_periodogram_upper_bound) # input upper bound
-                periodogram_upper_bound_input = input()
+                periodogram_upper_bound_input = input(prompt_periodogram_upper_bound)
                 if periodogram_upper_bound_input.strip() == "":
                     upper_bound = periodogram_upper_bound_default
                 else:
