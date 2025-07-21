@@ -277,7 +277,7 @@ print(f'Bins: {selected_bins}')
 lowest_flux = None
 flux_watts_nominal = '(Not Generated)'
 semi_major_axis_nominal_AU = '(Not Generated)'
-star_temperature_nominal = '(Data Not Available)'
+star_temperature_nominal = '(Not Generated)'
 inner_goldilocks_radius_nominal = outer_goldilocks_radius_nominal = '(Not Generated)'
 star_luminosity = '(Data Not Available)'
 star_radius = '(Data Not Available)'
@@ -895,7 +895,7 @@ while True:
                     else:
                         in_habitable_zone = 'No'
                 else:
-                    in_habitable_zone = '(Data Not Available)'
+                    in_habitable_zone = '(Not Generated)'
 
                 if planet_radius_earth_nominal != '(Not Generated)' and exoplanet_k_temperature_nominal != '(Not Generated)':
                     if exoplanet_k_temperature_nominal >= 1000:
