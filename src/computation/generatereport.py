@@ -5,30 +5,31 @@ import os
 from src.getdata.getexoplanetdata import *
 from src.getdata.getstardata import *
 
+initialize_vars = False
+def generate_full_report(lowest_flux, planet_period_float, target_star):
+    global initialize_vars
+    if initialize_vars is False:
+        flux_watts_nominal = '(Not Generated)'
+        semi_major_axis_nominal_AU = '(Not Generated)'
+        star_temperature_nominal = '(Not Generated)'
+        inner_goldilocks_radius_nominal = outer_goldilocks_radius_nominal = '(Not Generated)'
+        star_luminosity = '(Data Not Available)'
+        star_radius = '(Data Not Available)'
+        star_mass_solarmass = '(Data Not Available)'
+        planet_radius_earth_nominal = '(Not Generated)'
+        exoplanet_k_temperature_nominal = '(Not Generated)'
+        orbital_period_days = '(Data Not Available)'
+        planet_radius_earth_upper_diff = planet_radius_earth_lower_diff = '0.0'
+        flux_watts_upper_diff = flux_watts_lower_diff = '0.0'
+        semi_major_axis_upper_diff_AU = semi_major_axis_lower_diff_AU = '0.0'
+        star_temperature_upper_diff = star_temperature_lower_diff = '0.0'
+        inner_goldilocks_radius_lower_diff  = outer_goldilocks_radius_upper_diff = '0.0'
+        star_luminosity_uncertainty_positive = star_luminosity_uncertainty_negative = '0.0'
+        star_radius_uncertainty_positive = star_radius_uncertainty_negative = '0.0'
+        star_mass_solarmass_uncertainty_positive = star_mass_solarmass_uncertainty_negative = '0.0'
+        exoplanet_k_temperature_upper_diff = exoplanet_k_temperature_lower_diff = '0.0'
+        initialize_vars = True
 
-def generate_full_report(lowest_flux, planet_period_float):
-    lowest_flux = None
-    planet_period_float = None
-    flux_watts_nominal = '(Not Generated)'
-    semi_major_axis_nominal_AU = '(Not Generated)'
-    star_temperature_nominal = '(Not Generated)'
-    inner_goldilocks_radius_nominal = outer_goldilocks_radius_nominal = '(Not Generated)'
-    star_luminosity = '(Data Not Available)'
-    star_radius = '(Data Not Available)'
-    star_mass_solarmass = '(Data Not Available)'
-    planet_radius_earth_nominal = '(Not Generated)'
-    exoplanet_k_temperature_nominal = '(Not Generated)'
-    orbital_period_days = '(Data Not Available)'
-    target_star = 'None'
-    planet_radius_earth_upper_diff = planet_radius_earth_lower_diff = '0.0'
-    flux_watts_upper_diff = flux_watts_lower_diff = '0.0'
-    semi_major_axis_upper_diff_AU = semi_major_axis_lower_diff_AU = '0.0'
-    star_temperature_upper_diff = star_temperature_lower_diff = '0.0'
-    inner_goldilocks_radius_lower_diff  = outer_goldilocks_radius_upper_diff = '0.0'
-    star_luminosity_uncertainty_positive = star_luminosity_uncertainty_negative = '0.0'
-    star_radius_uncertainty_positive = star_radius_uncertainty_negative = '0.0'
-    star_mass_solarmass_uncertainty_positive = star_mass_solarmass_uncertainty_negative = '0.0'
-    exoplanet_k_temperature_upper_diff = exoplanet_k_temperature_lower_diff = '0.0'
     while True:
         print('Current Report Status')
         current_date = str(date.today())
@@ -72,7 +73,7 @@ def generate_full_report(lowest_flux, planet_period_float):
 
 
 
-        data_exoplanet = {'Exoplanet Data': ['Radius:', 'Orbital Period:', 'Blackbody Temperature:', 'Semi-major axis of orbit:', 'Stellar Flux Received:', 'In Goldilocks Zone?', 'Planet Classification:'],'Value': [f'{planet_radius_earth_nominal} R⊕ (+{planet_radius_earth_upper_diff} R⊕ -{planet_radius_earth_lower_diff} R⊕)', f'{orbital_period_days} d',f'{exoplanet_k_temperature_nominal} K (+{exoplanet_k_temperature_upper_diff} K -{exoplanet_k_temperature_lower_diff} K)', f'{semi_major_axis_nominal_AU} AU (+{semi_major_axis_upper_diff_AU} AU -{semi_major_axis_lower_diff_AU} AU)', f'{flux_watts_nominal} W/m^2 (+{flux_watts_upper_diff} W/m^2 -{flux_watts_lower_diff} W/m^2)', f'{in_habitable_zone}', f'{exoplanet_temperature_prefix}{exoplanet_size_suffix}']}
+        data_exoplanet = {'Exoplanet Data': ['Radius:', 'Orbital Period:', 'Blackbody Temperature:', 'Semi-major axis of orbit:', 'Stellar Flux Received:', 'In Goldilocks Zone?', 'Planet Classification:'],'Value': [f'{planet_radius_earth_nominal} R⊕ (+{planet_radius_earth_upper_diff} R⊕ -{planet_radius_earth_lower_diff} R⊕)', f'{round(orbital_period_days, rounding_decimal_places)} d',f'{exoplanet_k_temperature_nominal} K (+{exoplanet_k_temperature_upper_diff} K -{exoplanet_k_temperature_lower_diff} K)', f'{semi_major_axis_nominal_AU} AU (+{semi_major_axis_upper_diff_AU} AU -{semi_major_axis_lower_diff_AU} AU)', f'{flux_watts_nominal} W/m^2 (+{flux_watts_upper_diff} W/m^2 -{flux_watts_lower_diff} W/m^2)', f'{in_habitable_zone}', f'{exoplanet_temperature_prefix}{exoplanet_size_suffix}']}
         table_exoplanet = pd.DataFrame(data_exoplanet) # HERE IS TABLE FOR STARS
         print(table_exoplanet)
 
@@ -105,7 +106,7 @@ def generate_full_report(lowest_flux, planet_period_float):
 
                 semi_major_axis_nominal_AU, semi_major_axis_upper_diff_AU, semi_major_axis_lower_diff_AU = kepler_orbital_radius_calculator(orbital_period_days, star_mass_solarmass, star_mass_solarmass_uncertainty_positive, star_mass_solarmass_uncertainty_negative)
 
-                planet_radius_earth_nominal, planet_radius_earth_upper_diff, planet_radius_earth_lower_diff = find_exoplanet_radius(star_radius, depth_of_phase_fold, star_radius_uncertainty_positive, star_radius_uncertainty_negative)
+                planet_radius_earth_nominal, planet_radius_earth_upper_diff, planet_radius_earth_lower_diff = find_exoplanet_radius(star_radius, star_radius_uncertainty_positive, star_radius_uncertainty_negative, depth_of_phase_fold)
 
                 inner_goldilocks_radius_nominal, inner_goldilocks_radius_lower_diff, outer_goldilocks_radius_nominal, outer_goldilocks_radius_upper_diff = habitable_zone_calculator(star_luminosity, star_luminosity_uncertainty_positive, star_luminosity_uncertainty_negative)
 
@@ -134,7 +135,7 @@ def generate_full_report(lowest_flux, planet_period_float):
                     print(prompt_input_not_recognized)
                 else:
                     break
-            file_path = f'exopy/saved/saved_data/{target_star}/{current_date}'
+            file_path = f'saved/saved_data/{target_star}/{current_date}'
             os.makedirs(os.path.dirname(file_path), exist_ok=True)
             table_exoplanet.to_csv(f'{file_path}-EXOPLANET_REPORT.csv', sep ='\t')
             table_star.to_csv(f'{file_path}-STAR_REPORT.csv', sep ='\t')

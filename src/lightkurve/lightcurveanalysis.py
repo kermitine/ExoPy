@@ -18,14 +18,12 @@ def star_lightcurve_analysis(target_star):
         lightcurve_collection.plot(title=plot_title)
     except ValueError:
         print(f"ERROR: Either no data available for {target_star}, or system doesn't exist.")
-        print('\n')
         return 'fail'
 
     end_time = time.time() # measure time
     print(f'took {round((end_time - start_time), 1)} seconds to retrieve')
     save_plot(target_star, f'_LIGHTCURVECOLLECTION.{file_saving_format}')
     plt.show()
-    print('\n' * 3)
     return lightcurve_collection
 
 def star_lightcurve_analysis_continued(lightcurve_collection, target_star):
@@ -56,7 +54,6 @@ def star_lightcurve_analysis_continued(lightcurve_collection, target_star):
         except ValueError:
             upper_bound = periodogram_upper_bound_default
 
-    time.sleep(3)
     print('Generating periodogram...')
     
     period = np.linspace(lower_bound, upper_bound, 100000) # Period
@@ -64,11 +61,9 @@ def star_lightcurve_analysis_continued(lightcurve_collection, target_star):
     plot_title = f'Periodogram of light curve of {target_star}'
     periodogram_bls.plot(title=plot_title)
 
-    time.sleep(2)
     save_plot(target_star, f'_LIGHTCURVEPERIODOGRAM_{alphabet_list[alphabet_index]}.{file_saving_format}')
     plt.show()
     # FIRST ONE ABOVE. REST IN LOOP
-    time.sleep(1)
 
     while True:
         print('Folding light curve...')
@@ -100,7 +95,6 @@ def star_lightcurve_analysis_continued(lightcurve_collection, target_star):
         lowest_flux = float(lowest_flux)
         plt.show()
         
-        print('\n')
         
         while True:
             exit_function = input('Would you like to create another periodogram? (y/n): ')
@@ -109,7 +103,6 @@ def star_lightcurve_analysis_continued(lightcurve_collection, target_star):
             else:
                 exit_function = exit_function.lower().strip()
                 break
-        print('\n')
         if exit_function == 'n':
             return lowest_flux, planet_period_float
 
@@ -139,13 +132,11 @@ def star_lightcurve_analysis_continued(lightcurve_collection, target_star):
             except ValueError:
                 upper_bound = periodogram_upper_bound_default
 
-        time.sleep(3)
         print('Generating periodogram...')
         
         period = np.linspace(lower_bound, upper_bound, 100000) # Period
         periodogram_bls = lightcurve_stitched.to_periodogram(method='bls', period=period, frequency_factor=500)
         plot_title = 'Periodogram of light curve of ' + target_star
         periodogram_bls.plot(title=plot_title)
-        time.sleep(2)
         save_plot(target_star, f'_LIGHTCURVEPERIODOGRAM_{alphabet_list[alphabet_index]}.{file_saving_format}')
         plt.show()

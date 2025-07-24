@@ -1,8 +1,9 @@
 from config.config import *
 from utils.KermLib.KermLib import *
 from src.getdata.getstardata import *
-from utils.initvars import *
-
+target_star = 'None'
+lowest_flux = None
+planet_period_float = None
 
 KermLib.ascii_run()
 print(f'ExoPy V{version} initialized')
@@ -102,4 +103,6 @@ while True: # main program loop
 
     elif desired_function == 'Generate Full Report':
         from src.computation.generatereport import generate_full_report
-        generate_full_report(lowest_flux, planet_period_float)
+        generate_full_report(lowest_flux, planet_period_float, target_star)
+
+    print('\n' * 3)
