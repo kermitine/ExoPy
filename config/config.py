@@ -1,7 +1,7 @@
 version = '2.0.2'
 # ENABLE/DISABLE FUNCTIONALITY BELOW
 masking_enabled = False # enable/disable cadence masking
-sound_enabled = True # enable/disable sound effects
+sound_enabled = False # enable/disable sound effects
 file_saving_enabled = True # recommended enabled (saves plots to saved_data/{starsystem})
 # DEFAULTS
 periodogram_lower_bound_default = 0.5

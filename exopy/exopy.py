@@ -54,7 +54,6 @@ def get_desired_function():
 while True: # main program loop
     desired_function = get_desired_function()
 
-    play_sound('data/nflsong.wav', True)
     if desired_function == 'Star Pixelfile Retrieval' or desired_function == 'Star Light Curve Analysis':
         target_star = get_target_star(target_star)
         if desired_function == 'Star Pixelfile Retrieval':
