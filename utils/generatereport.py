@@ -95,7 +95,6 @@ def generate_full_report(lowest_flux, planet_period_float, target_star):
 
 
                 if attempt_wikipedia_pull == True:
-                    print('Attempting to pull star data from Wikipedia...')
                     while True:
                         target_star = input(f'Enter system/star name (Last used: {target_star}): ')
                         target_star = target_star.strip().upper()
@@ -103,6 +102,8 @@ def generate_full_report(lowest_flux, planet_period_float, target_star):
                             print(prompt_input_not_recognized)
                         else:
                             break
+                    print('Attempting to pull star data from Wikipedia...')
+
 
                     try:
                         star_radius, star_radius_uncertainty_positive, star_radius_uncertainty_negative = parse_wiki_data(pull_wiki_data(target_star, 'Radius'))
