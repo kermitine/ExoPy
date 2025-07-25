@@ -1,4 +1,4 @@
-version = '2.0.2'
+version = '2.0.3'
 # ENABLE/DISABLE FUNCTIONALITY BELOW
 masking_enabled = False # enable/disable cadence masking
 sound_enabled = False # enable/disable sound effects

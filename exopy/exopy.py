@@ -1,6 +1,3 @@
-import sys
-import os
-sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 from config.config import *
 from utils.playsound import play_sound
 from utils.KermLib.KermLib import *
@@ -111,6 +108,7 @@ while True: # main program loop
 
     elif desired_function == 'Generate Full Report':
         from exopy.computation.generatereport import generate_full_report
+        print('\n' * 2)
         generate_full_report(lowest_flux, planet_period_float, target_star)
 
-    print('\n' * 3)
+    print('\n' * 2)
