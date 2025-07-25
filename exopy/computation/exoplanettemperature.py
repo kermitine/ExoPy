@@ -17,7 +17,6 @@ def blackbody_temperature_calculator(star_luminosity, star_luminosity_uncertaint
 
     except ZeroDivisionError:
         print('ERROR: Divison by zero. Did you enter the correct exoplanet radius data?')
-        print('\n' * 3)
         return 'Not Generated', 0, 0
     
     exoplanet_temperature_k_upper_diff = exoplanet_temperature_k_upper - exoplanet_temperature_k_nominal
@@ -25,10 +24,8 @@ def blackbody_temperature_calculator(star_luminosity, star_luminosity_uncertaint
 
     try:
         print(f'Calculated nominal exoplanet temperature (assuming blackbody): {round(exoplanet_temperature_k_nominal, rounding_decimal_places)} K (+{round(exoplanet_temperature_k_upper_diff, rounding_decimal_places)} K -{round(exoplanet_temperature_k_lower_diff, rounding_decimal_places)} K)')
-        print('\n' * 3)
         return round(exoplanet_temperature_k_nominal, rounding_decimal_places), round(exoplanet_temperature_k_upper_diff, rounding_decimal_places), round(exoplanet_temperature_k_lower_diff, rounding_decimal_places)
 
     except TypeError:
         print('ERROR: Complex number. Are you sure you entered the correct data?')
-        print('\n' * 3)
         return '(Not Generated)', 0, 0

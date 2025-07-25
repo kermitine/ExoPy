@@ -18,9 +18,7 @@ def kepler_orbital_radius_calculator(orbital_period_days, star_mass_solarmass, s
 
     try:
         print(f'Calculated nominal semi-major axis: {round(semi_major_axis_nominal_AU, rounding_decimal_places)} AU (+{round(semi_major_axis_upper_diff_AU, rounding_decimal_places)} AU -{round(semi_major_axis_lower_diff_AU, rounding_decimal_places)} AU)')
-        print('\n' * 3)
         return round(semi_major_axis_nominal_AU, rounding_decimal_places), round(semi_major_axis_upper_diff_AU, rounding_decimal_places), round(semi_major_axis_lower_diff_AU, rounding_decimal_places)
     except TypeError:
         print('ERROR: Complex number. Are you sure you entered the correct data?')
-        print('\n' * 3)
         return '(Not Generated)', 0, 0

@@ -23,5 +23,4 @@ def star_pixelfile_retrieval(target_star):
     print(f'took {round((end_time - start_time), 1)} seconds to retrieve')
     save_plot(target_star, f'_PIXELFILE.{file_saving_format}')
     plt.show()
-    print('\n' * 3)
     return pixelfile

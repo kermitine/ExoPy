@@ -4,6 +4,7 @@ from datetime import date
 import os
 from exopy.getdata.getexoplanetdata import *
 from exopy.getdata.getstardata import *
+from utils.wikipull import *
 
 initialize_vars = False
 def generate_full_report(lowest_flux, planet_period_float, target_star):
@@ -91,11 +92,57 @@ def generate_full_report(lowest_flux, planet_period_float, target_star):
                     print(prompt_input_not_recognized)
 
             if user_decision == 'y': # TAKE ALL VALUES AND CALCULATE AT ONCE
-                star_radius, star_radius_uncertainty_positive, star_radius_uncertainty_negative = get_star_radius()
-                star_luminosity, star_luminosity_uncertainty_positive, star_luminosity_uncertainty_negative = get_star_luminosity()
-                star_mass_solarmass, star_mass_solarmass_uncertainty_positive, star_mass_solarmass_uncertainty_negative = get_star_mass()
+
+
+                if attempt_wikipedia_pull == True:
+                    print('Attempting to pull star data from Wikipedia...')
+                    while True:
+                        target_star = input(f'Enter system/star name (Last used: {target_star}): ')
+                        target_star = target_star.strip().upper()
+                        if target_star == '' or target_star is None:
+                            print(prompt_input_not_recognized)
+                        else:
+                            break
+
+                    try:
+                        star_radius, star_radius_uncertainty_positive, star_radius_uncertainty_negative = parse_wiki_data(pull_wiki_data(target_star, 'Radius'))
+                        print(f'Retrieved Radius of {target_star}: {star_radius} +{star_radius_uncertainty_positive} -{star_radius_uncertainty_negative}')
+                    except Exception:
+                        print('ERROR: Radius not found automatically.')
+                        star_radius, star_radius_uncertainty_positive, star_radius_uncertainty_negative = get_star_radius()
+
+
+                    try:
+                        star_luminosity, star_luminosity_uncertainty_positive, star_luminosity_uncertainty_negative = parse_wiki_data(pull_wiki_data(target_star, 'Luminosity'))
+                        print(f'Retrieved Luminosity of {target_star}: {star_luminosity} +{star_luminosity_uncertainty_positive} -{star_luminosity_uncertainty_negative}')
+
+                    except IndexError:
+                        star_luminosity, star_luminosity_uncertainty_positive, star_luminosity_uncertainty_negative = parse_wiki_data(pull_wiki_data(target_star, 'Luminosity (bolometric)'))
+                        print(f'Retrieved Luminosity of {target_star}: {star_luminosity} +{star_luminosity_uncertainty_positive} -{star_luminosity_uncertainty_negative}')
+
+                    except Exception:
+                        print('ERROR: Luminosity not found automatically.')
+                        star_luminosity, star_luminosity_uncertainty_positive, star_luminosity_uncertainty_negative = get_star_luminosity()
+
+                    try:
+                        star_mass_solarmass, star_mass_solarmass_uncertainty_positive, star_mass_solarmass_uncertainty_negative = parse_wiki_data(pull_wiki_data(target_star, 'Mass'))
+                        print(f'Retrieved Mass of {target_star}: {star_mass_solarmass} +{star_mass_solarmass_uncertainty_positive} -{star_mass_solarmass_uncertainty_negative}')
+                    except Exception:
+                        print('ERROR: Mass not found automatically.')
+                        star_mass_solarmass, star_mass_solarmass_uncertainty_positive, star_mass_solarmass_uncertainty_negative = get_star_mass()
+
+
+
+
+                else:
+                    star_radius, star_radius_uncertainty_positive, star_radius_uncertainty_negative = get_star_radius()
+                    star_luminosity, star_luminosity_uncertainty_positive, star_luminosity_uncertainty_negative = get_star_luminosity()
+                    star_mass_solarmass, star_mass_solarmass_uncertainty_positive, star_mass_solarmass_uncertainty_negative = get_star_mass()
+
                 depth_of_phase_fold = get_star_lowest_flux(lowest_flux)
                 orbital_period_days = get_exoplanet_orbital_period(planet_period_float)
+
+
                 from exopy.computation.orbitalSMA import kepler_orbital_radius_calculator
                 from exopy.computation.exoplanetradius import find_exoplanet_radius
                 from exopy.computation.starhabitablezone import habitable_zone_calculator
@@ -140,10 +187,8 @@ def generate_full_report(lowest_flux, planet_period_float, target_star):
             os.makedirs(os.path.dirname(file_path), exist_ok=True)
             table_exoplanet.to_csv(f'{file_path}-EXOPLANET_REPORT.csv', sep ='\t')
             table_star.to_csv(f'{file_path}-STAR_REPORT.csv', sep ='\t')
-            print(f'Dataframe sucessfully exported to {file_path}-EXOPLANET_REPORT as csv')
-            print(f'Dataframe sucessfully exported to {file_path}-STAR_REPORT as csv')
-            print('\n' * 2)
+            print(f'Dataframe sucessfully exported to {file_path}-EXOPLANET_REPORT.csv')
+            print(f'Dataframe sucessfully exported to {file_path}-STAR_REPORT.csv')
             break
         else:
-            print('\n' * 2)
             break

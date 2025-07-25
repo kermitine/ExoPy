@@ -14,7 +14,6 @@ def find_exoplanet_radius(star_radius, star_radius_uncertainty_positive, star_ra
         planet_radius_solar = star_radius * math.sqrt(1-depth_of_phase_fold)
     except ValueError:
         print('ERROR: Negative root. Did you enter the correct flux data?')
-        print('\n' * 3)
         return '(Not Generated)', 0, 0 
     planet_radius_solar_positive_uncertainty = planet_radius_solar_upperlimit_uncertainty - planet_radius_solar
     planet_radius_solar_negative_uncertainty = planet_radius_solar - planet_radius_solar_lowerlimit_uncertainty
@@ -25,5 +24,4 @@ def find_exoplanet_radius(star_radius, star_radius_uncertainty_positive, star_ra
     planet_radius_earth_lower_diff = planet_radius_solar_negative_uncertainty * constant_solarradii_TO_earthradii
 
     print(f'Calculated nominal planet radius: {round(planet_radius_earth_nominal, rounding_decimal_places)} R⊕ (+{round(planet_radius_earth_upper_diff, rounding_decimal_places)} R⊕ -{round(planet_radius_earth_lower_diff, rounding_decimal_places)} R⊕)')
-    print('\n' * 3)
     return round(planet_radius_earth_nominal, rounding_decimal_places), round(planet_radius_earth_upper_diff, rounding_decimal_places), round(planet_radius_earth_lower_diff, rounding_decimal_places)

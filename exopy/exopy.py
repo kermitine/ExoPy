@@ -107,7 +107,7 @@ while True: # main program loop
         blackbody_temperature_calculator(star_luminosity, star_luminosity_uncertainty_positive, star_luminosity_uncertainty_negative, semi_major_axis_nominal_AU, semi_major_axis_upper_diff_AU, semi_major_axis_lower_diff_AU)
 
     elif desired_function == 'Generate Full Report':
-        from exopy.computation.generatereport import generate_full_report
+        from utils.generatereport import generate_full_report
         print('\n' * 2)
         generate_full_report(lowest_flux, planet_period_float, target_star)
 
