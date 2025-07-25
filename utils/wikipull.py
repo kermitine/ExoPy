@@ -1,7 +1,5 @@
 import pandas as pd
 
-# 1.408+0.021 −0.030 M☉
-
 def pull_wiki_data(target_star, target_data_id):
     star_table = pd.read_html('https://en.wikipedia.org/wiki/' + target_star.lower())[0]
     first_column = star_table.columns[0]
