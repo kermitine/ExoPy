@@ -118,12 +118,18 @@ def generate_full_report(lowest_flux, planet_period_float, target_star):
                         print(f'Retrieved Luminosity of {target_star}: {star_luminosity} +{star_luminosity_uncertainty_positive} -{star_luminosity_uncertainty_negative}')
 
                     except IndexError:
-                        star_luminosity, star_luminosity_uncertainty_positive, star_luminosity_uncertainty_negative = parse_wiki_data(pull_wiki_data(target_star, 'Luminosity (bolometric)'))
-                        print(f'Retrieved Luminosity of {target_star}: {star_luminosity} +{star_luminosity_uncertainty_positive} -{star_luminosity_uncertainty_negative}')
+                        
+                        try:
+                            star_luminosity, star_luminosity_uncertainty_positive, star_luminosity_uncertainty_negative = parse_wiki_data(pull_wiki_data(target_star, 'Luminosity (bolometric)'))
+                            print(f'Retrieved Luminosity of {target_star}: {star_luminosity} +{star_luminosity_uncertainty_positive} -{star_luminosity_uncertainty_negative}')
+                        except IndexError:
+                            print('ERROR: Luminosity not found automatically.')
+                            star_luminosity, star_luminosity_uncertainty_positive, star_luminosity_uncertainty_negative = get_star_luminosity()
 
                     except Exception:
                         print('ERROR: Luminosity not found automatically.')
                         star_luminosity, star_luminosity_uncertainty_positive, star_luminosity_uncertainty_negative = get_star_luminosity()
+
 
                     try:
                         star_mass_solarmass, star_mass_solarmass_uncertainty_positive, star_mass_solarmass_uncertainty_negative = parse_wiki_data(pull_wiki_data(target_star, 'Mass'))
