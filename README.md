@@ -7,9 +7,12 @@ This program was made by me during the CSUDH MSEIP, for use on the Physics team.
 
 ## Dependencies
 ```pip install lightkurve```
+```pip install scipy```
 
 ## How to Use
 run exopy.bat in the root folder. Alternatively, in the root, run ```python -m exopy.exopy```
+
+You can also use the provided binaries in releases. However, the .exe is not capable of showing interactive matploblib tables. You must use the saved svgs in /saved/systemname.
 <br/> <br/>
 
 ## Features

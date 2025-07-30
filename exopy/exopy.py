@@ -1,3 +1,5 @@
+# command used to condense to exe: pyinstaller --onefile --name exopy --icon="icon.ico" --add-data "C:\Users\ayryt\AppData\Local\Programs\Python\Python313\Lib\site-packages\lightkurve\data;lightkurve/data" --add-data "C:\Users\ayryt\AppData\Local\Programs\Python\Python313\Lib\site-packages\astroquery\CITATION;astroquery" --add-data "config;config" --add-data "data;data" --add-data "utils;utils" --add-data "exopy;exopy" --hidden-import=winsound --hidden-import=lightkurve --hidden-import=scipy --hidden-import=matplotlib.backends.backend_svg --hidden-import=matplotlib.backends.backend_agg exopy/exopy.py
+
 from config.config import *
 from utils.playsound import play_sound
 from utils.KermLib.KermLib import *
