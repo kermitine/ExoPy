@@ -3,6 +3,9 @@ from lightkurve import search_targetpixelfile
 from config.config import *
 from utils.saveplot import *
 import matplotlib.pyplot as plt
+import matplotlib
+
+matplotlib.use('qtagg')
 def star_pixelfile_retrieval(target_star):
     """
     Retrieves and displays pixelfile of star.

@@ -4,6 +4,9 @@ from utils.saveplot import save_plot
 import matplotlib.pyplot as plt
 import time
 import numpy as np
+import matplotlib
+
+matplotlib.use('qtagg')
 def star_lightcurve_analysis(target_star):
     """
     Retrieves multiple light curves of star. Automatically graphs and saves light curve, periodogram,
