@@ -174,28 +174,32 @@ def generate_full_report(lowest_flux, planet_period_float, target_star):
                 print('\n' * 2)
 
                 continue
+        if file_saving_enabled == True:
 
-        while True:
-            user_decision = input('Would you like to proceed in exporting current report? (y/n): ')
-            if user_decision.lower().strip() in ['y', 'n']:
+
+            while True:
+                user_decision = input('Would you like to proceed in exporting current report? (y/n): ')
+                if user_decision.lower().strip() in ['y', 'n']:
+                    break
+                else:
+                    print(prompt_input_not_recognized)
+            
+            if user_decision == 'y':
+                while True:
+                    target_star = input(f'Enter system/star name (Last used: {target_star}): ')
+                    target_star = target_star.strip().upper()
+                    if target_star == '' or target_star is None:
+                        print(prompt_input_not_recognized)
+                    else:
+                        break
+                file_path = f'saved/saved_data/{target_star}/{current_date}'
+                os.makedirs(os.path.dirname(file_path), exist_ok=True)
+                table_exoplanet.to_csv(f'{file_path}-EXOPLANET_REPORT.csv', sep ='\t')
+                table_star.to_csv(f'{file_path}-STAR_REPORT.csv', sep ='\t')
+                print(f'Dataframe sucessfully exported to {file_path}-EXOPLANET_REPORT.csv')
+                print(f'Dataframe sucessfully exported to {file_path}-STAR_REPORT.csv')
                 break
             else:
-                print(prompt_input_not_recognized)
-        
-        if user_decision == 'y':
-            while True:
-                target_star = input(f'Enter system/star name (Last used: {target_star}): ')
-                target_star = target_star.strip().upper()
-                if target_star == '' or target_star is None:
-                    print(prompt_input_not_recognized)
-                else:
-                    break
-            file_path = f'saved/saved_data/{target_star}/{current_date}'
-            os.makedirs(os.path.dirname(file_path), exist_ok=True)
-            table_exoplanet.to_csv(f'{file_path}-EXOPLANET_REPORT.csv', sep ='\t')
-            table_star.to_csv(f'{file_path}-STAR_REPORT.csv', sep ='\t')
-            print(f'Dataframe sucessfully exported to {file_path}-EXOPLANET_REPORT.csv')
-            print(f'Dataframe sucessfully exported to {file_path}-STAR_REPORT.csv')
-            break
+                break
         else:
             break

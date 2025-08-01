@@ -30,7 +30,7 @@ print(f'Cadence selected: {selected_cadence}')
 if selected_cadence.lower() == 'short':
     print('WARNING: short cadence selected. Expect long loading times.')
 print(f'Bins: {selected_bins}')
-
+print('\n' * 2)
 
 def get_desired_function():
     function_index = 1
@@ -52,6 +52,7 @@ def get_desired_function():
     return list_of_tools[user_input-1]
     
 while True: # main program loop
+    from utils.saveplot import *
     desired_function = get_desired_function()
 
     if desired_function == 'Star Pixelfile Retrieval' or desired_function == 'Star Light Curve Analysis':

@@ -1,6 +1,6 @@
 from lightkurve import search_lightcurve
 from config.config import *
-from utils.saveplot import save_plot
+from utils.saveplot import *
 import matplotlib.pyplot as plt
 import time
 import numpy as np
