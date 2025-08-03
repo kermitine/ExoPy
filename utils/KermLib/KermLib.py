@@ -4,7 +4,7 @@ alphabet = [ 'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i',
              'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r',
                's', 't', 'u', 'v', 'w', 'x', 'y', 'z' ]
 
-ascii_kermitine_portrait = '''                                                                                                       
+ascii_kermitine_portrait = r'''                                                                                                       
                                                     ###%%%#*                                           
                                                   #%%%%%%%%%%*                                         
                                                +%%%%%%%%%%%%%%%#=                                      
@@ -49,7 +49,7 @@ ascii_kermitine_portrait = '''
 
                                                                                                        '''
 
-ascii_kermitine = ''' __                             .__   __   .__                 
+ascii_kermitine = r''' __                             .__   __   .__                 
 |  | __  ____  _______   _____  |__|_/  |_ |__|  ____    ____  
 |  |/ /_/ __ \ \_  __ \ /     \ |  |\   __\|  | /    \ _/ __ \ 
 |    < \  ___/  |  | \/|  Y Y  \|  | |  |  |  ||   |  \\  ___/ 
@@ -99,4 +99,4 @@ class KermLib():
 
             
             
-KermLib = KermLib('2024.11.29.0140.alpha')
+KermLib = KermLib('2025.08.03.1100.alpha')
