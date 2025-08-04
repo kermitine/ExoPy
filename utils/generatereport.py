@@ -94,7 +94,7 @@ def generate_full_report(lowest_flux, planet_period_float, target_star):
             if user_decision == 'y': # TAKE ALL VALUES AND CALCULATE AT ONCE
 
 
-                if attempt_wikipedia_pull == True:
+                if user_flags['attempt_wikipedia_pull'] == True:
                     while True:
                         target_star = input(f'Enter system/star name (Last used: {target_star}): ')
                         target_star = target_star.strip().upper()
@@ -174,7 +174,7 @@ def generate_full_report(lowest_flux, planet_period_float, target_star):
                 print('\n' * 2)
 
                 continue
-        if file_saving_enabled == True:
+        if user_flags['file_saving_enabled'] == True:
 
 
             while True:

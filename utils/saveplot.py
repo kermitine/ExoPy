@@ -2,7 +2,7 @@ from config.config import *
 import os
 import matplotlib.pyplot as plt
 
-if file_saving_enabled == True:
+if user_flags['file_saving_enabled'] == True:
     try:
         os.makedirs('saved', exist_ok=True)
     except PermissionError:

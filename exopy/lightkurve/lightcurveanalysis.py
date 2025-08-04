@@ -15,7 +15,7 @@ def star_lightcurve_analysis(target_star):
     print(f'Retrieving ALL light curves of {target_star}...')
     start_time = time.time() # measure time
     plot_title = f'All light curves of {target_star}'
-    search_result = search_lightcurve(target_star, author=selected_telescope, cadence=selected_cadence)
+    search_result = search_lightcurve(target_star, author=user_flags['selected_telescope'], cadence=user_flags['selected_cadence'])
     lightcurve_collection = search_result.download_all()
     try:
         lightcurve_collection.plot(title=plot_title)
@@ -25,7 +25,7 @@ def star_lightcurve_analysis(target_star):
 
     end_time = time.time() # measure time
     print(f'took {round((end_time - start_time), 1)} seconds to retrieve')
-    save_plot(target_star, f'_LIGHTCURVECOLLECTION.{file_saving_format}')
+    save_plot(target_star, f'_LIGHTCURVECOLLECTION.{user_flags['file_saving_format']}')
     plt.show()
     return lightcurve_collection
 
@@ -37,7 +37,7 @@ def star_lightcurve_analysis_continued(lightcurve_collection, target_star):
     lightcurve_stitched.plot(title=plot_title)
     
     
-    save_plot(target_star, f'_LIGHTCURVECOLLECTIONSTITCHED.{file_saving_format}')
+    save_plot(target_star, f'_LIGHTCURVECOLLECTIONSTITCHED.{user_flags['file_saving_format']}')
     plt.show()
     alphabet_index = 0
     periodogram_lower_bound_input = input(prompt_periodogram_lower_bound)
@@ -64,7 +64,7 @@ def star_lightcurve_analysis_continued(lightcurve_collection, target_star):
     plot_title = f'Periodogram of light curve of {target_star}'
     periodogram_bls.plot(title=plot_title)
 
-    save_plot(target_star, f'_LIGHTCURVEPERIODOGRAM_{alphabet_list[alphabet_index]}.{file_saving_format}')
+    save_plot(target_star, f'_LIGHTCURVEPERIODOGRAM_{alphabet_list[alphabet_index]}.{user_flags['file_saving_format']}')
     plt.show()
     # FIRST ONE ABOVE. REST IN LOOP
 
@@ -77,16 +77,16 @@ def star_lightcurve_analysis_continued(lightcurve_collection, target_star):
         ax.set_xlim(-5, 5)
         ax.plot(title=f'Phasefold of Planet {alphabet_list[alphabet_index]}')
 
-        save_plot(target_star, f'_PHASEFOLD_{alphabet_list[alphabet_index]}.{file_saving_format}')
+        save_plot(target_star, f'_PHASEFOLD_{alphabet_list[alphabet_index]}.{user_flags['file_saving_format']}')
 
         plt.show()
         
         folded_lc = lightcurve_stitched.fold(period=planet_period, epoch_time=planet_t0)
         flux = folded_lc.flux
         print('Binning...')
-        binned_phase_fold = folded_lc.bin(bins=selected_bins)
+        binned_phase_fold = folded_lc.bin(bins=user_flags['selected_bins'])
         binned_phase_fold.plot()
-        save_plot(target_star, f'_PHASEFOLDBINNED_{alphabet_list[alphabet_index]}.{file_saving_format}')
+        save_plot(target_star, f'_PHASEFOLDBINNED_{alphabet_list[alphabet_index]}.{user_flags['file_saving_format']}')
 
         min_idx = np.nanargmin(binned_phase_fold.flux)
         min_flux  = binned_phase_fold.flux[min_idx]
@@ -112,7 +112,7 @@ def star_lightcurve_analysis_continued(lightcurve_collection, target_star):
 
         alphabet_index += 1
 
-        if masking_enabled is True: # mask signals if true
+        if user_flags['masking_enabled'] is True: # mask signals if true
             planet_mask = periodogram_bls.get_transit_mask(period=planet_period, transit_time=planet_t0, duration=planet_dur)
             lightcurve_stitched = lightcurve_stitched[~planet_mask]
             print('Masking enabled ' + '(' + alphabet_list[alphabet_index] + ')...')
@@ -141,5 +141,5 @@ def star_lightcurve_analysis_continued(lightcurve_collection, target_star):
         periodogram_bls = lightcurve_stitched.to_periodogram(method='bls', period=period, frequency_factor=500)
         plot_title = 'Periodogram of light curve of ' + target_star
         periodogram_bls.plot(title=plot_title)
-        save_plot(target_star, f'_LIGHTCURVEPERIODOGRAM_{alphabet_list[alphabet_index]}.{file_saving_format}')
+        save_plot(target_star, f'_LIGHTCURVEPERIODOGRAM_{alphabet_list[alphabet_index]}.{user_flags['file_saving_format']}')
         plt.show()

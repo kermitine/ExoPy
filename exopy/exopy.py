@@ -4,6 +4,7 @@
 from config.config import *
 from utils.playsound import play_sound
 from utils.KermLib.KermLib import *
+from utils.editsettings import *
 from exopy.getdata.getstardata import *
 
 target_star = 'None'
@@ -16,21 +17,6 @@ print('Created by Ayrik Nabirahni')
 print('\n')
 
 
-
-play_sound('data/subwaysurfers.wav', True)
-print('Flags:')
-flag_index = 0
-for x in range(len(user_flags)//2):
-    print(user_flags[flag_index] + ' = ' + str(user_flags[flag_index+1]))
-    flag_index += 2
-if file_saving_enabled is True:
-    print(f'File saving format: {file_saving_format}')
-print(f'Telescope selected: {selected_telescope}')
-print(f'Cadence selected: {selected_cadence}')
-if selected_cadence.lower() == 'short':
-    print('WARNING: short cadence selected. Expect long loading times.')
-print(f'Bins: {selected_bins}')
-print('\n' * 2)
 
 def get_desired_function():
     function_index = 1
@@ -52,7 +38,10 @@ def get_desired_function():
     return list_of_tools[user_input-1]
     
 while True: # main program loop
+    play_sound('data/subwaysurfers.wav', True)
+
     from utils.saveplot import *
+    show_flags()
     desired_function = get_desired_function()
 
     if desired_function == 'Star Pixelfile Retrieval' or desired_function == 'Star Light Curve Analysis':
@@ -114,5 +103,9 @@ while True: # main program loop
         from utils.generatereport import generate_full_report
         print('\n' * 2)
         generate_full_report(lowest_flux, planet_period_float, target_star)
+    
+    elif desired_function == 'Settings':
+        print('\n' * 2)
+        edit_settings()
 
     print('\n' * 2)
