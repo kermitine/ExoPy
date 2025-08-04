@@ -6,7 +6,7 @@ def show_flags():
     print('\n' * 2)
 
 def edit_settings():
-    list_of_settings_index = show_flags()
-    user_input = get_setting(list_of_settings_index)
+    show_flags()
+    user_input = get_setting()
     new_setting = get_new_setting(user_flags[user_input])
     user_flags[user_input] = new_setting

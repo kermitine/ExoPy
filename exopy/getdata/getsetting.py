@@ -1,5 +1,5 @@
 from config.config import *
-def get_setting(list_of_settings_index):
+def get_setting():
     while True: # PREVENTS CRASHES FROM UNRECOGNIZED INPUTS
         user_input = input('Select the setting you want to change: ')
         if user_input.lower().strip() not in user_flags:

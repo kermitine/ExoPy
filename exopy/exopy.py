@@ -104,7 +104,7 @@ while True: # main program loop
         print('\n' * 2)
         generate_full_report(lowest_flux, planet_period_float, target_star)
     
-    elif desired_function == 'Settings':
+    elif desired_function == 'Edit Settings':
         print('\n' * 2)
         edit_settings()
 
