@@ -9,4 +9,5 @@ def play_sound(file_path, loop_enabled):
             winsound.PlaySound(file_path, winsound.SND_ASYNC | winsound.SND_FILENAME)
         return 'sound played'
     else:
+        winsound.PlaySound(None, winsound.SND_PURGE)
         return 'sound effects are disabled'
