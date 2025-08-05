@@ -57,7 +57,7 @@ def get_new_setting(old_setting_value):
                 except:
                     print(prompt_input_not_recognized)
                     continue
-                return user_input
+                return user_input.strip().lower()
             else:
                 print(prompt_input_not_recognized)
                 continue
