@@ -1,4 +1,4 @@
-version = '2.2.2'
+version = '2.2.3'
 # USER VARS BELOW
 user_flags = {
 "masking_enabled": False,

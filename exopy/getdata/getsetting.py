@@ -16,18 +16,28 @@ def get_setting():
 def get_new_setting(old_setting_value):
     if str(type(old_setting_value)) == "<class 'bool'>":
         old_setting_type = 'True/False'
+        new_setting_allowed_values = ['True', 'False']
     if str(type(old_setting_value)) == "<class 'str'>":
         old_setting_type = 'String'
+        if old_setting_value.lower().strip() in ['k2', 'kepler', 'tess']:
+            new_setting_allowed_values = ['k2', 'kepler', 'tess']
+        elif old_setting_value.lower().strip() in ['long', 'short']:
+            new_setting_allowed_values = ['long', 'short']
+        else:
+            new_setting_allowed_values = ['svg', 'png', 'jpeg', 'jpg', 'tiff', 'tif', 'pdf', 'webp']
     if str(type(old_setting_value)) == "<class 'int'>":
         old_setting_type = 'Integer'
+        new_setting_allowed_values = ['Integer']
+
+
     while True: # PREVENTS CRASHES FROM UNRECOGNIZED INPUTS
-        user_input = input(f'Enter new value for setting ({old_setting_type}): ')
+        user_input = input(f'Enter new value for setting ({', '.join(new_setting_allowed_values)}): ')
 
 
         # BOOLS 
         if old_setting_type == 'True/False':
             try:
-                user_input.capitalize()
+                user_input.strip().capitalize()
             except:
                 print(prompt_input_not_recognized)
                 continue
@@ -41,12 +51,16 @@ def get_new_setting(old_setting_value):
 
         # STR
         if old_setting_type == 'String':
-            try:
-                user_input = str(user_input)
-            except:
+            if user_input.strip().lower() in new_setting_allowed_values:
+                try:
+                    user_input = str(user_input)
+                except:
+                    print(prompt_input_not_recognized)
+                    continue
+                return user_input
+            else:
                 print(prompt_input_not_recognized)
                 continue
-            return user_input
         
         # INT
         if old_setting_type == 'Integer':

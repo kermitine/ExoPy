@@ -10,3 +10,4 @@ def edit_settings():
     user_input = get_setting()
     new_setting = get_new_setting(user_flags[user_input])
     user_flags[user_input] = new_setting
+    print(f'Flag {user_input} set to {new_setting}')

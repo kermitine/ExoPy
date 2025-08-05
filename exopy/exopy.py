@@ -36,7 +36,7 @@ def get_desired_function():
             except ValueError:
                 print(prompt_input_not_recognized)
     return list_of_tools[user_input-1]
-    
+  
 while True: # main program loop
     play_sound('data/subwaysurfers.wav', True)
 
