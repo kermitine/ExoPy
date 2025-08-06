@@ -1,4 +1,20 @@
-# command used to condense to exe: pyinstaller --onefile --name exopy --icon="icon.ico" --add-data "C:\Users\ayryt\AppData\Local\Programs\Python\Python313\Lib\site-packages\lightkurve\data;lightkurve/data" --add-data "C:\Users\ayryt\AppData\Local\Programs\Python\Python313\Lib\site-packages\astroquery\CITATION;astroquery" --add-data "config;config" --add-data "data;data" --add-data "utils;utils" --add-data "exopy;exopy" --hidden-import=winsound --hidden-import=lightkurve --hidden-import=scipy --hidden-import=matplotlib.backends.backend_svg --hidden-import=matplotlib.backends.backend_agg --hidden-import=matplotlib.backends.backend_qtagg exopy/exopy.py
+# Copyright (C) 2025 Ayrik Nabirahni
+# This program is free software: you can redistribute it and/or modify
+#  it under the terms of the GNU Affero General Public License as published
+#  by the Free Software Foundation, either version 3 of the License, or 
+# (at your option) any later version.
+
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+# GNU Affero General Public License for more details.
+
+# You should have received a copy of the GNU Affero General Public License
+# along with this program. If not, see https://www.gnu.org/licenses.
+
+
+
+# pyinstaller command used to exe: pyinstaller --onefile --name exopy --icon="icon.ico" --add-data "C:\Users\ayryt\AppData\Local\Programs\Python\Python313\Lib\site-packages\lightkurve\data;lightkurve/data" --add-data "C:\Users\ayryt\AppData\Local\Programs\Python\Python313\Lib\site-packages\astroquery\CITATION;astroquery" --add-data "config;config" --add-data "data;data" --add-data "utils;utils" --add-data "exopy;exopy" --hidden-import=winsound --hidden-import=lightkurve --hidden-import=scipy --hidden-import=matplotlib.backends.backend_svg --hidden-import=matplotlib.backends.backend_agg --hidden-import=matplotlib.backends.backend_qtagg exopy/exopy.py
 
 
 from config.config import *
