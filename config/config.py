@@ -1,7 +1,7 @@
 """
-Copyright (C) 2025 Ayrik Nabirahni. This file is licensed under
-the AGPLv3 license, and is apart of the ExoPy project.
-See LICENSE and README for more details.
+Copyright (C) 2025 Ayrik Nabirahni. This file
+is apart of the ExoPy project, and licensed under
+the GNU AGPL-3.0-or-later. See LICENSE and README for more details.
 """
 
 version = '2.2.4'
