@@ -44,6 +44,7 @@ Save .svg files of all plots to their own folder based on the star name. Save fu
 
 ```pip install scipy```
 
+```pip install pandas```
 ## How to Use
 After installing all dependencies, the program can be run using exopy.bat in the project's root folder. Alternatively, with a CMD window running in the project root, run the command ```python -m exopy.exopy```. 
 
