@@ -37,7 +37,7 @@ All inputs and outputs of ExoPy feature the capability of accepting the uncertan
 All inputs are filtered to prevent any crashes. Please open an issue ticket if you run into one.
 
 ### File saving
-Save .svg files of all plots to their own folder based on the star name. Save full reports of calculated data to .csv file.
+Save plots to their own folder based on the star name, in a file format of your choosing. Save full reports of calculated data to .csv file.
 
 ## Dependencies
 ```pip install lightkurve```
@@ -47,7 +47,6 @@ Save .svg files of all plots to their own folder based on the star name. Save fu
 ```pip install pandas```
 ## How to Use
 After installing all dependencies, the program can be run using launch.bat in the project's root folder. Alternatively, with a CMD window running in the project root, run the command ```python -m exopy.exopy```. 
-
 Alternatively, you can also use the portable executable in releases—no installation of Python or any other modules necessary.
 
 ## License
