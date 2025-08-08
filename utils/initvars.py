@@ -1,3 +1,9 @@
+"""
+Copyright (C) 2025 Ayrik Nabirahni. This file
+is apart of the ExoPy project, and licensed under
+the GNU AGPL-3.0-or-later. See LICENSE and README for more details.
+"""
+
 lowest_flux = None
 planet_period_float = None
 flux_watts_nominal = '(Not Generated)'
