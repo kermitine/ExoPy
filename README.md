@@ -1,6 +1,6 @@
 # ExoPy
 
-A Python3 console-based exoplanet detection tool, leveraging LightKurve
+A Python3 console-based exoplanet detection tool.
 
 ## Motivation
 This program was made by me during the CSUDH MSEIP-STALP, for use on the Physics team. Our core project was to analyze Kepler light curve data, and create annotated graphs of the transit event, as well as ascertain the radius of the transiting exoplanet. However, the scope of our project increased, and as such, ExoPy contains many more features to help streamline the entire exoplanet detection process.
