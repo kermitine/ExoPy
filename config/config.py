@@ -4,7 +4,7 @@ is apart of the ExoPy project, and licensed under
 the GNU AGPL-3.0-or-later. See LICENSE and README for more details.
 """
 
-version = '2.2.4'
+version = '2.2.5'
 # USER VARS BELOW
 user_flags = {
 "masking_enabled": False,

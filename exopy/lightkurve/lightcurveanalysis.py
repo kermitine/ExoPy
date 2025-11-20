@@ -11,6 +11,7 @@ import matplotlib.pyplot as plt
 import time
 import numpy as np
 import matplotlib
+from utils.timer import *
 
 matplotlib.use('qtagg')
 def star_lightcurve_analysis(target_star):
@@ -19,7 +20,7 @@ def star_lightcurve_analysis(target_star):
     binned lightcurve and saves values for radius calculations.
     """
     print(f'Retrieving ALL light curves of {target_star}...')
-    start_time = time.time() # measure time
+    timer()
     plot_title = f'All light curves of {target_star}'
     search_result = search_lightcurve(target_star, author=user_flags['selected_telescope'], cadence=user_flags['selected_cadence'])
     lightcurve_collection = search_result.download_all()
@@ -29,17 +30,18 @@ def star_lightcurve_analysis(target_star):
         print(f"ERROR: Either no data available for {target_star}, or system doesn't exist.")
         return 'fail'
 
-    end_time = time.time() # measure time
-    print(f'took {round((end_time - start_time), 1)} seconds to retrieve')
+    timer()
     save_plot(target_star, f'_LIGHTCURVECOLLECTION.{user_flags['file_saving_format']}')
     plt.show()
     return lightcurve_collection
 
 def star_lightcurve_analysis_continued(lightcurve_collection, target_star):
     print('Stitching light curve collection...')
+    timer()
     lightcurve_stitched = lightcurve_collection.stitch()
     plot_title = f'Stitched lightcurve of {target_star}'
     lightcurve_stitched = lightcurve_stitched.remove_outliers().normalize().flatten()
+    timer()
     lightcurve_stitched.plot(title=plot_title)
     
     
@@ -64,18 +66,20 @@ def star_lightcurve_analysis_continued(lightcurve_collection, target_star):
             upper_bound = periodogram_upper_bound_default
 
     print('Generating periodogram...')
-    
+    timer()
     period = np.linspace(lower_bound, upper_bound, 100000) # Period
     periodogram_bls = lightcurve_stitched.to_periodogram(method='bls', period=period, frequency_factor=500)
     plot_title = f'Periodogram of light curve of {target_star}'
     periodogram_bls.plot(title=plot_title)
 
     save_plot(target_star, f'_LIGHTCURVEPERIODOGRAM_{alphabet_list[alphabet_index]}.{user_flags['file_saving_format']}')
+    timer()
     plt.show()
     # FIRST ONE ABOVE. REST IN LOOP
 
     while True:
         print('Folding light curve...')
+        timer()
         planet_period = periodogram_bls.period_at_max_power
         planet_t0 = periodogram_bls.transit_time_at_max_power
         planet_dur = periodogram_bls.duration_at_max_power
@@ -84,12 +88,13 @@ def star_lightcurve_analysis_continued(lightcurve_collection, target_star):
         ax.plot(title=f'Phasefold of Planet {alphabet_list[alphabet_index]}')
 
         save_plot(target_star, f'_PHASEFOLD_{alphabet_list[alphabet_index]}.{user_flags['file_saving_format']}')
-
+        timer()
         plt.show()
         
         folded_lc = lightcurve_stitched.fold(period=planet_period, epoch_time=planet_t0)
         flux = folded_lc.flux
         print('Binning...')
+        timer()
         binned_phase_fold = folded_lc.bin(bins=user_flags['selected_bins'])
         binned_phase_fold.plot()
         save_plot(target_star, f'_PHASEFOLDBINNED_{alphabet_list[alphabet_index]}.{user_flags['file_saving_format']}')
@@ -102,6 +107,7 @@ def star_lightcurve_analysis_continued(lightcurve_collection, target_star):
         print(f"Likely period = {planet_period_float} days. Saved to memory.")
         lowest_flux = f"{min_flux:.6f}"
         lowest_flux = float(lowest_flux)
+        timer()
         plt.show()
         
         
