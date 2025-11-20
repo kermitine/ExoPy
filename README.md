@@ -1,6 +1,6 @@
 # ExoPy
 
-A Python3 console-based exoplanet detection tool, leveraging LightKurve
+A Python3 console-based exoplanet detection tool.
 
 ## Motivation
 This program was made by me during the CSUDH MSEIP-STALP, for use on the Physics team. Our core project was to analyze Kepler light curve data, and create annotated graphs of the transit event, as well as ascertain the radius of the transiting exoplanet. However, the scope of our project increased, and as such, ExoPy contains many more features to help streamline the entire exoplanet detection process.
@@ -37,7 +37,7 @@ All inputs and outputs of ExoPy feature the capability of accepting the uncertan
 All inputs are filtered to prevent any crashes. Please open an issue ticket if you run into one.
 
 ### File saving
-Save .svg files of all plots to their own folder based on the star name. Save full reports of calculated data to .csv file.
+Save plots to their own folder based on the star name, in a file format of your choosing. Save full reports of calculated data to .csv file.
 
 ## Dependencies
 ```pip install lightkurve```
@@ -46,8 +46,7 @@ Save .svg files of all plots to their own folder based on the star name. Save fu
 
 ```pip install pandas```
 ## How to Use
-After installing all dependencies, the program can be run using exopy.bat in the project's root folder. Alternatively, with a CMD window running in the project root, run the command ```python -m exopy.exopy```. 
-
+After installing all dependencies, the program can be run using launch.bat in the project's root folder. Alternatively, with a CMD window running in the project root, run the command ```python -m exopy.exopy```. 
 Alternatively, you can also use the portable executable in releases—no installation of Python or any other modules necessary.
 
 ## License
