@@ -11,31 +11,28 @@ import os
 from exopy.getdata.getexoplanetdata import *
 from exopy.getdata.getstardata import *
 from utils.wikipull import *
+import time 
 
-initialize_vars = False
 def generate_full_report(lowest_flux, planet_period_float, target_star):
-    global initialize_vars
-    if initialize_vars is False:
-        flux_watts_nominal = '(Not Generated)'
-        semi_major_axis_nominal_AU = '(Not Generated)'
-        star_temperature_nominal = '(Not Generated)'
-        inner_goldilocks_radius_nominal = outer_goldilocks_radius_nominal = '(Not Generated)'
-        star_luminosity = '(Data Not Available)'
-        star_radius = '(Data Not Available)'
-        star_mass_solarmass = '(Data Not Available)'
-        planet_radius_earth_nominal = '(Not Generated)'
-        exoplanet_k_temperature_nominal = '(Not Generated)'
-        orbital_period_days = 0
-        planet_radius_earth_upper_diff = planet_radius_earth_lower_diff = '0.0'
-        flux_watts_upper_diff = flux_watts_lower_diff = '0.0'
-        semi_major_axis_upper_diff_AU = semi_major_axis_lower_diff_AU = '0.0'
-        star_temperature_upper_diff = star_temperature_lower_diff = '0.0'
-        inner_goldilocks_radius_lower_diff  = outer_goldilocks_radius_upper_diff = '0.0'
-        star_luminosity_uncertainty_positive = star_luminosity_uncertainty_negative = '0.0'
-        star_radius_uncertainty_positive = star_radius_uncertainty_negative = '0.0'
-        star_mass_solarmass_uncertainty_positive = star_mass_solarmass_uncertainty_negative = '0.0'
-        exoplanet_k_temperature_upper_diff = exoplanet_k_temperature_lower_diff = '0.0'
-        initialize_vars = True
+    flux_watts_nominal = '(Not Generated)'
+    semi_major_axis_nominal_AU = '(Not Generated)'
+    star_temperature_nominal = '(Not Generated)'
+    inner_goldilocks_radius_nominal = outer_goldilocks_radius_nominal = '(Not Generated)'
+    star_luminosity = '(Data Not Available)'
+    star_radius = '(Data Not Available)'
+    star_mass_solarmass = '(Data Not Available)'
+    planet_radius_earth_nominal = '(Not Generated)'
+    exoplanet_k_temperature_nominal = '(Not Generated)'
+    orbital_period_days = 0
+    planet_radius_earth_upper_diff = planet_radius_earth_lower_diff = '0.0'
+    flux_watts_upper_diff = flux_watts_lower_diff = '0.0'
+    semi_major_axis_upper_diff_AU = semi_major_axis_lower_diff_AU = '0.0'
+    star_temperature_upper_diff = star_temperature_lower_diff = '0.0'
+    inner_goldilocks_radius_lower_diff  = outer_goldilocks_radius_upper_diff = '0.0'
+    star_luminosity_uncertainty_positive = star_luminosity_uncertainty_negative = '0.0'
+    star_radius_uncertainty_positive = star_radius_uncertainty_negative = '0.0'
+    star_mass_solarmass_uncertainty_positive = star_mass_solarmass_uncertainty_negative = '0.0'
+    exoplanet_k_temperature_upper_diff = exoplanet_k_temperature_lower_diff = '0.0'
 
     while True:
         print('Current Report Status')
@@ -204,6 +201,7 @@ def generate_full_report(lowest_flux, planet_period_float, target_star):
                 table_star.to_csv(f'{file_path}-STAR_REPORT.csv', sep ='\t')
                 print(f'Dataframe sucessfully exported to {file_path}-EXOPLANET_REPORT.csv')
                 print(f'Dataframe sucessfully exported to {file_path}-STAR_REPORT.csv')
+                time.sleep(3)
                 break
             else:
                 break
