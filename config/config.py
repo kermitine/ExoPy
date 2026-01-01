@@ -4,7 +4,7 @@ is apart of the ExoPy project, and licensed under
 the GNU AGPL-3.0-or-later. See LICENSE and README for more details.
 """
 
-version = '2.2.8'
+version = '2.2.9'
 # USER VARS BELOW
 user_flags = {
 "masking_enabled": False,
@@ -21,8 +21,8 @@ periodogram_lower_bound_default = 0.5
 periodogram_upper_bound_default = 30
 rounding_decimal_places = 4 # decimal places to round to
 # commonly used print statements for easy editing
-prompt_periodogram_upper_bound = f'Please input periodogram upper bound (if blank, default {periodogram_upper_bound_default}): '
-prompt_periodogram_lower_bound = f'Please input periodogram lower bound (if blank, default {periodogram_lower_bound_default}): '
+prompt_periodogram_upper_bound = f'Please input periodogram upper search range in days (if blank, default {periodogram_upper_bound_default}): '
+prompt_periodogram_lower_bound = f'Please input periodogram lower search range in days (if blank, default {periodogram_lower_bound_default}): '
 prompt_input_not_recognized = 'Input not recognized. Please try again.'
 # do not edit below
 import string
