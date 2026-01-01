@@ -52,14 +52,17 @@ while True: # main program loop
     if desired_function == 'Star Pixelfile Retrieval' or desired_function == 'Star Light Curve Analysis':
         target_star = get_target_star(target_star)
         if desired_function == 'Star Pixelfile Retrieval':
+            print('initializing Star Pixelfile Retrieval...')
             from exopy.lightkurve.pixelfileretrieval import star_pixelfile_retrieval
             star_pixelfile_retrieval(target_star)
         elif desired_function == 'Star Light Curve Analysis':
+            print('initializing Star Light Curve Analysis...')
             from exopy.lightkurve.lightcurveanalysis import *
             lightcurve_collection = star_lightcurve_analysis(target_star)
             lowest_flux, planet_period_float = star_lightcurve_analysis_continued(lightcurve_collection, target_star)
 
     elif desired_function == 'Exoplanet Radius Calculator':
+        print('initializing Radius Calculator...')
         from exopy.computation.exoplanetradius import find_exoplanet_radius
         from exopy.getdata.getstardata import *
         depth_of_phase_fold = get_star_lowest_flux(lowest_flux)
@@ -68,12 +71,14 @@ while True: # main program loop
         planet_radius_earth_nominal, planet_radius_earth_upper_diff, planet_radius_earth_lower_diff = find_exoplanet_radius(star_radius, star_radius_uncertainty_positive, star_radius_uncertainty_negative, depth_of_phase_fold)
 
     elif desired_function == 'Star Habitable Zone Calculator':
+        print('initializing Habitable Zone Calculator...')
         from exopy.computation.starhabitablezone import habitable_zone_calculator
         star_luminosity, star_luminosity_uncertainty_positive, star_luminosity_uncertainty_negative = get_star_luminosity()
         print('\n' * 2)
         inner_goldilocks_radius_nominal, inner_goldilocks_radius_lower_diff, outer_goldilocks_radius_nominal, outer_goldilocks_radius_upper_diff = habitable_zone_calculator(star_luminosity, star_luminosity_uncertainty_positive, star_luminosity_uncertainty_negative)
 
     elif desired_function == 'Stefan-Boltzmann Star Temperature Calculator':
+        print('initializing Stefan-Boltzmann Temperature Calculator...')
         from exopy.computation.startemperature import stefan_boltzmann_star_temperature_calculator
         star_luminosity, star_luminosity_uncertainty_positive, star_luminosity_uncertainty_negative = get_star_luminosity()
         star_radius, star_radius_uncertainty_positive, star_radius_uncertainty_negative = get_star_radius()
@@ -81,6 +86,7 @@ while True: # main program loop
         star_temperature_nominal, star_temperature_upper_diff, star_temperature_lower_diff = stefan_boltzmann_star_temperature_calculator(star_radius, star_luminosity, star_radius_uncertainty_positive, star_radius_uncertainty_negative, star_luminosity_uncertainty_positive, star_luminosity_uncertainty_negative)
 
     elif desired_function == 'Kepler Orbital Radius Calculator':
+        print('initializing Kepler Orbital Radius Calculator...')
         from exopy.computation.orbitalSMA import kepler_orbital_radius_calculator
         from exopy.getdata.getexoplanetdata import *
         orbital_period_days = get_exoplanet_orbital_period(planet_period_float)
@@ -89,6 +95,7 @@ while True: # main program loop
         semi_major_axis_nominal_AU, semi_major_axis_upper_diff_AU, semi_major_axis_lower_diff_AU = kepler_orbital_radius_calculator(orbital_period_days, star_mass_solarmass, star_mass_solarmass_uncertainty_positive, star_mass_solarmass_uncertainty_negative)
 
     elif desired_function == 'Inverse-Square Exoplanet Stellar Energy Calculator':
+        print('initializing Exoplanet Stellar Energy Calculator...')
         from exopy.computation.exoplanetstellarenergy import exoplanet_flux_received
         from exopy.getdata.getexoplanetdata import *
         star_luminosity, star_luminosity_uncertainty_positive, star_luminosity_uncertainty_negative = get_star_luminosity()
@@ -97,6 +104,7 @@ while True: # main program loop
         flux_watts_nominal, flux_watts_upper_diff, flux_watts_lower_diff = exoplanet_flux_received(star_luminosity, star_luminosity_uncertainty_positive, star_luminosity_uncertainty_negative, semi_major_axis_nominal_AU, semi_major_axis_upper_diff_AU, semi_major_axis_lower_diff_AU)
 
     elif desired_function == 'Blackbody Exoplanet Temperature Calculator':
+        print('initializing Blackbody Exoplanet Temperature Calculator...')
         from exopy.getdata.getexoplanetdata import *
         from exopy.computation.exoplanettemperature import blackbody_temperature_calculator
         star_luminosity, star_luminosity_uncertainty_positive, star_luminosity_uncertainty_negative = get_star_luminosity()
@@ -105,6 +113,7 @@ while True: # main program loop
         blackbody_temperature_calculator(star_luminosity, star_luminosity_uncertainty_positive, star_luminosity_uncertainty_negative, semi_major_axis_nominal_AU, semi_major_axis_upper_diff_AU, semi_major_axis_lower_diff_AU)
 
     elif desired_function == 'Generate Full Report':
+        print('initializing Report Generator...')
         from utils.generatereport import generate_full_report
         print('\n' * 2)
         generate_full_report(lowest_flux, planet_period_float, target_star)
