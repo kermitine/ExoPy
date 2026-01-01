@@ -4,13 +4,13 @@ is apart of the ExoPy project, and licensed under
 the GNU AGPL-3.0-or-later. See LICENSE and README for more details.
 """
 
-version = '2.2.7'
+version = '2.2.8'
 # USER VARS BELOW
 user_flags = {
 "masking_enabled": False,
 "sound_enabled": False,
 "file_saving_enabled": True,
-"attempt_wikipedia_pull": False,
+"attempt_wikipedia_pull": True,
 "selected_bins": 700,
 "file_saving_format": 'svg',
 "selected_telescope": 'Kepler',

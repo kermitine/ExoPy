@@ -5,9 +5,13 @@ the GNU AGPL-3.0-or-later. See LICENSE and README for more details.
 """
 
 import pandas as pd
+import requests
 
 def pull_wiki_data(target_star, target_data_id):
-    star_table = pd.read_html('https://en.wikipedia.org/wiki/' + target_star.lower())[0]
+    wikipedia_url = 'https://en.wikipedia.org/wiki/' + target_star.lower()
+    wikipedia_html = requests.get(wikipedia_url, headers={'User-Agent': 'Mozilla/5.0'})
+    star_table = pd.read_html(wikipedia_html.content)[0]
+    
     first_column = star_table.columns[0]
     pulled_row = star_table.loc[star_table[first_column] == target_data_id]
     pulled_value = pulled_row.iloc[0, 1]

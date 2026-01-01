@@ -11,6 +11,7 @@ from utils.playsound import play_sound
 from utils.KermLib.KermLib import *
 from utils.editsettings import *
 from exopy.getdata.getstardata import *
+from utils.saveplot import *
 
 target_star = 'None'
 lowest_flux = None
@@ -45,7 +46,6 @@ def get_desired_function():
 while True: # main program loop
     play_sound('data/subwaysurfers.wav', True)
 
-    from utils.saveplot import *
     show_flags()
     desired_function = get_desired_function()
 
