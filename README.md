@@ -1,4 +1,4 @@
-# ExoPy
+# ExoPy ![kermitine](https://github.com/kermitine/ExoPy/blob/33298e407cb0694a2e91ae5a1d47250e8eb74d07/icon.ico)
 
 A Python3 console-based exoplanet detection tool.
 
