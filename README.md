@@ -48,7 +48,7 @@ Save plots to their own folder based on the star name, in a file format of your 
 
 ```pip install requests```
 ## How to Use
-After installing all dependencies, the program can be run using launch.bat in the project's root folder. Alternatively, with a CMD window running in the project root, run the command ```python -m exopy.exopy```. 
+After installing all dependencies, the program can be run using launch.bat in the project's root folder. You can also open a CMD window running in the project root, and run the command ```python -m exopy.exopy```. 
 Alternatively, you can also use the portable executable in releases—no installation of Python or any other modules necessary.
 
 ## License
