@@ -38,8 +38,6 @@ def get_exoplanet_size_suffix(planet_radius_earth_nominal):
     return exoplanet_size_suffix
 
 
-
-
 def generate_full_report(lowest_flux, planet_period_float, target_star):
     flux_watts_nominal = '(Not Generated)'
     semi_major_axis_nominal_AU = '(Not Generated)'
@@ -87,7 +85,6 @@ def generate_full_report(lowest_flux, planet_period_float, target_star):
         else:
             exoplanet_temperature_prefix = ''
             exoplanet_size_suffix = '(Not Generated)'
-
 
 
         data_exoplanet = {'Exoplanet Data': ['Radius:', 'Orbital Period:', 'Blackbody Temperature:', 'Semi-major axis of orbit:', 'Stellar Flux Received:', 'In Goldilocks Zone?', 'Planet Classification:'],'Value': [f'{planet_radius_earth_nominal} R⊕ (+{planet_radius_earth_upper_diff} R⊕ -{planet_radius_earth_lower_diff} R⊕)', f'{round(orbital_period_days, rounding_decimal_places)} d',f'{exoplanet_k_temperature_nominal} K (+{exoplanet_k_temperature_upper_diff} K -{exoplanet_k_temperature_lower_diff} K)', f'{semi_major_axis_nominal_AU} AU (+{semi_major_axis_upper_diff_AU} AU -{semi_major_axis_lower_diff_AU} AU)', f'{flux_watts_nominal} W/m^2 (+{flux_watts_upper_diff} W/m^2 -{flux_watts_lower_diff} W/m^2)', f'{in_habitable_zone}', f'{exoplanet_temperature_prefix}{exoplanet_size_suffix}']}
