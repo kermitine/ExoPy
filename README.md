@@ -40,13 +40,7 @@ All inputs are filtered to prevent any crashes. Please open an issue ticket if y
 Save plots to their own folder based on the star name, in a file format of your choosing. Save full reports of calculated data to .csv file.
 
 ## Dependencies
-```pip install lightkurve```
-
-```pip install scipy```
-
-```pip install pandas```
-
-```pip install requests```
+run ```pip install -r requirements.txt``` in project root
 ## How to Use
 After installing all dependencies, the program can be run using launch.bat in the project's root folder. You can also open a CMD window running in the project root, and run the command ```python -m exopy.exopy```. 
 Alternatively, you can also use the portable executable in releases—no installation of Python or any other modules necessary.
