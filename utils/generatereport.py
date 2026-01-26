@@ -13,6 +13,33 @@ from exopy.getdata.getstardata import *
 from utils.wikipull import *
 import time 
 
+
+def get_exoplanet_temp_prefix(nominal_temperature_kelvin):
+    if nominal_temperature_kelvin >= 1000:
+        exoplanet_temperature_prefix = 'Hot '
+    elif 1000 > nominal_temperature_kelvin > 300:
+        exoplanet_temperature_prefix = 'Warm '
+    else:
+        exoplanet_temperature_prefix = 'Cold '
+    return exoplanet_temperature_prefix
+
+
+def get_exoplanet_size_suffix(planet_radius_earth_nominal):
+    if planet_radius_earth_nominal >= 7:
+        exoplanet_size_suffix = 'Jupiter-like'
+    elif 7 > planet_radius_earth_nominal >= 3.8:
+        exoplanet_size_suffix = 'Neptune-like'
+    elif 3.8 > planet_radius_earth_nominal >= 2.2:
+        exoplanet_size_suffix = 'Mini-Neptune'
+    elif 2.2 > planet_radius_earth_nominal >= 1.5:
+        exoplanet_size_suffix = 'Super-Earth'
+    else:
+        exoplanet_size_suffix = 'Earth-Like'
+    return exoplanet_size_suffix
+
+
+
+
 def generate_full_report(lowest_flux, planet_period_float, target_star):
     flux_watts_nominal = '(Not Generated)'
     semi_major_axis_nominal_AU = '(Not Generated)'
@@ -54,23 +81,9 @@ def generate_full_report(lowest_flux, planet_period_float, target_star):
             in_habitable_zone = '(Not Generated)'
 
         if planet_radius_earth_nominal != '(Not Generated)' and exoplanet_k_temperature_nominal != '(Not Generated)':
-            if exoplanet_k_temperature_nominal >= 1000:
-                exoplanet_temperature_prefix = 'Hot '
-            elif 1000 > exoplanet_k_temperature_nominal > 300:
-                exoplanet_temperature_prefix = 'Warm '
-            else:
-                exoplanet_temperature_prefix = 'Cold '
+            exoplanet_temperature_prefix = get_exoplanet_temp_prefix(exoplanet_k_temperature_nominal)
+            exoplanet_size_suffix = get_exoplanet_size_suffix(planet_radius_earth_nominal)
 
-            if planet_radius_earth_nominal >= 7:
-                exoplanet_size_suffix = 'Jupiter-like'
-            elif 7 > planet_radius_earth_nominal >= 3.8:
-                exoplanet_size_suffix = 'Neptune-like'
-            elif 3.8 > planet_radius_earth_nominal >= 2.2:
-                exoplanet_size_suffix = 'Mini-Neptune'
-            elif 2.2 > planet_radius_earth_nominal >= 1.5:
-                exoplanet_size_suffix = 'Super-Earth'
-            else:
-                exoplanet_size_suffix = 'Earth-Like'
         else:
             exoplanet_temperature_prefix = ''
             exoplanet_size_suffix = '(Not Generated)'
