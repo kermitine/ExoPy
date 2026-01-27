@@ -8,6 +8,7 @@ import time
 from lightkurve import search_targetpixelfile
 from config.config import *
 from utils.saveplot import *
+from utils.timer import *
 import matplotlib.pyplot as plt
 import matplotlib
 
@@ -17,7 +18,7 @@ def star_pixelfile_retrieval(target_star):
     Retrieves and displays pixelfile of star.
     """
     print(f'Retrieving pixelfile of {target_star}...')
-    start_time = time.time() # measure time 
+    timer()
     plot_title = f'Pixelfile of {target_star}'
     pixelfile = search_targetpixelfile(target_star).download()
 
@@ -28,8 +29,7 @@ def star_pixelfile_retrieval(target_star):
         print('\n')
         return 'fail'
     
-    end_time = time.time() # measure time
-    print(f'took {round((end_time - start_time), 1)} seconds to retrieve')
+    timer()
     save_plot(target_star, f'_PIXELFILE.{user_flags['file_saving_format']}')
     plt.show()
     return pixelfile
