@@ -8,7 +8,6 @@ from lightkurve import search_lightcurve
 from config.config import *
 from utils.saveplot import *
 import matplotlib.pyplot as plt
-import time
 import numpy as np
 import matplotlib
 from utils.timer import *
