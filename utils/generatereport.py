@@ -23,7 +23,6 @@ def get_exoplanet_temp_prefix(nominal_temperature_kelvin):
         exoplanet_temperature_prefix = 'Cold '
     return exoplanet_temperature_prefix
 
-
 def get_exoplanet_size_suffix(planet_radius_earth_nominal):
     if planet_radius_earth_nominal >= 7:
         exoplanet_size_suffix = 'Jupiter-like'
@@ -37,6 +36,14 @@ def get_exoplanet_size_suffix(planet_radius_earth_nominal):
         exoplanet_size_suffix = 'Earth-Like'
     return exoplanet_size_suffix
 
+def is_in_goldilocks(semi_major_axis_lower_diff_AU, semi_major_axis_nominal_AU, semi_major_axis_upper_diff_AU, inner_goldilocks_radius_nominal, inner_goldilocks_radius_lower_diff, outer_goldilocks_radius_nominal, outer_goldilocks_radius_upper_diff):
+    if outer_goldilocks_radius_nominal > semi_major_axis_nominal_AU > inner_goldilocks_radius_nominal:
+        in_habitable_zone = 'Yes (Nominal)'
+    elif (outer_goldilocks_radius_nominal+outer_goldilocks_radius_upper_diff) > (semi_major_axis_nominal_AU+semi_major_axis_upper_diff_AU) > (inner_goldilocks_radius_nominal-inner_goldilocks_radius_lower_diff) or (outer_goldilocks_radius_nominal+outer_goldilocks_radius_upper_diff) > (semi_major_axis_nominal_AU-semi_major_axis_lower_diff_AU) > (inner_goldilocks_radius_nominal-inner_goldilocks_radius_lower_diff) or (outer_goldilocks_radius_nominal+outer_goldilocks_radius_upper_diff) > semi_major_axis_nominal_AU > (inner_goldilocks_radius_nominal-inner_goldilocks_radius_lower_diff):
+        in_habitable_zone = 'Possible'
+    else:
+        in_habitable_zone = 'No'
+    return in_habitable_zone
 
 def generate_full_report(lowest_flux, planet_period_float, target_star):
     flux_watts_nominal = '(Not Generated)'
@@ -69,19 +76,13 @@ def generate_full_report(lowest_flux, planet_period_float, target_star):
         print('\n')
 
         if semi_major_axis_nominal_AU != '(Not Generated)' and inner_goldilocks_radius_nominal != '(Not Generated)':
-            if outer_goldilocks_radius_nominal > semi_major_axis_nominal_AU > inner_goldilocks_radius_nominal:
-                in_habitable_zone = 'Yes (Nominal)'
-            elif (outer_goldilocks_radius_nominal+outer_goldilocks_radius_upper_diff) > (semi_major_axis_nominal_AU+semi_major_axis_upper_diff_AU) > (inner_goldilocks_radius_nominal-inner_goldilocks_radius_lower_diff) or (outer_goldilocks_radius_nominal+outer_goldilocks_radius_upper_diff) > (semi_major_axis_nominal_AU-semi_major_axis_lower_diff_AU) > (inner_goldilocks_radius_nominal-inner_goldilocks_radius_lower_diff) or (outer_goldilocks_radius_nominal+outer_goldilocks_radius_upper_diff) > semi_major_axis_nominal_AU > (inner_goldilocks_radius_nominal-inner_goldilocks_radius_lower_diff):
-                in_habitable_zone = 'Possible'
-            else:
-                in_habitable_zone = 'No'
+            in_habitable_zone = is_in_goldilocks(semi_major_axis_lower_diff_AU, semi_major_axis_nominal_AU, semi_major_axis_upper_diff_AU, inner_goldilocks_radius_nominal, inner_goldilocks_radius_lower_diff, outer_goldilocks_radius_nominal, outer_goldilocks_radius_upper_diff)
         else:
             in_habitable_zone = '(Not Generated)'
 
         if planet_radius_earth_nominal != '(Not Generated)' and exoplanet_k_temperature_nominal != '(Not Generated)':
             exoplanet_temperature_prefix = get_exoplanet_temp_prefix(exoplanet_k_temperature_nominal)
             exoplanet_size_suffix = get_exoplanet_size_suffix(planet_radius_earth_nominal)
-
         else:
             exoplanet_temperature_prefix = ''
             exoplanet_size_suffix = '(Not Generated)'
