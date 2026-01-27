@@ -4,7 +4,7 @@ is apart of the ExoPy project, and licensed under
 the GNU AGPL-3.0-or-later. See LICENSE and README for more details.
 """
 
-# pyinstaller command used to exe: pyinstaller --onefile --name exopy --icon="icon.ico" --add-data "C:\Users\ayryt\AppData\Local\Programs\Python\Python313\Lib\site-packages\lightkurve\data;lightkurve/data" --add-data "C:\Users\ayryt\AppData\Local\Programs\Python\Python313\Lib\site-packages\astroquery\CITATION;astroquery" --add-data "config;config" --add-data "data;data" --add-data "utils;utils" --add-data "exopy;exopy" --hidden-import=winsound --hidden-import=lightkurve --hidden-import=scipy --hidden-import=matplotlib.backends.backend_svg --hidden-import=matplotlib.backends.backend_agg --hidden-import=matplotlib.backends.backend_qtagg exopy/exopy.py
+# pyinstaller command used to exe: pyinstaller --onefile --name exopy --icon=data/icon.ico --add-data "C:\Users\ayryt\AppData\Local\Programs\Python\Python313\Lib\site-packages\lightkurve\data;lightkurve/data" --add-data "C:\Users\ayryt\AppData\Local\Programs\Python\Python313\Lib\site-packages\astroquery\CITATION;astroquery" --add-data "config;config" --add-data "data;data" --add-data "utils;utils" --add-data "exopy;exopy" --hidden-import=winsound --hidden-import=lightkurve --hidden-import=scipy --hidden-import=matplotlib.backends.backend_svg --hidden-import=matplotlib.backends.backend_agg --hidden-import=matplotlib.backends.backend_qtagg exopy/exopy.py
 
 from config.config import *
 from utils.playsound import play_sound
