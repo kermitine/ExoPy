@@ -9,3 +9,4 @@ lxml==6.0.2
 numpy==2.4.1
 autograd==1.8.0
 oktopus==0.1.2
+pytest==9.0.2
