@@ -7,17 +7,21 @@ the GNU AGPL-3.0-or-later. See LICENSE and README for more details.
 import pandas as pd
 import requests
 
-def pull_wiki_data(target_star, target_data_id):
-    wikipedia_url = 'https://en.wikipedia.org/wiki/' + target_star.lower()
+def wikipull(wiki_id, target_data): # rolls it all up into one function
+    pulled_wiki = get_wiki_data(wiki_id, target_data)
+    nominal, upper_diff, lower_diff = parse_wiki_data(pulled_wiki)
+    return nominal, upper_diff, lower_diff
+
+def get_wiki_data(wiki_id, target_data):
+    wikipedia_url = 'https://en.wikipedia.org/wiki/' + wiki_id.lower()
     wikipedia_html = requests.get(wikipedia_url, headers={'User-Agent': 'Mozilla/5.0'})
     star_table = pd.read_html(wikipedia_html.content)[0]
     
     first_column = star_table.columns[0]
-    pulled_row = star_table.loc[star_table[first_column] == target_data_id]
+    pulled_row = star_table.loc[star_table[first_column] == target_data]
     pulled_value = pulled_row.iloc[0, 1]
     return pulled_value
     
-
 def parse_wiki_data(infotable_string):
     list_of_accepted_nums_filter = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9', '.']
     list_of_accepted_symbols_filter =  ['+', '−', '-', '±']
