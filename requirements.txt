@@ -2,11 +2,10 @@ astropy==7.2.0
 lightkurve==2.5.1
 scipy==1.17.0
 pandas<3.0.0 # KEEP PANDAS BELOW 3.0.0, as they made changes to how it reads html files which would require a rewrite of Wikipull
-requests==2.32.5
 matplotlib==3.10.8
 pyqt6==6.10.2
-lxml==6.0.2
 numpy==2.4.1
 autograd==1.8.0
 oktopus==0.1.2
 pytest==9.0.2
+Wikipull
