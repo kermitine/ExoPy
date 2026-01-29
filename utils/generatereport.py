@@ -10,7 +10,8 @@ from datetime import date
 import os
 from exopy.getdata.getexoplanetdata import *
 from exopy.getdata.getstardata import *
-from utils.wikipull import *
+from utils.wikipull_convert import convert_dict_to_float
+from wikipull.wikipull import *
 import time 
 
 
@@ -116,11 +117,12 @@ def generate_full_report(lowest_flux, planet_period_float, target_star):
                             print(prompt_input_not_recognized)
                         else:
                             break
+                    print(f'Wikipull V{wikipull_version()}')
                     print('Attempting to pull star data from Wikipedia...')
 
 
                     try:
-                        star_radius, star_radius_uncertainty_positive, star_radius_uncertainty_negative = wikipull(target_star, 'Radius')
+                        star_radius, star_radius_uncertainty_positive, star_radius_uncertainty_negative = convert_dict_to_float(wikipull(target_star, 'Radius', measurement_with_uncertainty=True))
                         print(f'Retrieved Radius of {target_star}: {star_radius} +{star_radius_uncertainty_positive} -{star_radius_uncertainty_negative}')
                     except Exception:
                         print('ERROR: Radius not found automatically.')
@@ -128,13 +130,13 @@ def generate_full_report(lowest_flux, planet_period_float, target_star):
 
 
                     try:
-                        star_luminosity, star_luminosity_uncertainty_positive, star_luminosity_uncertainty_negative = wikipull(target_star, 'Luminosity')
+                        star_luminosity, star_luminosity_uncertainty_positive, star_luminosity_uncertainty_negative = convert_dict_to_float(wikipull(target_star, 'Luminosity', measurement_with_uncertainty=True))
                         print(f'Retrieved Luminosity of {target_star}: {star_luminosity} +{star_luminosity_uncertainty_positive} -{star_luminosity_uncertainty_negative}')
 
                     except IndexError:
                         
                         try:
-                            star_luminosity, star_luminosity_uncertainty_positive, star_luminosity_uncertainty_negative = wikipull(target_star, 'Luminosity (bolometric)')
+                            star_luminosity, star_luminosity_uncertainty_positive, star_luminosity_uncertainty_negative = convert_dict_to_float(wikipull(target_star, 'Luminosity (bolometric)', measurement_with_uncertainty=True))
                             print(f'Retrieved Luminosity of {target_star}: {star_luminosity} +{star_luminosity_uncertainty_positive} -{star_luminosity_uncertainty_negative}')
                         except IndexError:
                             print('ERROR: Luminosity not found automatically.')
@@ -146,7 +148,7 @@ def generate_full_report(lowest_flux, planet_period_float, target_star):
 
 
                     try:
-                        star_mass_solarmass, star_mass_solarmass_uncertainty_positive, star_mass_solarmass_uncertainty_negative = wikipull(target_star, 'Mass')
+                        star_mass_solarmass, star_mass_solarmass_uncertainty_positive, star_mass_solarmass_uncertainty_negative = convert_dict_to_float(wikipull(target_star, 'Mass', measurement_with_uncertainty=True))
                         print(f'Retrieved Mass of {target_star}: {star_mass_solarmass} +{star_mass_solarmass_uncertainty_positive} -{star_mass_solarmass_uncertainty_negative}')
                     except Exception:
                         print('ERROR: Mass not found automatically.')
