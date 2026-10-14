@@ -21,7 +21,7 @@ def star_lightcurve_analysis(target_star):
     print(f'Retrieving ALL light curves of {target_star}...')
     timer()
     plot_title = f'All light curves of {target_star}'
-    search_result = search_lightcurve(target_star, author=user_flags['selected_telescope'], cadence=user_flags['selected_cadence'])
+    search_result = search_lightcurve(target_star, mission=user_flags['selected_telescope'], cadence=user_flags['selected_cadence'])
     lightcurve_collection = search_result.download_all()
     try:
         lightcurve_collection.plot(title=plot_title)
@@ -39,7 +39,8 @@ def star_lightcurve_analysis_continued(lightcurve_collection, target_star):
     timer()
     lightcurve_stitched = lightcurve_collection.stitch()
     plot_title = f'Stitched lightcurve of {target_star}'
-    lightcurve_stitched = lightcurve_stitched.remove_outliers().normalize().flatten()
+    # Keep downward dips that may be transits; only clip upward outliers.
+    lightcurve_stitched = lightcurve_stitched.remove_outliers(sigma_lower=np.inf).normalize().flatten()
     timer()
     lightcurve_stitched.plot(title=plot_title)
     
