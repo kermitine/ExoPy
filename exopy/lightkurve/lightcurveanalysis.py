@@ -39,8 +39,7 @@ def star_lightcurve_analysis_continued(lightcurve_collection, target_star):
     timer()
     lightcurve_stitched = lightcurve_collection.stitch()
     plot_title = f'Stitched lightcurve of {target_star}'
-    # Keep downward dips that may be transits; only clip upward outliers.
-    lightcurve_stitched = lightcurve_stitched.remove_outliers(sigma_lower=np.inf).normalize().flatten()
+    lightcurve_stitched = lightcurve_stitched.remove_outliers().normalize().flatten()
     timer()
     lightcurve_stitched.plot(title=plot_title)
     
