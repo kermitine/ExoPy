@@ -3,7 +3,9 @@
 A Python3 console-based exoplanet detection tool.
 
 ## Motivation
-This program was made by me during the CSUDH MSEIP-STALP, for use on the Physics team. Our core project was to analyze Kepler light curve data, and create annotated graphs of the transit event, as well as ascertain the radius of the transiting exoplanet. However, the scope of our project increased, and as such, ExoPy contains many more features to help streamline the entire exoplanet detection process.
+ExoPy started from a simple frustration. Lightkurve is a powerful library for working with Kepler, K2, and TESS data, but using it for a full transit analysis takes a lot of time and setup. Even routine tasks, like downloading a light curve, flattening it, finding the orbital period, and phase-folding the transit, require writing and running code step by step, usually in a Jupyter notebook. For students and newcomers, that workflow can feel clunky and slow.
+
+We built ExoPy to make that process faster and easier. ExoPy wraps the entire exoplanet detection workflow in a simple, guided console interface, so there’s no notebook and no boilerplate code. It automates light-curve analysis, phase folding, and the key calculations that follow, from planet radius and orbital distance to habitable-zone estimates and equilibrium temperature, all with full uncertainty propagation. The goal is to let anyone go from a star’s name to annotated plots and a complete data report in minutes.
 
 ## Features
 ### Light Curve Analysis
@@ -44,6 +46,10 @@ run ```pip install -r requirements.txt``` in project root
 ## How to Use
 After installing all dependencies, the program can be run using launch.bat in the project's root folder. You can also open a CMD window running in the project root, and run the command ```python -m exopy.exopy```. 
 Alternatively, you can also use the portable executable in releases—no installation of Python or any other modules necessary.
+
+## Contributors
+ - Ayrik Nabirahni (@kermitine)
+ - Hana Nabirahni (@hananabirahni)
 
 ## License
 This repository/project is licensed under the GNU Affero General Public v3.0-or-later. For more information, please consult the LICENSE file (located in the root of the project), or visit https://www.gnu.org/licenses/agpl-3.0.en.html to read the full license.
